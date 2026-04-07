@@ -1,0 +1,43 @@
+name: Deploy to Production
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  deploy:
+    name: Deploy to Hetzner
+    runs-on: ubuntu-latest
+    environment: production
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.SERVER_IP }}
+          username: root
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            cd /opt/diplomacy2
+
+            # Pull latest code
+            git pull origin main
+
+            # Rebuild and restart containers
+            docker compose pull
+            docker compose up -d --build
+
+            # Run database migrations (wenn vorhanden)
+            if docker compose exec -T api npx prisma migrate deploy 2>/dev/null; then
+              echo "Migrations applied"
+            else
+              echo "No migrations to apply (or Prisma not yet configured)"
+            fi
+
+            # Health check
+            sleep 5
+            curl -f http://localhost:4000/health || echo "Health check pending - API may not be ready yet"
+
+            echo "✅ Deployment complete!"

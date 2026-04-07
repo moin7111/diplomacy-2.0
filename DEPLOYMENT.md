@@ -16,7 +16,7 @@
 ## 2. Repository klonen
 
 ```bash
-git clone https://github.com/DEIN-ACCOUNT/diplomacy-2.0.git
+git clone https://github.com/moin7111/diplomacy-2.0.git
 cd diplomacy-2.0
 ```
 

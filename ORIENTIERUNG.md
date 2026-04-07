@@ -47,6 +47,23 @@ C:\Users\leons\Downloads\Diplomacy 2.0\
 
 ---
 
+### GitHub Repository
+
+```
+Repository: https://github.com/moin7111/diplomacy-2.0
+Clone:      git clone https://github.com/moin7111/diplomacy-2.0.git
+
+Branches:
+  main      ← Production (nur über PR von develop)
+  develop   ← Integration (Default Branch, hier arbeiten!)
+  feature/* ← Feature-Branches (z.B. feature/F1-project-setup)
+
+Doku:       .github/BRANCH_STRATEGY.md
+CI/CD:      .github/workflows/ (wird noch hinzugefügt)
+```
+
+---
+
 ### Server (Hetzner Cloud - Production)
 
 ```
@@ -89,7 +106,10 @@ Quellen:
 ### Server-Verbindung
 
 ```bash
-# SSH Verbindung
+# SSH Verbindung (Kurzform - empfohlen)
+ssh diplomacy
+
+# SSH Verbindung (explizit)
 ssh root@91.99.192.76
 
 # Server-Status prüfen
