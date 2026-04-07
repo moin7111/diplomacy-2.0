@@ -1,0 +1,55 @@
+# ============================================
+# Diplomacy 2.0 - .gitignore
+# ============================================
+
+# === Secrets & Environment ===
+.env
+.env.local
+.env.production
+infrastructure/.env.server
+
+# === Large Assets (Design Mockups & Wireframes) ===
+# Diese Dateien sind zu groß für GitHub — lokal behalten, nicht pushen
+Degsin ideen/
+UI Konzepte/
+
+# === Dependencies ===
+node_modules/
+.pnp.*
+
+# === Build Output ===
+dist/
+build/
+.next/
+out/
+
+# === IDE / Editor ===
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# === OS Files ===
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# === Docker ===
+docker-compose.override.yml
+
+# === Logs ===
+*.log
+npm-debug.log*
+
+# === Database ===
+backups/
+*.sql.gz
+
+# === Test ===
+coverage/
+.nyc_output/
+
+# === Misc ===
+*.tmp
+*.bak

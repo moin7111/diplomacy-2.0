@@ -1,0 +1,84 @@
+services:
+  # ============================================
+  # PostgreSQL - Diplomacy 2.0 Database
+  # ============================================
+  db:
+    image: postgres:16-alpine
+    container_name: diplomacy2-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: diplomacy2
+      POSTGRES_USER: diplomacy2
+      POSTGRES_PASSWORD: D2_Pg_S3cur3_2026!
+    ports:
+      - "127.0.0.1:5433:5432"
+    volumes:
+      - diplomacy2_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U diplomacy2"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ============================================
+  # Redis - Sessions, Cache, WebSocket Pub/Sub
+  # ============================================
+  redis:
+    image: redis:7-alpine
+    container_name: diplomacy2-redis
+    restart: unless-stopped
+    command: redis-server --requirepass D2_Redis_S3cur3_2026! --maxmemory 256mb --maxmemory-policy allkeys-lru
+    ports:
+      - "127.0.0.1:6379:6379"
+    volumes:
+      - diplomacy2_redis:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "-a", "D2_Redis_S3cur3_2026!", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ============================================
+  # NestJS API - Backend (wird später gebaut)
+  # Placeholder: Node.js Container für Development
+  # ============================================
+  api:
+    image: node:22-alpine
+    container_name: diplomacy2-api
+    restart: unless-stopped
+    working_dir: /app
+    environment:
+      NODE_ENV: development
+      PORT: 4000
+      DATABASE_URL: postgresql://diplomacy2:D2_Pg_S3cur3_2026!@db:5432/diplomacy2
+      REDIS_URL: redis://:D2_Redis_S3cur3_2026!@redis:6379
+      JWT_SECRET: D2_JWT_Sup3r_S3cr3t_K3y_2026!
+      CORS_ORIGIN: "*"
+    ports:
+      - "127.0.0.1:4000:4000"
+    volumes:
+      - ./backend:/app
+      - diplomacy2_node_modules:/app/node_modules
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    command: >
+      sh -c "
+        if [ -f package.json ]; then
+          npm install && npm run start:dev
+        else
+          echo Waiting for backend code... Container ready.
+          echo Mount your NestJS project to /opt/diplomacy2/backend
+          tail -f /dev/null
+        fi
+      "
+
+volumes:
+  diplomacy2_pgdata:
+    driver: local
+  diplomacy2_redis:
+    driver: local
+  diplomacy2_node_modules:
+    driver: local

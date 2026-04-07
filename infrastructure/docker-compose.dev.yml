@@ -1,0 +1,31 @@
+# ============================================
+# Diplomacy 2.0 - Docker Compose (Lokale Entwicklung)
+# ============================================
+# Nutzung: docker compose -f docker-compose.yml -f docker-compose.dev.yml up -d
+#
+# Unterschiede zu Production:
+# - DB & Redis Ports von außen erreichbar (nicht nur localhost)
+# - API im Watch-Mode mit Hot-Reload
+# - Keine SSL-Terminierung (Caddy läuft nur auf dem Server)
+
+services:
+  db:
+    ports:
+      - "5433:5432"  # Extern erreichbar für DB-Tools (DBeaver, pgAdmin)
+
+  redis:
+    ports:
+      - "6379:6379"  # Extern erreichbar für Redis-CLI / RedisInsight
+
+  api:
+    environment:
+      NODE_ENV: development
+      CORS_ORIGIN: "*"
+    # Hot-Reload: Bei Dateiänderungen automatisch neustarten
+    volumes:
+      - ./backend:/app
+      - diplomacy2_node_modules:/app/node_modules
+
+volumes:
+  diplomacy2_node_modules:
+    driver: local
