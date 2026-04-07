@@ -23,6 +23,11 @@ build/
 .next/
 out/
 
+# === GitHub Actions Workflows ===
+# Token hat keine 'workflow' Berechtigung — Workflows manuell über GitHub UI hinzufügen
+# Die Dateien liegen lokal unter .github/workflows/
+.github/workflows/
+
 # === IDE / Editor ===
 .idea/
 .vscode/
