@@ -65,14 +65,16 @@ Caddy:    Reverse Proxy (Auto-HTTPS)
 
 ---
 
-## ✅ GitHub CI/CD & Branch-Strategie eingerichtet
+## ✅ GitHub Repository erstellt
 
-| Datei | Beschreibung |
-|-------|-------------|
-| `.github/BRANCH_STRATEGY.md` | Vollständige Branch-Strategie (main/develop/feature) |
-| `.github/workflows/ci.yml` | CI Pipeline (Lint, Tests, Docker Build) |
-| `.github/workflows/deploy.yml` | CD Pipeline (SSH Deploy zu Hetzner) |
-| `.github/PULL_REQUEST_TEMPLATE.md` | PR-Template mit Checkliste |
+| Eigenschaft | Wert |
+|-------------|------|
+| **URL** | https://github.com/moin7111/diplomacy-2.0 |
+| **Clone** | `git clone https://github.com/moin7111/diplomacy-2.0.git` |
+| **Default Branch** | `develop` |
+| **Branches** | `main` (Production), `develop` (Integration) |
+| **Branch-Strategie** | `.github/BRANCH_STRATEGY.md` |
+| **PR-Template** | `.github/PULL_REQUEST_TEMPLATE.md` |
 
 ---
 
@@ -92,7 +94,10 @@ Caddy:    Reverse Proxy (Auto-HTTPS)
 | Automatische Snapshots/Backups | ⏳ | Mittel |
 | Fail2Ban installieren | ⏳ | Niedrig |
 | UFW Firewall konfigurieren | ⏳ | Mittel |
-| GitHub Repository erstellen | ⏳ | Hoch |
+| GitHub Repository erstellen | ✅ | https://github.com/moin7111/diplomacy-2.0 |
+| CI/CD Workflows (lokal) | ✅ | `.github/workflows/ci.yml` + `deploy.yml` (lokal vorhanden, müssen über GitHub UI hochgeladen werden — Token braucht `workflow` Scope) |
+| SSH Shortcut eingerichtet | ✅ | `ssh diplomacy` funktioniert |
+| Team Quick-Connect Guide | ✅ | `infrastructure/QUICK-CONNECT.md` |
 
 ---
 
