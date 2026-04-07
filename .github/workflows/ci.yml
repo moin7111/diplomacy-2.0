@@ -1,0 +1,88 @@
+name: CI Pipeline
+
+on:
+  pull_request:
+    branches: [develop, main]
+  push:
+    branches: [develop]
+
+jobs:
+  lint-and-test:
+    name: Lint & Test
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_DB: diplomacy2_test
+          POSTGRES_USER: diplomacy2
+          POSTGRES_PASSWORD: test_password
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U diplomacy2"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+      redis:
+        image: redis:7-alpine
+        ports:
+          - 6379:6379
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: backend/package-lock.json
+
+      - name: Install Backend Dependencies
+        working-directory: backend
+        run: npm ci
+
+      - name: Lint
+        working-directory: backend
+        run: npm run lint
+
+      - name: Type Check
+        working-directory: backend
+        run: npx tsc --noEmit
+
+      - name: Unit Tests
+        working-directory: backend
+        env:
+          DATABASE_URL: postgresql://diplomacy2:test_password@localhost:5432/diplomacy2_test
+          REDIS_URL: redis://localhost:6379
+          JWT_SECRET: test_jwt_secret_for_ci_pipeline
+          NODE_ENV: test
+        run: npm test
+
+  docker-build:
+    name: Docker Build Test
+    runs-on: ubuntu-latest
+    needs: lint-and-test
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Validate Docker Compose
+        run: docker compose -f infrastructure/docker-compose.yml config
+
+      - name: Build API Image
+        working-directory: backend
+        run: |
+          if [ -f Dockerfile ]; then
+            docker build -t diplomacy2-api:test .
+          else
+            echo "No Dockerfile yet — skipping build"
+          fi
