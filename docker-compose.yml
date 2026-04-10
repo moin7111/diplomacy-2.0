@@ -1,0 +1,59 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: diplomacy2-db
+    restart: always
+    environment:
+      POSTGRES_USER: ${DB_USER:-diplomacy2}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-D2_Pg_S3cur3_2026!}
+      POSTGRES_DB: ${DB_NAME:-diplomacy2}
+    ports:
+      - "5433:5432" # Orientierung.md sagt 5433 vom host
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-diplomacy2} -d ${DB_NAME:-diplomacy2}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    container_name: diplomacy2-redis
+    restart: always
+    command: redis-server --requirepass ${REDIS_PASSWORD:-D2_Redis_S3cur3_2026!}
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "-a", "${REDIS_PASSWORD:-D2_Redis_S3cur3_2026!}", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  # Das API-Backend nutzen wir vorerst hauptsächlich für Production, aber man kann es hier definieren.
+  # Für lokale Entwicklung wird `npm run start:dev` empfohlen, aber hier ist die Container-Version.
+  api:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: diplomacy2-api
+    restart: unless-stopped
+    ports:
+      - "4000:4000"
+    environment:
+      - DATABASE_URL=postgresql://${DB_USER:-diplomacy2}:${DB_PASSWORD:-D2_Pg_S3cur3_2026!}@db:5432/${DB_NAME:-diplomacy2}?schema=public
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - REDIS_PASSWORD=${REDIS_PASSWORD:-D2_Redis_S3cur3_2026!}
+      - PORT=4000
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+volumes:
+  postgres_data:
+  redis_data:
