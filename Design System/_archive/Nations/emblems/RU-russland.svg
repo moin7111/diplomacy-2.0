@@ -1,0 +1,88 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 140" width="120" height="140">
+  <defs>
+    <linearGradient id="ru-shield-grad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#F5D020"/>
+      <stop offset="100%" stop-color="#C9A000"/>
+    </linearGradient>
+    <linearGradient id="ru-gold-grad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#EDD898"/>
+      <stop offset="50%" stop-color="#C5A55A"/>
+      <stop offset="100%" stop-color="#9E7E3A"/>
+    </linearGradient>
+    <filter id="ru-shadow">
+      <feDropShadow dx="0" dy="3" stdDeviation="3" flood-color="rgba(0,0,0,0.5)"/>
+    </filter>
+  </defs>
+
+  <!-- Shield outline (gold border) -->
+  <path d="M60 8 L108 8 L108 85 Q108 118 60 132 Q12 118 12 85 L12 8 Z"
+        fill="url(#ru-gold-grad)" filter="url(#ru-shadow)"/>
+
+  <!-- Shield fill -->
+  <path d="M60 13 L104 13 L104 84 Q104 114 60 127 Q16 114 16 84 L16 13 Z"
+        fill="url(#ru-shield-grad)"/>
+
+  <!-- Bear silhouette (rampant, facing right) -->
+
+  <!-- Bear body -->
+  <ellipse cx="58" cy="76" rx="20" ry="24" fill="#8B4513"/>
+
+  <!-- Bear head -->
+  <circle cx="68" cy="52" r="16" fill="#8B4513"/>
+
+  <!-- Bear ears -->
+  <circle cx="60" cy="40" r="6" fill="#8B4513"/>
+  <circle cx="60" cy="40" r="3.5" fill="#7A3B10"/>
+  <circle cx="76" cy="38" r="6" fill="#8B4513"/>
+  <circle cx="76" cy="38" r="3.5" fill="#7A3B10"/>
+
+  <!-- Bear face details -->
+  <!-- Eyes -->
+  <circle cx="63" cy="50" r="3" fill="#111C27"/>
+  <circle cx="63" cy="50" r="1.5" fill="#EDD898"/>
+  <circle cx="62.5" cy="49.5" r="0.7" fill="#111C27"/>
+  <circle cx="74" cy="49" r="3" fill="#111C27"/>
+  <circle cx="74" cy="49" r="1.5" fill="#EDD898"/>
+  <circle cx="73.5" cy="48.5" r="0.7" fill="#111C27"/>
+
+  <!-- Nose/Snout -->
+  <ellipse cx="74" cy="58" rx="8" ry="6" fill="#7A3B10"/>
+  <ellipse cx="74" cy="56" rx="5" ry="3.5" fill="#4A2008"/>
+  <!-- Nostrils -->
+  <circle cx="72" cy="55" r="1.5" fill="#2A1005"/>
+  <circle cx="76" cy="55" r="1.5" fill="#2A1005"/>
+
+  <!-- Mouth -->
+  <path d="M68 61 Q74 65 80 61" stroke="#4A2008" stroke-width="1.5" fill="none"/>
+
+  <!-- Raised front paw (right) -->
+  <ellipse cx="84" cy="65" rx="9" ry="7" fill="#8B4513" transform="rotate(-20 84 65)"/>
+  <!-- Claws -->
+  <path d="M87 59 L92 53 M90 61 L96 56 M84 58 L88 51" stroke="#5C3A1A" stroke-width="2" stroke-linecap="round"/>
+
+  <!-- Left arm / front paw -->
+  <ellipse cx="40" cy="70" rx="9" ry="6" fill="#8B4513" transform="rotate(20 40 70)"/>
+
+  <!-- Hind legs -->
+  <ellipse cx="46" cy="97" rx="10" ry="7" fill="#8B4513" transform="rotate(15 46 97)"/>
+  <ellipse cx="70" cy="99" rx="10" ry="7" fill="#8B4513" transform="rotate(-10 70 99)"/>
+
+  <!-- Hind paw claws -->
+  <path d="M38 100 L34 106 M43 102 L40 108 M48 101 L46 107" stroke="#5C3A1A" stroke-width="2" stroke-linecap="round"/>
+
+  <!-- Fur texture lines -->
+  <path d="M52 60 Q55 65 53 72" stroke="#7A3B10" stroke-width="1" fill="none" opacity="0.6"/>
+  <path d="M58 58 Q61 64 59 72" stroke="#7A3B10" stroke-width="1" fill="none" opacity="0.6"/>
+  <path d="M46 72 Q50 78 48 86" stroke="#7A3B10" stroke-width="1" fill="none" opacity="0.6"/>
+
+  <!-- Russian crown on bear head -->
+  <path d="M57 38 L57 32 L61 35 L63 28 L66 33 L69 30 L71 35 L75 32 L75 38 Z"
+        fill="url(#ru-gold-grad)"/>
+  <rect x="55" y="36" width="22" height="5" rx="1" fill="url(#ru-gold-grad)"/>
+  <circle cx="63" cy="29" r="2" fill="#CC0000"/>
+  <circle cx="69" cy="31" r="1.5" fill="#3498DB"/>
+
+  <!-- Shield border inner line -->
+  <path d="M60 16 L101 16 L101 84 Q101 112 60 124 Q19 112 19 84 L19 16 Z"
+        fill="none" stroke="#9E7E3A" stroke-width="1.5" opacity="0.7"/>
+</svg>

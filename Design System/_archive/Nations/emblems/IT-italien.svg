@@ -1,0 +1,73 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 140" width="120" height="140">
+  <defs>
+    <linearGradient id="it-shield-grad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#3DC876"/>
+      <stop offset="100%" stop-color="#1A6E40"/>
+    </linearGradient>
+    <linearGradient id="it-gold-grad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#EDD898"/>
+      <stop offset="50%" stop-color="#C5A55A"/>
+      <stop offset="100%" stop-color="#9E7E3A"/>
+    </linearGradient>
+    <filter id="it-shadow">
+      <feDropShadow dx="0" dy="3" stdDeviation="3" flood-color="rgba(0,0,0,0.5)"/>
+    </filter>
+  </defs>
+
+  <!-- Shield outline (gold border) -->
+  <path d="M60 8 L108 8 L108 85 Q108 118 60 132 Q12 118 12 85 L12 8 Z"
+        fill="url(#it-gold-grad)" filter="url(#it-shadow)"/>
+
+  <!-- Shield fill -->
+  <path d="M60 13 L104 13 L104 84 Q104 114 60 127 Q16 114 16 84 L16 13 Z"
+        fill="url(#it-shield-grad)"/>
+
+  <!-- Italian tricolor stripes (vertical) -->
+  <clipPath id="it-shield-clip">
+    <path d="M60 13 L104 13 L104 84 Q104 114 60 127 Q16 114 16 84 L16 13 Z"/>
+  </clipPath>
+  <rect x="16" y="13" width="29" height="115" fill="#27AE60" opacity="0.4" clip-path="url(#it-shield-clip)"/>
+  <rect x="75" y="13" width="29" height="115" fill="#CC0000" opacity="0.4" clip-path="url(#it-shield-clip)"/>
+
+  <!-- Five-pointed Star (Stella d'Italia) — large centered -->
+  <polygon points="60,22 64.7,36.6 80,36.6 67.6,45.4 72.4,60 60,51.2 47.6,60 52.4,45.4 40,36.6 55.3,36.6"
+           fill="url(#it-gold-grad)"/>
+
+  <!-- Star inner highlight -->
+  <polygon points="60,28 63.1,37.6 73,37.6 65.2,43.3 68.1,53 60,47.3 51.9,53 54.8,43.3 47,37.6 56.9,37.6"
+           fill="#EDD898" opacity="0.4"/>
+
+  <!-- Olive wreath around star -->
+  <!-- Left branch -->
+  <path d="M32 68 Q36 58 42 52" stroke="#C5A55A" stroke-width="2" fill="none"/>
+  <ellipse cx="33" cy="65" rx="5" ry="3" fill="#27AE60" opacity="0.7" transform="rotate(-30 33 65)"/>
+  <ellipse cx="35" cy="58" rx="5" ry="3" fill="#27AE60" opacity="0.7" transform="rotate(-45 35 58)"/>
+  <ellipse cx="40" cy="52" rx="5" ry="3" fill="#27AE60" opacity="0.7" transform="rotate(-60 40 52)"/>
+
+  <!-- Right branch -->
+  <path d="M88 68 Q84 58 78 52" stroke="#C5A55A" stroke-width="2" fill="none"/>
+  <ellipse cx="87" cy="65" rx="5" ry="3" fill="#27AE60" opacity="0.7" transform="rotate(30 87 65)"/>
+  <ellipse cx="85" cy="58" rx="5" ry="3" fill="#27AE60" opacity="0.7" transform="rotate(45 85 58)"/>
+  <ellipse cx="80" cy="52" rx="5" ry="3" fill="#27AE60" opacity="0.7" transform="rotate(60 80 52)"/>
+
+  <!-- Lower wreath connection -->
+  <path d="M32 68 Q60 80 88 68" stroke="#C5A55A" stroke-width="1.5" fill="none" stroke-dasharray="3,2"/>
+
+  <!-- Gear/cog wheel (industrial Italy symbol) -->
+  <circle cx="60" cy="92" r="14" fill="none" stroke="#C5A55A" stroke-width="2.5"/>
+  <circle cx="60" cy="92" r="8" fill="none" stroke="#C5A55A" stroke-width="1.5"/>
+  <circle cx="60" cy="92" r="4" fill="#C5A55A" opacity="0.6"/>
+  <!-- Gear teeth -->
+  <rect x="58" y="76" width="4" height="6" rx="1" fill="#C5A55A" transform="rotate(0 60 92)"/>
+  <rect x="58" y="76" width="4" height="6" rx="1" fill="#C5A55A" transform="rotate(45 60 92)"/>
+  <rect x="58" y="76" width="4" height="6" rx="1" fill="#C5A55A" transform="rotate(90 60 92)"/>
+  <rect x="58" y="76" width="4" height="6" rx="1" fill="#C5A55A" transform="rotate(135 60 92)"/>
+  <rect x="58" y="76" width="4" height="6" rx="1" fill="#C5A55A" transform="rotate(180 60 92)"/>
+  <rect x="58" y="76" width="4" height="6" rx="1" fill="#C5A55A" transform="rotate(225 60 92)"/>
+  <rect x="58" y="76" width="4" height="6" rx="1" fill="#C5A55A" transform="rotate(270 60 92)"/>
+  <rect x="58" y="76" width="4" height="6" rx="1" fill="#C5A55A" transform="rotate(315 60 92)"/>
+
+  <!-- Shield border inner line -->
+  <path d="M60 16 L101 16 L101 84 Q101 112 60 124 Q19 112 19 84 L19 16 Z"
+        fill="none" stroke="#EDD898" stroke-width="1.5" opacity="0.6"/>
+</svg>

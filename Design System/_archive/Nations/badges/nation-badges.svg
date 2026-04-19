@@ -1,0 +1,119 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 80" width="560" height="80">
+  <defs>
+    <linearGradient id="gold-ring" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#EDD898"/>
+      <stop offset="50%" stop-color="#C5A55A"/>
+      <stop offset="100%" stop-color="#9E7E3A"/>
+    </linearGradient>
+  </defs>
+
+  <!-- GB — Großbritannien (#E8A0B0) -->
+  <circle cx="40" cy="40" r="36" fill="url(#gold-ring)"/>
+  <circle cx="40" cy="40" r="32" fill="#E8A0B0"/>
+  <!-- Lion simplified -->
+  <ellipse cx="40" cy="44" rx="12" ry="14" fill="#8B0000" opacity="0.85"/>
+  <circle cx="46" cy="33" r="8" fill="#8B0000" opacity="0.85"/>
+  <path d="M37 26 L37 22 L40 24 L42 20 L44 24 L47 22 L47 26 Z" fill="#C5A55A"/>
+  <rect x="35" y="24" width="14" height="3" rx="1" fill="#C5A55A"/>
+  <circle cx="44" cy="31" r="1.5" fill="#F4E8C1"/>
+  <path d="M51 36 L56 32 M53 38 L58 35" stroke="#8B0000" stroke-width="2" stroke-linecap="round"/>
+  <path d="M28 42 Q23 35 26 30" stroke="#8B0000" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+
+  <!-- DE — Deutsches Reich (#4A4A4A) -->
+  <circle cx="120" cy="40" r="36" fill="url(#gold-ring)"/>
+  <circle cx="120" cy="40" r="32" fill="#4A4A4A"/>
+  <!-- Eagle simplified -->
+  <ellipse cx="120" cy="48" rx="10" ry="12" fill="#C5A55A"/>
+  <!-- Wings -->
+  <path d="M110 44 Q98 36 94 24 Q98 21 100 24 Q104 33 108 38 Q103 28 107 22 Q111 20 112 24 Q111 33 114 40 Z" fill="#C5A55A"/>
+  <path d="M130 44 Q142 36 146 24 Q142 21 140 24 Q136 33 132 38 Q137 28 133 22 Q129 20 128 24 Q129 33 126 40 Z" fill="#C5A55A"/>
+  <!-- Head -->
+  <circle cx="120" cy="32" r="8" fill="#C5A55A"/>
+  <!-- Beak -->
+  <path d="M126 32 L131 30 L130 33 L126 33 Z" fill="#9E7E3A"/>
+  <!-- Crown -->
+  <path d="M114 26 L114 22 L117 24 L119 19 L121 24 L124 22 L126 26 Z" fill="#C5A55A"/>
+  <rect x="112" y="24" width="16" height="3" rx="1" fill="#C5A55A"/>
+
+  <!-- AT — Österreich-Ungarn (#C0392B) -->
+  <circle cx="200" cy="40" r="36" fill="url(#gold-ring)"/>
+  <circle cx="200" cy="40" r="32" fill="#C0392B"/>
+  <!-- Double eagle simplified -->
+  <ellipse cx="200" cy="50" rx="9" ry="11" fill="#F4E8C1"/>
+  <!-- Red-white-red bar on breast -->
+  <rect x="196" y="46" width="8" height="10" rx="1" fill="#C0392B"/>
+  <rect x="196" y="50" width="8" height="4" fill="#F4E8C1"/>
+  <!-- Wings -->
+  <path d="M191 46 Q181 38 178 26 Q181 23 183 26 Q186 34 189 39 Q185 30 188 24 Q191 22 193 26 Q192 34 194 42 Z" fill="#F4E8C1"/>
+  <path d="M209 46 Q219 38 222 26 Q219 23 217 26 Q214 34 211 39 Q215 30 212 24 Q209 22 207 26 Q208 34 206 42 Z" fill="#F4E8C1"/>
+  <!-- Left head -->
+  <circle cx="194" cy="32" r="7" fill="#F4E8C1"/>
+  <path d="M188 32 L183 30 L184 33 L188 33 Z" fill="#C5A55A"/>
+  <!-- Right head -->
+  <circle cx="206" cy="32" r="7" fill="#F4E8C1"/>
+  <path d="M212 32 L217 30 L216 33 L212 33 Z" fill="#C5A55A"/>
+  <!-- Left crown -->
+  <path d="M188 27 L188 23 L191 25 L193 20 L195 25 L198 23 L198 27 Z" fill="#C5A55A"/>
+  <!-- Right crown -->
+  <path d="M202 27 L202 23 L205 25 L207 20 L209 25 L212 23 L212 27 Z" fill="#C5A55A"/>
+
+  <!-- FR — Frankreich (#3498DB) -->
+  <circle cx="280" cy="40" r="36" fill="url(#gold-ring)"/>
+  <circle cx="280" cy="40" r="32" fill="#3498DB"/>
+  <!-- Fleur-de-lis -->
+  <!-- Central petal -->
+  <path d="M280 16 C280 16 274 24 274 33 C274 39 277 43 280 44 C283 43 286 39 286 33 C286 24 280 16 280 16 Z" fill="#C5A55A"/>
+  <!-- Left petal -->
+  <path d="M280 38 C280 38 271 34 265 28 C262 25 262 21 265 19 C268 18 272 21 273 25 C270 21 271 18 274 18 C277 18 279 23 279 28 L280 38 Z" fill="#C5A55A"/>
+  <!-- Right petal -->
+  <path d="M280 38 C280 38 289 34 295 28 C298 25 298 21 295 19 C292 18 288 21 287 25 C290 21 289 18 286 18 C283 18 281 23 281 28 L280 38 Z" fill="#C5A55A"/>
+  <!-- Band -->
+  <rect x="274" y="42" width="12" height="4" rx="1" fill="#9E7E3A"/>
+  <!-- Lower drop -->
+  <path d="M280 46 C277 50 275 56 277 60 C278 63 280 64 280 64 C280 64 282 63 283 60 C285 56 283 50 280 46 Z" fill="#C5A55A"/>
+
+  <!-- IT — Italien (#27AE60) -->
+  <circle cx="360" cy="40" r="36" fill="url(#gold-ring)"/>
+  <circle cx="360" cy="40" r="32" fill="#27AE60"/>
+  <!-- Star -->
+  <polygon points="360,14 363.8,25.3 375.6,25.3 366.6,31.9 369.8,43.1 360,36.5 350.2,43.1 353.4,31.9 344.4,25.3 356.2,25.3" fill="#C5A55A"/>
+  <!-- Gear below -->
+  <circle cx="360" cy="56" r="10" fill="none" stroke="#C5A55A" stroke-width="2"/>
+  <circle cx="360" cy="56" r="5" fill="none" stroke="#C5A55A" stroke-width="1.5"/>
+  <rect x="358.5" y="44" width="3" height="4" rx="1" fill="#C5A55A" transform="rotate(0 360 56)"/>
+  <rect x="358.5" y="44" width="3" height="4" rx="1" fill="#C5A55A" transform="rotate(60 360 56)"/>
+  <rect x="358.5" y="44" width="3" height="4" rx="1" fill="#C5A55A" transform="rotate(120 360 56)"/>
+  <rect x="358.5" y="44" width="3" height="4" rx="1" fill="#C5A55A" transform="rotate(180 360 56)"/>
+  <rect x="358.5" y="44" width="3" height="4" rx="1" fill="#C5A55A" transform="rotate(240 360 56)"/>
+  <rect x="358.5" y="44" width="3" height="4" rx="1" fill="#C5A55A" transform="rotate(300 360 56)"/>
+
+  <!-- RU — Russland (#F1C40F) -->
+  <circle cx="440" cy="40" r="36" fill="url(#gold-ring)"/>
+  <circle cx="440" cy="40" r="32" fill="#F1C40F"/>
+  <!-- Bear simplified -->
+  <ellipse cx="442" cy="50" rx="13" ry="14" fill="#8B4513"/>
+  <circle cx="449" cy="36" r="11" fill="#8B4513"/>
+  <!-- Ears -->
+  <circle cx="443" cy="27" r="4" fill="#8B4513"/>
+  <circle cx="455" cy="26" r="4" fill="#8B4513"/>
+  <!-- Face -->
+  <circle cx="446" cy="34" r="1.5" fill="#111C27"/>
+  <circle cx="452" cy="33" r="1.5" fill="#111C27"/>
+  <ellipse cx="452" cy="38" rx="5" ry="4" fill="#7A3B10"/>
+  <ellipse cx="452" cy="37" rx="3" ry="2" fill="#4A2008"/>
+  <!-- Front paw raised -->
+  <ellipse cx="460" cy="44" rx="6" ry="4" fill="#8B4513" transform="rotate(-25 460 44)"/>
+  <path d="M462 40 L466 36 M464 42 L469 39" stroke="#5C3A1A" stroke-width="1.5" stroke-linecap="round"/>
+  <!-- Crown -->
+  <path d="M443 27 L443 23 L446 25 L448 19 L450 24 L453 22 L456 25 L456 27 Z" fill="#C5A55A"/>
+  <rect x="441" y="25" width="17" height="3" rx="1" fill="#C5A55A"/>
+
+  <!-- TR — Osmn. Reich (#1ABC9C) -->
+  <circle cx="520" cy="40" r="36" fill="url(#gold-ring)"/>
+  <circle cx="520" cy="40" r="32" fill="#1ABC9C"/>
+  <!-- Crescent -->
+  <circle cx="518" cy="40" r="20" fill="#F4E8C1"/>
+  <circle cx="524" cy="37" r="17" fill="#1ABC9C"/>
+  <!-- Star -->
+  <polygon points="537,34 538.7,39.2 544,39.2 539.7,42.4 541.4,47.6 537,44.4 532.6,47.6 534.3,42.4 530,39.2 535.3,39.2" fill="#F4E8C1"/>
+</svg>

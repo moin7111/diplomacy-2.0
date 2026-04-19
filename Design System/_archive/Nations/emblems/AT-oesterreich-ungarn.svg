@@ -1,0 +1,90 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 140" width="120" height="140">
+  <defs>
+    <linearGradient id="at-shield-grad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#E04030"/>
+      <stop offset="100%" stop-color="#8B1A10"/>
+    </linearGradient>
+    <linearGradient id="at-gold-grad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#EDD898"/>
+      <stop offset="50%" stop-color="#C5A55A"/>
+      <stop offset="100%" stop-color="#9E7E3A"/>
+    </linearGradient>
+    <filter id="at-shadow">
+      <feDropShadow dx="0" dy="3" stdDeviation="3" flood-color="rgba(0,0,0,0.5)"/>
+    </filter>
+  </defs>
+
+  <!-- Shield outline (gold border) -->
+  <path d="M60 8 L108 8 L108 85 Q108 118 60 132 Q12 118 12 85 L12 8 Z"
+        fill="url(#at-gold-grad)" filter="url(#at-shadow)"/>
+
+  <!-- Shield fill -->
+  <path d="M60 13 L104 13 L104 84 Q104 114 60 127 Q16 114 16 84 L16 13 Z"
+        fill="url(#at-shield-grad)"/>
+
+  <!-- White horizontal bar (Austrian arms) -->
+  <rect x="16" y="60" width="88" height="20" fill="#F4E8C1" opacity="0.9"/>
+
+  <!-- Double-headed eagle body -->
+  <ellipse cx="60" cy="76" rx="13" ry="16" fill="#F4E8C1"/>
+
+  <!-- Eagle breast shield (red-white-red) -->
+  <rect x="55" y="70" width="10" height="14" rx="2" fill="#C0392B"/>
+  <rect x="55" y="74" width="10" height="6" rx="1" fill="#F4E8C1"/>
+
+  <!-- Left wing -->
+  <path d="M47 72 Q28 58 22 35 Q24 30 28 33 Q33 46 40 55 Q34 40 38 30 Q42 27 46 31 Q44 44 49 54 Q45 40 51 34 Q55 32 57 37 Q54 50 55 62 Z"
+        fill="#F4E8C1"/>
+  <!-- Left wing details -->
+  <path d="M22 35 Q33 46 40 55" stroke="#C0392B" stroke-width="0.8" fill="none" opacity="0.6"/>
+  <path d="M38 30 Q44 44 49 54" stroke="#C0392B" stroke-width="0.8" fill="none" opacity="0.6"/>
+
+  <!-- Right wing -->
+  <path d="M73 72 Q92 58 98 35 Q96 30 92 33 Q87 46 80 55 Q86 40 82 30 Q78 27 74 31 Q76 44 71 54 Q75 40 69 34 Q65 32 63 37 Q66 50 65 62 Z"
+        fill="#F4E8C1"/>
+  <!-- Right wing details -->
+  <path d="M98 35 Q87 46 80 55" stroke="#C0392B" stroke-width="0.8" fill="none" opacity="0.6"/>
+  <path d="M82 30 Q76 44 71 54" stroke="#C0392B" stroke-width="0.8" fill="none" opacity="0.6"/>
+
+  <!-- Left head -->
+  <circle cx="50" cy="46" r="10" fill="#F4E8C1"/>
+  <!-- Left beak -->
+  <path d="M42 46 L35 43 L36 47 L42 48 Z" fill="#C5A55A"/>
+  <path d="M36 47 L32 50 L36 51 Z" fill="#C5A55A"/>
+  <!-- Left eye -->
+  <circle cx="47" cy="44" r="2.5" fill="#111C27"/>
+  <circle cx="47" cy="44" r="1" fill="#EDD898"/>
+
+  <!-- Right head -->
+  <circle cx="70" cy="46" r="10" fill="#F4E8C1"/>
+  <!-- Right beak -->
+  <path d="M78 46 L85 43 L84 47 L78 48 Z" fill="#C5A55A"/>
+  <path d="M84 47 L88 50 L84 51 Z" fill="#C5A55A"/>
+  <!-- Right eye -->
+  <circle cx="73" cy="44" r="2.5" fill="#111C27"/>
+  <circle cx="73" cy="44" r="1" fill="#EDD898"/>
+
+  <!-- Left crown -->
+  <path d="M42 38 L42 32 L46 35 L48 28 L51 35 L54 32 L54 38 Z" fill="url(#at-gold-grad)"/>
+  <rect x="40" y="36" width="16" height="4" rx="1" fill="url(#at-gold-grad)"/>
+  <circle cx="48" cy="29" r="1.5" fill="#CC0000"/>
+
+  <!-- Right crown -->
+  <path d="M66 38 L66 32 L70 35 L72 28 L75 35 L78 32 L78 38 Z" fill="url(#at-gold-grad)"/>
+  <rect x="64" y="36" width="16" height="4" rx="1" fill="url(#at-gold-grad)"/>
+  <circle cx="72" cy="29" r="1.5" fill="#CC0000"/>
+
+  <!-- Talons / feet -->
+  <path d="M50 91 Q46 96 44 102 M47 89 Q42 94 40 100 M53 92 Q51 99 50 105"
+        stroke="#C5A55A" stroke-width="2" fill="none" stroke-linecap="round"/>
+  <path d="M70 91 Q74 96 76 102 M73 89 Q78 94 80 100 M67 92 Q69 99 70 105"
+        stroke="#C5A55A" stroke-width="2" fill="none" stroke-linecap="round"/>
+
+  <!-- Scepter and orb between talons (Habsburg symbols) -->
+  <circle cx="60" cy="98" r="5" fill="none" stroke="#C5A55A" stroke-width="1.5"/>
+  <line x1="60" y1="93" x2="60" y2="104" stroke="#C5A55A" stroke-width="1.5"/>
+
+  <!-- Shield border inner line -->
+  <path d="M60 16 L101 16 L101 84 Q101 112 60 124 Q19 112 19 84 L19 16 Z"
+        fill="none" stroke="#C5A55A" stroke-width="1.5" opacity="0.6"/>
+</svg>

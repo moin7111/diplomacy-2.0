@@ -1,0 +1,71 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 140" width="120" height="140">
+  <defs>
+    <linearGradient id="tr-shield-grad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#22D4B0"/>
+      <stop offset="100%" stop-color="#0E8870"/>
+    </linearGradient>
+    <linearGradient id="tr-gold-grad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#EDD898"/>
+      <stop offset="50%" stop-color="#C5A55A"/>
+      <stop offset="100%" stop-color="#9E7E3A"/>
+    </linearGradient>
+    <filter id="tr-shadow">
+      <feDropShadow dx="0" dy="3" stdDeviation="3" flood-color="rgba(0,0,0,0.5)"/>
+    </filter>
+  </defs>
+
+  <!-- Shield outline (gold border) -->
+  <path d="M60 8 L108 8 L108 85 Q108 118 60 132 Q12 118 12 85 L12 8 Z"
+        fill="url(#tr-gold-grad)" filter="url(#tr-shadow)"/>
+
+  <!-- Shield fill -->
+  <path d="M60 13 L104 13 L104 84 Q104 114 60 127 Q16 114 16 84 L16 13 Z"
+        fill="url(#tr-shield-grad)"/>
+
+  <!-- Crescent moon (large, centered) -->
+  <!-- Outer circle -->
+  <circle cx="58" cy="65" r="30" fill="#F4E8C1"/>
+  <!-- Inner circle (cuts crescent) -->
+  <circle cx="66" cy="62" r="26" fill="url(#tr-shield-grad)"/>
+
+  <!-- Five-pointed star -->
+  <polygon points="82,53 84.8,61.6 94,61.6 86.6,67 89.4,75.6 82,70.2 74.6,75.6 77.4,67 70,61.6 79.2,61.6"
+           fill="#F4E8C1"/>
+
+  <!-- Decorative geometric pattern (Ottoman tile-style) -->
+  <!-- Corner ornaments -->
+  <!-- Top-left ornament -->
+  <path d="M20 20 Q26 20 26 26 Q26 20 32 20" stroke="#C5A55A" stroke-width="1.5" fill="none" opacity="0.6"/>
+  <circle cx="26" cy="20" r="2" fill="#C5A55A" opacity="0.5"/>
+
+  <!-- Top-right ornament -->
+  <path d="M88 20 Q94 20 100 20 Q94 20 94 26" stroke="#C5A55A" stroke-width="1.5" fill="none" opacity="0.6"/>
+  <circle cx="94" cy="20" r="2" fill="#C5A55A" opacity="0.5"/>
+
+  <!-- Bottom corners (angled with shield) -->
+  <path d="M25 100 Q26 106 30 110" stroke="#C5A55A" stroke-width="1.5" fill="none" opacity="0.5"/>
+  <path d="M95 100 Q94 106 90 110" stroke="#C5A55A" stroke-width="1.5" fill="none" opacity="0.5"/>
+
+  <!-- Geometric border pattern (Islamic-style) -->
+  <rect x="16" y="13" width="88" height="5" fill="none"/>
+  <!-- Top decorative band -->
+  <path d="M16 18 L104 18" stroke="#C5A55A" stroke-width="0.8" opacity="0.5"/>
+  <path d="M16 21 L104 21" stroke="#C5A55A" stroke-width="0.5" opacity="0.3"/>
+
+  <!-- Arabesque corner details -->
+  <path d="M22 26 Q24 30 22 34 Q26 32 30 34 Q28 30 30 26 Q26 28 22 26 Z"
+        fill="#C5A55A" opacity="0.4"/>
+  <path d="M98 26 Q96 30 98 34 Q94 32 90 34 Q92 30 90 26 Q94 28 98 26 Z"
+        fill="#C5A55A" opacity="0.4"/>
+
+  <!-- Bottom decorative elements -->
+  <path d="M38 110 Q60 118 82 110" stroke="#C5A55A" stroke-width="1" fill="none" opacity="0.5"/>
+  <!-- Small ornamental dots -->
+  <circle cx="30" cy="108" r="1.5" fill="#C5A55A" opacity="0.6"/>
+  <circle cx="60" cy="116" r="1.5" fill="#C5A55A" opacity="0.6"/>
+  <circle cx="90" cy="108" r="1.5" fill="#C5A55A" opacity="0.6"/>
+
+  <!-- Shield border inner line -->
+  <path d="M60 16 L101 16 L101 84 Q101 112 60 124 Q19 112 19 84 L19 16 Z"
+        fill="none" stroke="#EDD898" stroke-width="1.5" opacity="0.6"/>
+</svg>

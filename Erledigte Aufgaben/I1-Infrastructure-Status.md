@@ -92,8 +92,8 @@ Caddy:    Reverse Proxy (Auto-HTTPS)
 |---------|--------|-----------|
 | Hetzner Firewall Rules prüfen | ⏳ | Mittel |
 | Automatische Snapshots/Backups | ⏳ | Mittel |
-| Fail2Ban installieren | ⏳ | Niedrig |
-| UFW Firewall konfigurieren | ⏳ | Mittel |
+| Fail2Ban installieren | ✅ | Aktiv für sshd |
+| UFW Firewall konfigurieren | ✅ | Ports 22, 80, 443 + isolation |
 | GitHub Repository erstellen | ✅ | https://github.com/moin7111/diplomacy-2.0 |
 | CI/CD Workflows (lokal) | ✅ | `.github/workflows/ci.yml` + `deploy.yml` (lokal vorhanden, müssen über GitHub UI hochgeladen werden — Token braucht `workflow` Scope) |
 | SSH Shortcut eingerichtet | ✅ | `ssh diplomacy` funktioniert |
@@ -107,8 +107,8 @@ Caddy:    Reverse Proxy (Auto-HTTPS)
 |-------|-------------|--------|
 | **I2** | CI/CD Pipeline | ✅ Workflow-Dateien erstellt, repo fehlt noch |
 | **I3** | Deployment-Konfiguration | ✅ docker-compose + Anleitung erstellt |
-| **I4** | WebSocket Infrastruktur | ⏳ Konfiguration vorbereitet |
+| **I4** | WebSocket Infrastruktur | ✅ | Caddy CORS & Flush, Redis Pub/Sub getestet |
 | **I5** | Monitoring & Alerting | ⏳ |
 | **I6** | Logging | ⏳ |
-| **I7** | Sicherheit | ⏳ Teilweise (SSH Key-Only, Caddy HTTPS) |
+| **I7** | Sicherheit | ✅ | UFW aktiv, Ports isoliert, JWT verifiziert, Fail2Ban |
 | **I9** | QA & Testing | ⏳ |

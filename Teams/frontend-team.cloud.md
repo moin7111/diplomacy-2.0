@@ -38,26 +38,26 @@ Das Frontend-Team ist verantwortlich für die gesamte Client-Seite der Web-App: 
 ### Paket F2: Login / Registrierung
 **Priorität:** Phase 1 (MVP)
 
-- [ ] Login-Screen (E-Mail + Passwort)
-- [ ] Registrierung-Screen (E-Mail, Username, Passwort)
-- [ ] Wechsel Login ↔ Registrierung (Inline-Toggle)
+- [x] Login-Screen (E-Mail + Passwort)
+- [x] Registrierung-Screen (E-Mail, Username, Passwort)
+- [x] Wechsel Login ↔ Registrierung (Inline-Toggle)
 - [ ] Social Login Integration (Google, Apple) - Optional
-- [ ] Formular-Validierung mit Fehlermeldungen
+- [x] Formular-Validierung mit Fehlermeldungen
 - [ ] "Passwort vergessen"-Flow
-- [ ] Secure Token Storage (HttpOnly Cookies / localStorage mit Encryption)
+- [x] Secure Token Storage (HttpOnly Cookies / localStorage mit Encryption)
 
 ### Paket F3: Hauptbildschirm (Home)
 **Priorität:** Phase 1 (MVP)
 
-- [ ] Layout: Spieler-Icon (groß, rund, klickbar), Name, CTAs, Match-Liste
+- [x] Layout: Spieler-Icon (groß, rund, klickbar), Name, CTAs, Match-Liste
 - [ ] Spieler-Icon-Auswahl (Overlay mit Icon-Galerie)
 - [ ] Spielername Inline-Edit (Tap → Edit → Save)
-- [ ] "Spiel erstellen"-Button → Konfigurationsscreen
-- [ ] "Spiel beitreten"-Button → Code-Eingabe
-- [ ] Match-Karten-Komponente (Flagge, Name, Spieleranzahl, Runde, Status)
-- [ ] Scrollbare Match-Liste (aktuelle Spiele + offene Spiele)
+- [x] "Spiel erstellen"-Button → Konfigurationsscreen
+- [x] "Spiel beitreten"-Button → Code-Eingabe
+- [x] Match-Karten-Komponente (Flagge, Name, Spieleranzahl, Runde, Status)
+- [x] Scrollbare Match-Liste (aktuelle Spiele + offene Spiele)
 - [ ] Pull-to-Refresh für Match-Liste
-- [ ] Settings-Button (oben links) → Settings-Screen
+- [x] Settings-Button (oben links) → Settings-Screen
 
 ### Paket F4: Spiel erstellen & Lobby
 **Priorität:** Phase 1 (MVP)
@@ -65,10 +65,10 @@ Das Frontend-Team ist verantwortlich für die gesamte Client-Seite der Web-App: 
 - [ ] Konfigurationsscreen (Spielname, Modus, Raketen, Timer-Einstellungen)
 - [ ] Slider-Komponenten für Timer-Werte
 - [ ] Toggle-Komponente für Raketen AN/AUS
-- [ ] Raumcode-Anzeige nach Erstellung
-- [ ] Share-Funktion (WhatsApp, SMS, Copy-to-Clipboard)
-- [ ] Lobby-Screen (Spielerliste, Bereit-Status, Host-Controls)
-- [ ] Länderwahl-Interface (nach Beitritt aller Spieler)
+- [x] Raumcode-Anzeige nach Erstellung
+- [x] Share-Funktion (WhatsApp, SMS, Copy-to-Clipboard)
+- [x] Lobby-Screen (Spielerliste, Bereit-Status, Host-Controls)
+- [x] Länderwahl-Interface (nach Beitritt aller Spieler)
 
 ### Paket F5: Karten-Renderer (Kernkomponente)
 **Priorität:** Phase 1 (MVP) - Kritischer Pfad

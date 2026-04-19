@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=390, initial-scale=1">
+<title>D2.0 — Login / Register</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --navy:#1B2838; --navy-l:#253548; --navy-d:#111C27;
+    --bord:#8B0000; --bord-h:#A50000;
+    --green:#2D5016; --green-h:#3D6B20;
+    --gold:#C5A55A; --gold-l:#D4BA7A; --gold-sh:#EDD898; --gold-d:#9E7E3A;
+    --paper:#F4E8C1; --muted:#8A9BAE;
+  }
+  body {
+    background:#0D1520;display:flex;justify-content:center;
+    align-items:flex-start;min-height:100vh;padding:24px;gap:24px;
+    flex-wrap:wrap;font-family:'Inter',sans-serif;
+  }
+  .label { color:var(--gold);font-size:11px;font-weight:600;letter-spacing:2px;text-align:center;margin-bottom:8px; }
+
+  .phone {
+    width:390px;height:844px;background:var(--navy);
+    border-radius:40px;overflow:hidden;position:relative;
+    border:3px solid var(--gold);
+    box-shadow:0 0 40px rgba(197,165,90,.2),0 20px 60px rgba(0,0,0,.8);
+    flex-shrink:0;
+  }
+  .phone::before {
+    content:'';position:absolute;top:0;left:0;right:0;height:3px;
+    background:linear-gradient(90deg,var(--gold-d),var(--gold-sh),var(--gold-d));z-index:10;
+  }
+  .phone::after {
+    content:'';position:absolute;bottom:0;left:0;right:0;height:3px;
+    background:linear-gradient(90deg,var(--gold-d),var(--gold-sh),var(--gold-d));
+  }
+
+  /* Diagonal background lines */
+  .bg-lines {
+    position:absolute;inset:0;overflow:hidden;pointer-events:none;
+    background-image:repeating-linear-gradient(
+      -45deg,transparent,transparent 40px,rgba(197,165,90,.025) 40px,rgba(197,165,90,.025) 41px
+    );
+  }
+
+  /* Corner ornaments */
+  .orn { position:absolute; }
+  .orn-tl { top:8px;left:8px;width:44px;height:44px;
+    border-top:1.5px solid rgba(197,165,90,.35);
+    border-left:1.5px solid rgba(197,165,90,.35); }
+  .orn-tr { top:8px;right:8px;width:44px;height:44px;
+    border-top:1.5px solid rgba(197,165,90,.35);
+    border-right:1.5px solid rgba(197,165,90,.35); }
+  .orn-bl { bottom:8px;left:8px;width:44px;height:44px;
+    border-bottom:1.5px solid rgba(197,165,90,.35);
+    border-left:1.5px solid rgba(197,165,90,.35); }
+  .orn-br { bottom:8px;right:8px;width:44px;height:44px;
+    border-bottom:1.5px solid rgba(197,165,90,.35);
+    border-right:1.5px solid rgba(197,165,90,.35); }
+
+  /* LOGO */
+  .logo-area {
+    position:absolute;top:78px;left:0;right:0;
+    display:flex;flex-direction:column;align-items:center;gap:0;
+  }
+  .shield-icon {
+    width:80px;height:80px;border-radius:50%;
+    background:var(--navy-l);border:2.5px solid var(--gold);
+    display:flex;align-items:center;justify-content:center;
+    font-size:32px;margin-bottom:14px;
+    box-shadow:0 0 22px rgba(197,165,90,.55),0 0 6px rgba(197,165,90,.8);
+  }
+  .logo-title {
+    font-family:'Cinzel',serif;font-size:30px;font-weight:700;
+    color:var(--gold-sh);letter-spacing:8px;text-align:center;
+    line-height:1;margin-bottom:4px;
+  }
+  .logo-version {
+    font-family:'Cinzel',serif;font-size:18px;font-weight:700;
+    color:var(--gold);letter-spacing:4px;text-align:center;
+  }
+  .logo-sub {
+    font-size:11px;color:var(--muted);letter-spacing:3px;
+    text-align:center;margin-top:6px;opacity:.75;
+  }
+  .divider {
+    display:flex;align-items:center;gap:10px;margin-top:14px;
+    width:260px;
+  }
+  .divider-line { flex:1;height:1px;background:rgba(197,165,90,.25); }
+  .divider-gem { font-size:8px;color:var(--gold);opacity:.7; }
+
+  /* TABS */
+  .tab-toggle {
+    position:absolute;top:282px;left:24px;right:24px;
+    height:46px;background:var(--navy-d);border-radius:8px;
+    border:1px solid rgba(197,165,90,.2);
+    display:flex;overflow:hidden;
+  }
+  .tab {
+    flex:1;display:flex;align-items:center;justify-content:center;
+    font-size:14px;font-weight:600;letter-spacing:.5px;cursor:pointer;
+    transition:all 150ms;
+  }
+  .tab.active { background:var(--bord);color:var(--paper); }
+  .tab.inactive { color:var(--muted); }
+  .tab.inactive:hover { color:var(--gold); }
+
+  /* FORM CARD */
+  .form-card {
+    position:absolute;top:344px;left:24px;right:24px;
+    background:var(--navy-l);border-radius:12px;
+    border:1.5px solid rgba(197,165,90,.35);
+    padding:20px 20px 22px;
+    box-shadow:0 8px 28px rgba(0,0,0,.45);
+  }
+
+  .field-label {
+    font-size:11px;font-weight:600;color:var(--gold);
+    letter-spacing:1.5px;text-transform:uppercase;
+    display:block;margin-bottom:7px;
+  }
+  .input {
+    width:100%;height:46px;
+    background:var(--navy-d);border:1px solid rgba(197,165,90,.25);
+    border-radius:8px;padding:0 14px;
+    font-family:'Inter',sans-serif;font-size:15px;color:var(--paper);
+    outline:none;transition:border-color 150ms;margin-bottom:18px;
+    display:flex;align-items:center;position:relative;
+  }
+  .input-field {
+    width:100%;height:46px;background:var(--navy-d);
+    border:1px solid rgba(197,165,90,.25);border-radius:8px;
+    padding:0 14px;font-family:'Inter',sans-serif;font-size:15px;
+    color:var(--paper);outline:none;transition:border-color 150ms;
+    margin-bottom:18px;
+  }
+  .input-field::placeholder { color:var(--muted); }
+  .input-field:focus { border-color:var(--gold); }
+
+  .pw-wrap { position:relative;margin-bottom:14px; }
+  .pw-wrap .input-field { margin-bottom:0;padding-right:44px; }
+  .pw-toggle {
+    position:absolute;right:12px;top:50%;transform:translateY(-50%);
+    font-size:18px;cursor:pointer;color:var(--muted);
+  }
+  .pw-toggle:hover { color:var(--gold); }
+
+  .forgot {
+    display:flex;justify-content:flex-end;margin-bottom:18px;
+    font-size:12px;color:var(--gold);cursor:pointer;
+  }
+  .forgot:hover { text-decoration:underline; }
+
+  .btn-primary {
+    width:100%;height:52px;background:var(--bord);
+    border:2px solid var(--gold-d);border-radius:8px;
+    font-family:'Inter',sans-serif;font-size:15px;font-weight:700;
+    letter-spacing:3px;text-transform:uppercase;color:var(--paper);
+    cursor:pointer;transition:all 150ms;display:flex;align-items:center;
+    justify-content:center;
+    box-shadow:0 4px 0 rgba(0,0,0,.5),0 2px 10px rgba(0,0,0,.35);
+    margin-bottom:18px;
+  }
+  .btn-primary:hover{background:var(--bord-h);box-shadow:0 4px 0 rgba(0,0,0,.5),0 0 12px rgba(197,165,90,.5);}
+  .btn-primary:active{transform:translateY(2px);box-shadow:0 2px 0 rgba(0,0,0,.5),inset 0 2px 4px rgba(0,0,0,.4);}
+
+  .btn-primary.green {background:var(--green);}
+  .btn-primary.green:hover{background:var(--green-h);}
+
+  .or-divider {
+    display:flex;align-items:center;gap:12px;margin-bottom:14px;
+  }
+  .or-line { flex:1;height:1px;background:rgba(197,165,90,.2); }
+  .or-text { font-size:12px;color:var(--muted); }
+
+  .btn-google {
+    width:100%;height:44px;background:var(--navy-d);
+    border:1px solid rgba(197,165,90,.25);border-radius:8px;
+    font-family:'Inter',sans-serif;font-size:14px;font-weight:500;
+    color:var(--paper);cursor:pointer;transition:all 150ms;
+    display:flex;align-items:center;justify-content:center;gap:10px;
+  }
+  .btn-google:hover{border-color:var(--gold);}
+
+  .tagline {
+    position:absolute;bottom:18px;left:0;right:0;
+    text-align:center;font-size:11px;color:var(--muted);
+    opacity:.55;letter-spacing:.5px;
+  }
+</style>
+</head>
+<body>
+
+<!-- ══════════════ LOGIN ══════════════ -->
+<div>
+  <div class="label">Login — Anmelden</div>
+  <div class="phone">
+    <div class="bg-lines"></div>
+    <div class="orn orn-tl"></div><div class="orn orn-tr"></div>
+    <div class="orn orn-bl"></div><div class="orn orn-br"></div>
+
+    <div class="logo-area">
+      <div class="shield-icon">⚔</div>
+      <div class="logo-title">DIPLOMACY</div>
+      <div class="logo-version">2.0</div>
+      <div class="logo-sub">Hybride Kriegsführung</div>
+      <div class="divider">
+        <div class="divider-line"></div>
+        <div class="divider-gem">◆</div>
+        <div class="divider-line"></div>
+      </div>
+    </div>
+
+    <div class="tab-toggle">
+      <div class="tab active">Anmelden</div>
+      <div class="tab inactive">Registrieren</div>
+    </div>
+
+    <div class="form-card">
+      <label class="field-label">E-Mail</label>
+      <input class="input-field" type="email" placeholder="name@beispiel.de">
+
+      <label class="field-label">Passwort</label>
+      <div class="pw-wrap">
+        <input class="input-field" type="password" placeholder="••••••••">
+        <span class="pw-toggle">👁</span>
+      </div>
+
+      <div class="forgot">Passwort vergessen?</div>
+
+      <button class="btn-primary">Anmelden</button>
+
+      <div class="or-divider">
+        <div class="or-line"></div>
+        <span class="or-text">oder</span>
+        <div class="or-line"></div>
+      </div>
+
+      <button class="btn-google">
+        <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+          <path d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844a4.14 4.14 0 01-1.796 2.716v2.259h2.908c1.702-1.567 2.684-3.875 2.684-6.615z" fill="#4285F4"/>
+          <path d="M9 18c2.43 0 4.467-.806 5.956-2.184l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 009 18z" fill="#34A853"/>
+          <path d="M3.964 10.71A5.41 5.41 0 013.682 9c0-.593.102-1.17.282-1.71V4.958H.957A8.996 8.996 0 000 9c0 1.452.348 2.827.957 4.042l3.007-2.332z" fill="#FBBC05"/>
+          <path d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 00.957 4.958L3.964 7.29C4.672 5.163 6.656 3.58 9 3.58z" fill="#EA4335"/>
+        </svg>
+        Mit Google anmelden
+      </button>
+    </div>
+
+    <div class="tagline">❝ Hybride Kriegsführung beginnt hier ❞</div>
+  </div>
+</div>
+
+<!-- ══════════════ REGISTER ══════════════ -->
+<div>
+  <div class="label">Register — Registrieren</div>
+  <div class="phone">
+    <div class="bg-lines"></div>
+    <div class="orn orn-tl"></div><div class="orn orn-tr"></div>
+    <div class="orn orn-bl"></div><div class="orn orn-br"></div>
+
+    <div class="logo-area">
+      <div class="shield-icon">⚔</div>
+      <div class="logo-title">DIPLOMACY</div>
+      <div class="logo-version">2.0</div>
+      <div class="logo-sub">Hybride Kriegsführung</div>
+      <div class="divider">
+        <div class="divider-line"></div>
+        <div class="divider-gem">◆</div>
+        <div class="divider-line"></div>
+      </div>
+    </div>
+
+    <div class="tab-toggle" style="top:260px">
+      <div class="tab inactive">Anmelden</div>
+      <div class="tab active" style="background:var(--green)">Registrieren</div>
+    </div>
+
+    <div class="form-card" style="top:322px">
+      <label class="field-label">Benutzername</label>
+      <input class="input-field" type="text" placeholder="Feldmarschall123">
+
+      <label class="field-label">E-Mail</label>
+      <input class="input-field" type="email" placeholder="name@beispiel.de">
+
+      <label class="field-label">Passwort</label>
+      <div class="pw-wrap" style="margin-bottom:18px">
+        <input class="input-field" type="password" placeholder="Mindestens 8 Zeichen">
+        <span class="pw-toggle">👁</span>
+      </div>
+
+      <label class="field-label">Passwort wiederholen</label>
+      <div class="pw-wrap" style="margin-bottom:18px">
+        <input class="input-field" type="password" placeholder="Passwort bestätigen">
+        <span class="pw-toggle">👁</span>
+      </div>
+
+      <button class="btn-primary green">Konto Erstellen</button>
+    </div>
+
+    <div class="tagline">❝ Hybride Kriegsführung beginnt hier ❞</div>
+  </div>
+</div>
+
+</body>
+</html>

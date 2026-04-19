@@ -1,0 +1,93 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 140" width="120" height="140">
+  <defs>
+    <linearGradient id="fr-shield-grad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#5EB0EE"/>
+      <stop offset="100%" stop-color="#1D6FA0"/>
+    </linearGradient>
+    <linearGradient id="fr-gold-grad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#EDD898"/>
+      <stop offset="50%" stop-color="#C5A55A"/>
+      <stop offset="100%" stop-color="#9E7E3A"/>
+    </linearGradient>
+    <filter id="fr-shadow">
+      <feDropShadow dx="0" dy="3" stdDeviation="3" flood-color="rgba(0,0,0,0.5)"/>
+    </filter>
+  </defs>
+
+  <!-- Shield outline (gold border) -->
+  <path d="M60 8 L108 8 L108 85 Q108 118 60 132 Q12 118 12 85 L12 8 Z"
+        fill="url(#fr-gold-grad)" filter="url(#fr-shadow)"/>
+
+  <!-- Shield fill -->
+  <path d="M60 13 L104 13 L104 84 Q104 114 60 127 Q16 114 16 84 L16 13 Z"
+        fill="url(#fr-shield-grad)"/>
+
+  <!-- Fleur-de-lis (large, centered) -->
+  <!-- Central petal -->
+  <path d="M60 28
+           C60 28 53 38 53 50
+           C53 58 57 63 60 65
+           C63 63 67 58 67 50
+           C67 38 60 28 60 28 Z"
+        fill="url(#fr-gold-grad)"/>
+
+  <!-- Center bulge of central petal -->
+  <ellipse cx="60" cy="50" rx="5" ry="12" fill="#EDD898" opacity="0.4"/>
+
+  <!-- Left petal -->
+  <path d="M60 55
+           C60 55 48 50 40 42
+           C36 38 36 32 40 30
+           C44 28 50 32 52 38
+           C48 32 48 28 52 28
+           C56 28 58 35 58 42
+           L60 55 Z"
+        fill="url(#fr-gold-grad)"/>
+
+  <!-- Right petal -->
+  <path d="M60 55
+           C60 55 72 50 80 42
+           C84 38 84 32 80 30
+           C76 28 70 32 68 38
+           C72 32 72 28 68 28
+           C64 28 62 35 62 42
+           L60 55 Z"
+        fill="url(#fr-gold-grad)"/>
+
+  <!-- Lower binding band -->
+  <rect x="52" y="62" width="16" height="6" rx="2" fill="#9E7E3A"/>
+  <rect x="54" y="63" width="12" height="4" rx="1" fill="#C5A55A"/>
+
+  <!-- Lower teardrop -->
+  <path d="M60 68 C56 72 54 80 56 86 C57 90 60 92 60 92 C60 92 63 90 64 86 C66 80 64 72 60 68 Z"
+        fill="url(#fr-gold-grad)"/>
+
+  <!-- Side decorative fleur elements (smaller) -->
+  <!-- Left small fleur -->
+  <path d="M30 85 C30 85 26 90 26 96 C26 100 28 102 30 103 C32 102 34 100 34 96 C34 90 30 85 30 85 Z"
+        fill="#EDD898" opacity="0.6"/>
+  <path d="M30 95 C30 95 24 92 20 87 C18 84 20 81 22 82 C24 83 26 86 27 90 L30 95 Z"
+        fill="#EDD898" opacity="0.6"/>
+  <path d="M30 95 C30 95 36 92 40 87 C42 84 40 81 38 82 C36 83 34 86 33 90 L30 95 Z"
+        fill="#EDD898" opacity="0.6"/>
+  <rect x="27" y="100" width="6" height="3" rx="1" fill="#9E7E3A" opacity="0.7"/>
+
+  <!-- Right small fleur -->
+  <path d="M90 85 C90 85 86 90 86 96 C86 100 88 102 90 103 C92 102 94 100 94 96 C94 90 90 85 90 85 Z"
+        fill="#EDD898" opacity="0.6"/>
+  <path d="M90 95 C90 95 84 92 80 87 C78 84 80 81 82 82 C84 83 86 86 87 90 L90 95 Z"
+        fill="#EDD898" opacity="0.6"/>
+  <path d="M90 95 C90 95 96 92 100 87 C102 84 100 81 98 82 C96 83 94 86 93 90 L90 95 Z"
+        fill="#EDD898" opacity="0.6"/>
+  <rect x="87" y="100" width="6" height="3" rx="1" fill="#9E7E3A" opacity="0.7"/>
+
+  <!-- Scattered small fleurs pattern -->
+  <text x="22" y="45" font-size="12" fill="#EDD898" opacity="0.5" font-family="serif">⚜</text>
+  <text x="85" y="45" font-size="12" fill="#EDD898" opacity="0.5" font-family="serif">⚜</text>
+  <text x="22" y="70" font-size="10" fill="#EDD898" opacity="0.4" font-family="serif">⚜</text>
+  <text x="87" y="70" font-size="10" fill="#EDD898" opacity="0.4" font-family="serif">⚜</text>
+
+  <!-- Shield border inner line -->
+  <path d="M60 16 L101 16 L101 84 Q101 112 60 124 Q19 112 19 84 L19 16 Z"
+        fill="none" stroke="#EDD898" stroke-width="1.5" opacity="0.6"/>
+</svg>
