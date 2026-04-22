@@ -19,7 +19,9 @@
       }
     ],
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "@diplomacy/game-logic": ["../packages/game-logic/src/index"],
+      "@diplomacy/game-logic/*": ["../packages/game-logic/src/*"]
     }
   },
   "include": [

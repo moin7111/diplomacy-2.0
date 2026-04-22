@@ -1,9 +1,11 @@
-import { Injectable, NotFoundException, BadRequestException, ForbiddenException } from '@nestjs/common';
+import { Injectable, NotFoundException, BadRequestException, ForbiddenException, Logger } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateGameDto, JoinGameDto, ChooseNationDto, ALLOWED_NATIONS } from './dto/game.dto';
 
 @Injectable()
 export class GameService {
+  private readonly logger = new Logger(GameService.name);
+
   constructor(private readonly prisma: PrismaService) {}
 
   private generateRoomCode(): string {
@@ -41,6 +43,8 @@ export class GameService {
         players: true
       }
     });
+
+    this.logger.log(`Game created: ${game.id} (Room: ${room_code}) by user ${userId}`);
 
     return game;
   }
@@ -162,10 +166,14 @@ export class GameService {
       throw new BadRequestException('All players must choose a valid nation before starting');
     }
 
-    return this.prisma.game.update({
+    const updatedGame = await this.prisma.game.update({
       where: { id: gameId },
       data: { status: 'active' },
       include: { players: true }
     });
+
+    this.logger.log(`Game started: ${game.id} by host ${userId}`);
+
+    return updatedGame;
   }
 }

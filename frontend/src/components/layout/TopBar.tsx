@@ -6,10 +6,60 @@
  * Platzhalter für: Exit, Nation Credits, Timer, Befehle Abgeben
  */
 
+import { useEffect, useRef } from "react";
 import { useGameStore } from "@/stores/useGameStore";
+import { useAuthStore } from "@/stores/useAuthStore";
 
 export function TopBar() {
-  const { gamePhase, timer } = useGameStore();
+  const { gamePhase, timer, gameId } = useGameStore();
+  const { token } = useAuthStore();
+  const socketRef = useRef<ReturnType<typeof import("socket.io-client").io> | null>(null);
+
+  // Connect to WebSocket and sync server-authoritative timer
+  useEffect(() => {
+    if (!gameId || !token) return;
+
+    let socket: ReturnType<typeof import("socket.io-client").io>;
+
+    import("socket.io-client").then(({ io }) => {
+      socket = io(`${process.env.NEXT_PUBLIC_WS_URL ?? "http://localhost:4000"}/game`, {
+        query: { token },
+        transports: ["websocket"],
+      });
+      socketRef.current = socket;
+
+      socket.emit("join-game", { gameId });
+
+      socket.on("timer-tick", (data: { timeLeft: number; phase: string }) => {
+        useGameStore.setState({ timer: data.timeLeft });
+        if (data.phase) useGameStore.setState({ gamePhase: data.phase as any });
+      });
+
+      socket.on("timer-expired", () => {
+        useGameStore.setState({ timer: 0 });
+      });
+
+      socket.on("phase-change", (data: { phase: string; duration: number }) => {
+        useGameStore.setState({ gamePhase: data.phase as any, timer: data.duration });
+      });
+    });
+
+    return () => {
+      socket?.emit("leave-game", { gameId });
+      socket?.disconnect();
+      socketRef.current = null;
+    };
+  }, [gameId, token]);
+
+  // Local fallback countdown when no WebSocket (e.g. dev without backend)
+  useEffect(() => {
+    if (gameId) return; // WebSocket handles it when in a game
+    if (timer <= 0) return;
+    const interval = setInterval(() => {
+      useGameStore.setState((state) => ({ timer: Math.max(0, state.timer - 1) }));
+    }, 1000);
+    return () => clearInterval(interval);
+  }, [timer, gameId]);
 
   const phaseLabels: Record<string, string> = {
     spring: "Frühling",

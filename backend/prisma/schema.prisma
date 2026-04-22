@@ -20,6 +20,11 @@ model User {
 
   hostedGames   Game[]   @relation("GameHost")
   playedGames   GamePlayer[]
+  
+  // Relations for B6 & B7
+  orders           PlayerOrder[]
+  sentMessages     ChatMessage[] @relation("ChatSender")
+  receivedMessages ChatMessage[] @relation("ChatRecipient")
 }
 
 model Game {
@@ -39,8 +44,12 @@ model Game {
   created_at     DateTime @default(now())
 
   players        GamePlayer[]
+  
+  // Relations for B6 & B7
+  playerOrders   PlayerOrder[]
+  gameStates     GameState[]
+  chatMessages   ChatMessage[]
 }
-
 model GamePlayer {
   game_id  String
   user_id  String
@@ -51,4 +60,41 @@ model GamePlayer {
   user     User @relation(fields: [user_id], references: [id])
 
   @@id([game_id, user_id])
+}
+
+model PlayerOrder {
+  id           String   @id @default(uuid())
+  game_id      String
+  user_id      String
+  phase        String   @default("FRÜHLING")
+  year         Int      @default(1901)
+  order_data   Json
+  submitted_at DateTime @default(now())
+
+  game Game @relation(fields: [game_id], references: [id], onDelete: Cascade)
+  user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
+}
+
+model GameState {
+  id           String   @id @default(uuid())
+  game_id      String
+  phase        String
+  year         Int
+  board_state  Json
+  created_at   DateTime @default(now())
+
+  game Game @relation(fields: [game_id], references: [id], onDelete: Cascade)
+}
+
+model ChatMessage {
+  id           String   @id @default(uuid())
+  game_id      String
+  sender_id    String
+  recipient_id String?
+  content      String
+  sent_at      DateTime @default(now())
+
+  game      Game  @relation(fields: [game_id], references: [id], onDelete: Cascade)
+  sender    User  @relation("ChatSender", fields: [sender_id], references: [id], onDelete: Cascade)
+  recipient User? @relation("ChatRecipient", fields: [recipient_id], references: [id], onDelete: Cascade)
 }

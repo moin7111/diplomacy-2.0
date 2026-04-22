@@ -26,6 +26,10 @@ services:
       - ./backend:/app
       - diplomacy2_node_modules:/app/node_modules
 
+  uptime-kuma:
+    ports:
+      - "3001:3001"  # Extern erreichbar für lokale Kontrolle
+
 volumes:
   diplomacy2_node_modules:
     driver: local
