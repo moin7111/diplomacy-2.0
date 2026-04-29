@@ -9,7 +9,10 @@ import { JwtStrategy } from './jwt.strategy';
   imports: [
     PassportModule,
     JwtModule.register({
-      secret: process.env.JWT_SECRET || 'diplomacy2-dev-secret-super-secure',
+      secret: (() => {
+        if (!process.env.JWT_SECRET) throw new Error('FATAL: JWT_SECRET environment variable is missing!');
+        return process.env.JWT_SECRET;
+      })(),
       signOptions: { expiresIn: (process.env.JWT_EXPIRATION || '7d') as any },
     }),
   ],

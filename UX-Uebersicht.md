@@ -131,10 +131,15 @@
 - Spieler-Identität steht im Zentrum (großes Icon + Name)
 - Zwei prominente CTAs: Erstellen & Beitreten
 - Scrollbarer Bereich unten für laufende/offene Matches
-- Match-Karten zeigen: Flagge, Name, Spieleranzahl, Runde, Status
+- Match-Karten zeigen: Spieler-Avatar der Nation, Name, Spieleranzahl, Runde, Status
+
+**Wichtig — Avatar als Nationssymbol:**
+- Der gewählte Avatar ist nicht nur ein Profilbild, sondern das **In-Game-Icon der eigenen Nation**
+- Überall wo bisher Länderflaggen oder Wappen stehen (Chat, Economy-Panel, Lobby, HUD) erscheint stattdessen der Avatar des jeweiligen Spielers
+- Andere Spieler sehen deinen Avatar als das Gesicht deiner Nation
 
 **Interaktionen:**
-- **Spieler-Icon klicken** → Overlay mit Icon-Galerie öffnet sich
+- **Spieler-Icon klicken** → Overlay mit Avatar-Galerie öffnet sich (Generäle, Admiräle, Diplomaten, Spione, Herrscher)
 - **Name klicken** → Inline-Edit des Spielernamens
 - **"Erstelle ein Match"** → Konfigurationsscreen
 - **"Code: XXXX"** → Eingabefeld für Raumcode + "Beitreten" Button

@@ -365,7 +365,7 @@ Home Supply Centers und zugehoerige Startgebiete werden mit 40% Alpha-Overlay de
 | England | Rosa/Pink | `#E8A0B0` | `rgba(232, 160, 176, 0.4)` | `.territory-gb` |
 | Deutsches Reich | Anthrazit | `#4A4A4A` | `rgba(74, 74, 74, 0.4)` | `.territory-de` |
 | Oesterreich-Ungarn | Rot | `#C0392B` | `rgba(192, 57, 43, 0.4)` | `.territory-at` |
-| Frankreich | Blau | `#3498DB` | `rgba(52, 152, 219, 0.4)` | `.territory-fr` |
+| Frankreich | Gelb | `#FFDD00` | `rgba(255, 221, 0, 0.4)` | `.territory-fr` |
 | Italien | Gruen | `#27AE60` | `rgba(39, 174, 96, 0.4)` | `.territory-it` |
 | Russland | Gelb | `#F1C40F` | `rgba(241, 196, 15, 0.4)` | `.territory-ru` |
 | Osmanisches Reich | Tuerkis | `#1ABC9C` | `rgba(26, 188, 156, 0.4)` | `.territory-tr` |

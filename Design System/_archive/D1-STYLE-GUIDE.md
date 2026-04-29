@@ -565,7 +565,7 @@ Stil:    Holz-Hintergrund, Gold-Icons, vertikale Anordnung
 | Großbritannien | `--color-nation-gb` | `#E8A0B0` | `rgba(232,160,176,0.4)` |
 | Deutsches Reich | `--color-nation-de` | `#4A4A4A` | `rgba(74,74,74,0.4)` |
 | Österreich-Ungarn | `--color-nation-at` | `#C0392B` | `rgba(192,57,43,0.4)` |
-| Frankreich | `--color-nation-fr` | `#3498DB` | `rgba(52,152,219,0.4)` |
+| Frankreich | `--color-nation-fr` | `#FFDD00` | `rgba(255,221,0,0.4)` |
 | Italien | `--color-nation-it` | `#27AE60` | `rgba(39,174,96,0.4)` |
 | Russland | `--color-nation-ru` | `#F1C40F` | `rgba(241,196,15,0.4)` |
 | Osmanisches Reich | `--color-nation-tr` | `#1ABC9C` | `rgba(26,188,156,0.4)` |

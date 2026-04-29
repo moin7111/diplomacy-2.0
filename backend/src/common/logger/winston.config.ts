@@ -2,6 +2,7 @@ import * as winston from 'winston';
 import 'winston-daily-rotate-file';
 
 export const winstonConfig = {
+  level: process.env.NODE_ENV === 'production' ? 'info' : 'debug',
   transports: [
     // Console Transport
     new winston.transports.Console({

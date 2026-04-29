@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=390, initial-scale=1">
+<title>D6 — Sieg & Niederlage · End Screen</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --navy:#1B2838; --navy-l:#253548; --navy-d:#111C27;
+    --bord:#8B0000; --bord-d:#6B0000;
+    --green:#2D5016; --green-h:#3D6B20;
+    --gold:#C5A55A; --gold-l:#D4BA7A; --gold-sh:#EDD898; --gold-d:#9E7E3A;
+    --paper:#F4E8C1; --muted:#8A9BAE;
+  }
+
+  body {
+    background:#0D1520;
+    display:flex; justify-content:center; align-items:flex-start;
+    min-height:100vh; padding:24px; gap:24px;
+    flex-wrap:wrap; font-family:'Inter',sans-serif;
+  }
+
+  .page-label {
+    width:100%; text-align:center; color:var(--gold);
+    font-size:11px; font-weight:600; letter-spacing:3px;
+    text-transform:uppercase; padding:0 0 4px;
+    border-bottom:1px solid rgba(197,165,90,.2); margin-bottom:20px;
+  }
+  .col-label {
+    color:var(--gold); font-size:10px; font-weight:600;
+    letter-spacing:2px; text-transform:uppercase;
+    text-align:center; margin-bottom:8px;
+  }
+
+  /* ── PHONE ── */
+  .phone {
+    width:390px; height:844px; background:var(--navy);
+    border-radius:40px; overflow:hidden; position:relative;
+    border:3px solid var(--gold);
+    box-shadow:0 0 40px rgba(197,165,90,.2),0 20px 60px rgba(0,0,0,.8);
+    flex-shrink:0;
+  }
+  .phone::before {
+    content:''; position:absolute; top:0; left:0; right:0; height:3px;
+    background:linear-gradient(90deg,var(--gold-d),var(--gold-sh),var(--gold-d)); z-index:100;
+  }
+  .phone::after {
+    content:''; position:absolute; bottom:0; left:0; right:0; height:3px;
+    background:linear-gradient(90deg,var(--gold-d),var(--gold-sh),var(--gold-d)); z-index:100;
+  }
+  .phone.victory {
+    border-color:var(--gold-sh);
+    box-shadow:
+      0 0 60px rgba(237,216,152,.35),
+      0 0 120px rgba(197,165,90,.18),
+      0 20px 60px rgba(0,0,0,.8);
+  }
+  .phone.defeat {
+    border-color:#4a4a6a;
+    box-shadow:0 0 30px rgba(30,30,60,.5),0 20px 60px rgba(0,0,0,.9);
+  }
+
+  .sbar {
+    display:flex; justify-content:space-between; align-items:center;
+    padding:14px 28px 8px;
+    font-family:'JetBrains Mono',monospace; font-size:12px; font-weight:700;
+    color:var(--paper); position:relative; z-index:5;
+  }
+
+  /* ── VICTORY SCREEN ── */
+  .victory-bg {
+    position:absolute; inset:0;
+    background:
+      radial-gradient(ellipse 120% 80% at 50% 30%, rgba(197,165,90,.18) 0%, transparent 70%),
+      radial-gradient(ellipse 80% 60% at 50% 0%, rgba(237,216,152,.12) 0%, transparent 60%),
+      linear-gradient(180deg, #111C27 0%, #1B2838 40%, #0d111a 100%);
+    z-index:1;
+  }
+  /* Animated gold particles */
+  .particle {
+    position:absolute;
+    width:4px; height:4px;
+    background:var(--gold-sh);
+    border-radius:50%;
+    opacity:0;
+    animation:float-up 3s ease-in infinite;
+    z-index:2;
+  }
+  @keyframes float-up {
+    0%   { transform:translateY(0) scale(1);  opacity:.8; }
+    80%  { opacity:.3; }
+    100% { transform:translateY(-200px) scale(.3); opacity:0; }
+  }
+  .particle:nth-child(1)  { left:15%; bottom:15%; animation-delay:0s;   animation-duration:2.8s; }
+  .particle:nth-child(2)  { left:28%; bottom:20%; animation-delay:.4s;  animation-duration:3.2s; background:var(--gold); }
+  .particle:nth-child(3)  { left:45%; bottom:12%; animation-delay:.8s;  animation-duration:2.6s; }
+  .particle:nth-child(4)  { left:62%; bottom:18%; animation-delay:1.2s; animation-duration:3.4s; background:var(--gold-l); }
+  .particle:nth-child(5)  { left:78%; bottom:22%; animation-delay:1.6s; animation-duration:2.9s; }
+  .particle:nth-child(6)  { left:35%; bottom:25%; animation-delay:2.0s; animation-duration:3.1s; background:var(--gold-sh); }
+  .particle:nth-child(7)  { left:55%; bottom:14%; animation-delay:.2s;  animation-duration:2.7s; width:3px; height:3px; }
+  .particle:nth-child(8)  { left:70%; bottom:28%; animation-delay:1.0s; animation-duration:3.3s; width:5px; height:5px; }
+
+  /* Glow ring behind fullbody */
+  .victory-glow-ring {
+    position:absolute;
+    width:260px; height:260px;
+    border-radius:50%;
+    background:radial-gradient(ellipse, rgba(197,165,90,.22) 0%, transparent 70%);
+    left:50%; top:180px;
+    transform:translateX(-50%);
+    z-index:2;
+    animation:pulse-ring 2.5s ease-in-out infinite;
+  }
+  @keyframes pulse-ring {
+    0%,100% { transform:translateX(-50%) scale(1);   opacity:.7; }
+    50%      { transform:translateX(-50%) scale(1.1); opacity:1; }
+  }
+
+  /* Fullbody image */
+  .v-fullbody {
+    position:absolute;
+    bottom:268px; left:50%;
+    transform:translateX(-50%);
+    width:260px; height:320px;
+    object-fit:contain;
+    z-index:4;
+    filter:drop-shadow(0 4px 32px rgba(0,0,0,.9)) drop-shadow(0 0 20px rgba(197,165,90,.25));
+  }
+
+  /* Victory bottom content */
+  .v-bottom {
+    position:absolute;
+    bottom:0; left:0; right:0;
+    padding:0 20px 30px;
+    z-index:10;
+    display:flex; flex-direction:column; align-items:center;
+  }
+  .v-sieg-label {
+    font-family:'Cinzel',serif; font-size:52px; font-weight:700;
+    color:var(--gold-sh);
+    text-align:center; letter-spacing:4px; line-height:1;
+    margin-bottom:4px;
+    text-shadow:
+      0 0 30px rgba(237,216,152,.7),
+      0 0 60px rgba(197,165,90,.4),
+      0 4px 24px rgba(0,0,0,.8);
+  }
+  .v-sub {
+    font-size:13px; color:rgba(244,232,193,.7);
+    text-align:center; margin-bottom:20px; letter-spacing:.5px;
+  }
+
+  /* Stats grid */
+  .v-stats {
+    display:grid; grid-template-columns:repeat(4,1fr);
+    gap:0; width:100%; margin-bottom:20px;
+    border-radius:10px; overflow:hidden;
+    border:1px solid rgba(197,165,90,.25);
+  }
+  .v-stat {
+    padding:10px 4px;
+    background:rgba(27,40,56,.8);
+    text-align:center;
+    border-right:1px solid rgba(197,165,90,.15);
+  }
+  .v-stat:last-child { border-right:none; }
+  .v-stat-val {
+    font-family:'JetBrains Mono',monospace; font-size:18px; font-weight:700;
+    color:var(--gold-sh); line-height:1; margin-bottom:3px;
+  }
+  .v-stat-lbl { font-size:8px; color:var(--muted); text-transform:uppercase; letter-spacing:1px; }
+
+  /* Nation name row */
+  .v-nation-row {
+    display:flex; align-items:center; gap:8px; margin-bottom:16px;
+  }
+  .v-nation-dot {
+    width:10px; height:10px; border-radius:50%;
+    background:#E8A0B0;
+    box-shadow:0 0 8px rgba(232,160,176,.6);
+  }
+  .v-nation-name {
+    font-family:'Cinzel',serif; font-size:13px; font-weight:700;
+    color:var(--paper); letter-spacing:.5px;
+  }
+  .v-avatar-badge {
+    font-size:10px; color:var(--muted);
+  }
+
+  /* Action buttons */
+  .v-actions {
+    display:flex; flex-direction:column; gap:8px; width:100%;
+  }
+  .btn-primary {
+    height:52px;
+    background:var(--bord);
+    border:1px solid rgba(197,165,90,.45);
+    border-radius:8px; color:var(--paper);
+    font-family:'Cinzel',serif; font-size:14px; font-weight:700; letter-spacing:1.5px;
+    cursor:pointer;
+    box-shadow:0 4px 0 var(--bord-d),0 6px 20px rgba(139,0,0,.4);
+  }
+  .btn-secondary {
+    height:48px;
+    background:transparent;
+    border:1px solid rgba(197,165,90,.35);
+    border-radius:8px; color:var(--gold);
+    font-family:'Cinzel',serif; font-size:13px; font-weight:700; letter-spacing:1px;
+    cursor:pointer;
+  }
+  .btn-share {
+    display:flex; align-items:center; justify-content:center; gap:8px;
+    height:44px;
+    background:rgba(197,165,90,.08);
+    border:1px solid rgba(197,165,90,.3);
+    border-radius:8px; color:var(--gold-l);
+    font-size:13px; font-weight:600;
+    cursor:pointer;
+  }
+
+  /* ── DEFEAT SCREEN ── */
+  .defeat-bg {
+    position:absolute; inset:0;
+    background:
+      radial-gradient(ellipse 100% 60% at 50% 20%, rgba(40,20,20,.5) 0%, transparent 70%),
+      linear-gradient(180deg, #0a0d12 0%, #111820 40%, #0a0d12 100%);
+    z-index:1;
+  }
+  .d-fullbody {
+    position:absolute;
+    bottom:272px; left:50%;
+    transform:translateX(-50%);
+    width:240px; height:300px;
+    object-fit:contain;
+    z-index:4;
+    filter:
+      grayscale(60%)
+      drop-shadow(0 4px 24px rgba(0,0,0,.95))
+      brightness(.75);
+  }
+  .d-bottom {
+    position:absolute;
+    bottom:0; left:0; right:0;
+    padding:0 20px 30px;
+    z-index:10;
+    display:flex; flex-direction:column; align-items:center;
+  }
+  .d-label {
+    font-family:'Cinzel',serif; font-size:44px; font-weight:700;
+    color:#8a9bb5; text-align:center; letter-spacing:3px; line-height:1;
+    margin-bottom:4px;
+    text-shadow:0 4px 24px rgba(0,0,0,.8);
+  }
+  .d-sub {
+    font-size:12px; color:rgba(138,155,174,.6);
+    text-align:center; margin-bottom:20px;
+  }
+  .d-stats {
+    display:grid; grid-template-columns:repeat(3,1fr); gap:0;
+    width:100%; margin-bottom:20px;
+    border-radius:10px; overflow:hidden;
+    border:1px solid rgba(74,74,106,.4);
+  }
+  .d-stat {
+    padding:10px 4px;
+    background:rgba(20,26,36,.8);
+    text-align:center;
+    border-right:1px solid rgba(74,74,106,.3);
+  }
+  .d-stat:last-child { border-right:none; }
+  .d-stat-val {
+    font-family:'JetBrains Mono',monospace; font-size:18px; font-weight:700;
+    color:#8a9bb5; line-height:1; margin-bottom:3px;
+  }
+  .d-stat-lbl { font-size:8px; color:#4a5568; text-transform:uppercase; letter-spacing:1px; }
+
+  /* ── WINNER LIST (shown on defeat screen) ── */
+  .winner-card {
+    width:100%; padding:12px; margin-bottom:16px;
+    background:rgba(197,165,90,.08);
+    border:1px solid rgba(197,165,90,.25);
+    border-radius:10px;
+    display:flex; align-items:center; gap:12px;
+  }
+  .winner-mini {
+    width:44px; height:44px; padding:2.5px; border-radius:50%;
+    background:linear-gradient(135deg,var(--gold-d),var(--gold-sh),var(--gold-d));
+    flex-shrink:0;
+  }
+  .winner-mini-inner { width:100%; height:100%; border-radius:50%; overflow:hidden; }
+  .winner-mini-inner img { width:100%; height:100%; object-fit:cover; }
+  .winner-info { flex:1; }
+  .winner-name { font-family:'Cinzel',serif; font-size:14px; font-weight:700; color:var(--gold-sh); }
+  .winner-sub  { font-size:11px; color:var(--muted); }
+  .winner-vc   { font-family:'JetBrains Mono',monospace; font-size:22px; font-weight:700; color:var(--gold-sh); }
+  .winner-vc-lbl { font-size:8px; color:var(--muted); text-align:center; letter-spacing:1px; text-transform:uppercase; }
+</style>
+</head>
+<body>
+
+<div class="page-label">D6 — Sieg & Niederlage (Login → Home → Lobby → Karte → Befehlseingabe → Auflösung → <u>Sieg</u>)</div>
+
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!--  PHONE 1 — SIEG (Victory)                            -->
+<!-- ══════════════════════════════════════════════════════ -->
+<div>
+  <div class="col-label">1 — SIEG · Großbritannien gewinnt</div>
+  <div class="phone victory">
+
+    <div class="sbar" style="color:var(--gold-sh)">
+      <span>9:41</span>
+      <div style="display:flex;gap:5px;align-items:center">
+        <svg width="16" height="11" viewBox="0 0 16 11" fill="currentColor" opacity=".9">
+          <rect x="0" y="4" width="2.5" height="7" rx=".8"/><rect x="4" y="2.5" width="2.5" height="8.5" rx=".8"/>
+          <rect x="8" y="1" width="2.5" height="10" rx=".8"/><rect x="12" y="0" width="2.5" height="11" rx=".8"/>
+        </svg>
+        <svg width="24" height="11" viewBox="0 0 24 11" fill="currentColor">
+          <rect x=".5" y=".5" width="20" height="10" rx="2" fill="none" stroke="currentColor" opacity=".5"/>
+          <rect x="21" y="3" width="3" height="5" rx="1.2" opacity=".4"/>
+          <rect x="1.5" y="1.5" width="15" height="8" rx="1.2"/>
+        </svg>
+      </div>
+    </div>
+
+    <!-- Background & glow -->
+    <div class="victory-bg"></div>
+
+    <!-- Floating gold particles -->
+    <div class="particle"></div><div class="particle"></div>
+    <div class="particle"></div><div class="particle"></div>
+    <div class="particle"></div><div class="particle"></div>
+    <div class="particle"></div><div class="particle"></div>
+
+    <!-- Glow ring behind avatar -->
+    <div class="victory-glow-ring"></div>
+
+    <!-- Laurel / trophy decoration at top -->
+    <div style="position:absolute;top:55px;left:0;right:0;text-align:center;z-index:5">
+      <div style="font-size:36px;filter:drop-shadow(0 0 12px rgba(237,216,152,.8))">🏆</div>
+    </div>
+
+    <!-- Fullbody avatar -->
+    <img class="v-fullbody"
+         src="../../../frontend/public/avatars/antike-historisch/julius-caesar_fullbody.png"
+         alt="Julius Caesar">
+
+    <!-- Bottom content -->
+    <div class="v-bottom">
+
+      <div class="v-nation-row">
+        <div class="v-nation-dot"></div>
+        <div class="v-nation-name">Großbritannien</div>
+        <div class="v-avatar-badge">· Julius Caesar</div>
+      </div>
+
+      <div class="v-sieg-label">SIEG!</div>
+      <div class="v-sub">18 Versorgungszentren erreicht · Runde 12</div>
+
+      <!-- Stats row -->
+      <div class="v-stats">
+        <div class="v-stat">
+          <div class="v-stat-val">18</div>
+          <div class="v-stat-lbl">VZ</div>
+        </div>
+        <div class="v-stat">
+          <div class="v-stat-val">12</div>
+          <div class="v-stat-lbl">Runden</div>
+        </div>
+        <div class="v-stat">
+          <div class="v-stat-val">7</div>
+          <div class="v-stat-lbl">Einh.</div>
+        </div>
+        <div class="v-stat">
+          <div class="v-stat-val">3</div>
+          <div class="v-stat-lbl">Allies</div>
+        </div>
+      </div>
+
+      <!-- Actions -->
+      <div class="v-actions">
+        <div class="btn-share">
+          📤 &nbsp; Sieg teilen
+        </div>
+        <button class="btn-primary">NOCHMAL SPIELEN</button>
+        <button class="btn-secondary">HAUPTMENÜ</button>
+      </div>
+
+    </div>
+
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!--  PHONE 2 — NIEDERLAGE (Defeat — eliminated)          -->
+<!-- ══════════════════════════════════════════════════════ -->
+<div>
+  <div class="col-label">2 — NIEDERLAGE · Eliminiert in Runde 7</div>
+  <div class="phone defeat">
+
+    <div class="sbar" style="color:#8a9bb5">
+      <span>9:41</span>
+      <div style="display:flex;gap:5px;align-items:center">
+        <svg width="16" height="11" viewBox="0 0 16 11" fill="#8a9bb5" opacity=".7">
+          <rect x="0" y="4" width="2.5" height="7" rx=".8"/><rect x="4" y="2.5" width="2.5" height="8.5" rx=".8"/>
+          <rect x="8" y="1" width="2.5" height="10" rx=".8"/><rect x="12" y="0" width="2.5" height="11" rx=".8"/>
+        </svg>
+        <svg width="24" height="11" viewBox="0 0 24 11" fill="#8a9bb5">
+          <rect x=".5" y=".5" width="20" height="10" rx="2" fill="none" stroke="#8a9bb5" opacity=".4"/>
+          <rect x="21" y="3" width="3" height="5" rx="1.2" opacity=".25"/>
+          <rect x="1.5" y="1.5" width="9" height="8" rx="1.2"/>
+        </svg>
+      </div>
+    </div>
+
+    <!-- Dark defeat background -->
+    <div class="defeat-bg"></div>
+
+    <!-- Broken/faded decoration -->
+    <div style="position:absolute;top:55px;left:0;right:0;text-align:center;z-index:5">
+      <div style="font-size:32px;filter:grayscale(100%) opacity(40%)">💀</div>
+    </div>
+
+    <!-- Fullbody — greyed out, dim -->
+    <img class="d-fullbody"
+         src="../../../frontend/public/avatars/antike-historisch/julius-caesar_fullbody.png"
+         alt="Julius Caesar (Defeated)">
+
+    <!-- Bottom content -->
+    <div class="d-bottom">
+
+      <!-- Eliminated label -->
+      <div style="display:inline-block;padding:3px 12px;background:rgba(139,0,0,.2);border:1px solid rgba(139,0,0,.5);border-radius:12px;font-size:10px;font-weight:700;color:#ff6b6b;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:10px">
+        ELIMINIERT · RUNDE 7
+      </div>
+
+      <div class="d-label">NIEDERLAGE</div>
+      <div class="d-sub">Großbritannien · Julius Caesar<br>Alle Versorgungszentren verloren</div>
+
+      <!-- Stats -->
+      <div class="d-stats">
+        <div class="d-stat">
+          <div class="d-stat-val">0</div>
+          <div class="d-stat-lbl">VZ</div>
+        </div>
+        <div class="d-stat">
+          <div class="d-stat-val">7</div>
+          <div class="d-stat-lbl">Runden</div>
+        </div>
+        <div class="d-stat">
+          <div class="d-stat-val">0</div>
+          <div class="d-stat-lbl">Einh.</div>
+        </div>
+      </div>
+
+      <!-- Who won -->
+      <div style="font-size:10px;color:#4a5568;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:8px;align-self:flex-start">
+        Gewinner dieser Runde:
+      </div>
+      <div class="winner-card">
+        <div class="winner-mini">
+          <div class="winner-mini-inner">
+            <img src="../../../frontend/public/avatars/griechische-goetter/zeus_icon.png" alt="Zeus">
+          </div>
+        </div>
+        <div class="winner-info">
+          <div class="winner-name">Zeus</div>
+          <div class="winner-sub">Russland · Griechische Götter</div>
+        </div>
+        <div>
+          <div class="winner-vc">18</div>
+          <div class="winner-vc-lbl">VZ</div>
+        </div>
+      </div>
+
+      <!-- Actions -->
+      <div style="display:flex;flex-direction:column;gap:8px;width:100%">
+        <button class="btn-primary">NEUES SPIEL</button>
+        <div style="display:flex;gap:8px">
+          <button class="btn-secondary" style="flex:1">REPLAY ANSEHEN</button>
+          <button class="btn-secondary" style="flex:1">HAUPTMENÜ</button>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!--  PHONE 3 — FINAL STANDINGS · Alle Spieler            -->
+<!-- ══════════════════════════════════════════════════════ -->
+<div>
+  <div class="col-label">3 — ABSCHLUSS-RANGLISTE · Alle 7 Spieler</div>
+  <div class="phone">
+
+    <div class="sbar">
+      <span>9:41</span>
+      <div style="display:flex;gap:5px;align-items:center">
+        <svg width="16" height="11" viewBox="0 0 16 11" fill="currentColor" opacity=".8">
+          <rect x="0" y="4" width="2.5" height="7" rx=".8"/><rect x="4" y="2.5" width="2.5" height="8.5" rx=".8"/>
+          <rect x="8" y="1" width="2.5" height="10" rx=".8"/><rect x="12" y="0" width="2.5" height="11" rx=".8"/>
+        </svg>
+        <svg width="24" height="11" viewBox="0 0 24 11" fill="currentColor">
+          <rect x=".5" y=".5" width="20" height="10" rx="2" fill="none" stroke="currentColor" opacity=".4"/>
+          <rect x="21" y="3" width="3" height="5" rx="1.2" opacity=".3"/>
+          <rect x="1.5" y="1.5" width="15" height="8" rx="1.2"/>
+        </svg>
+      </div>
+    </div>
+
+    <!-- Header -->
+    <div style="padding:12px 16px;border-bottom:1px solid rgba(197,165,90,.2);background:linear-gradient(180deg,rgba(197,165,90,.06) 0%,transparent 100%)">
+      <div style="font-family:'Cinzel',serif;font-size:16px;font-weight:700;color:var(--gold);letter-spacing:1.5px;margin-bottom:2px">
+        SPIEL BEENDET
+      </div>
+      <div style="font-size:11px;color:var(--muted)">Runde 12 · Herbst 1906 · 7 Spieler</div>
+    </div>
+
+    <!-- Standings list -->
+    <div style="overflow-y:auto;height:calc(844px - 200px);padding:12px 14px 90px;scrollbar-width:thin;scrollbar-color:rgba(197,165,90,.3) transparent">
+
+      <!-- #1 Winner -->
+      <div style="display:flex;align-items:center;gap:12px;padding:12px;margin-bottom:8px;background:rgba(197,165,90,.1);border:1px solid rgba(197,165,90,.35);border-radius:10px">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:20px;font-weight:700;color:var(--gold-sh);width:24px;text-align:center">1</div>
+        <div style="width:42px;height:42px;padding:2px;border-radius:50%;background:linear-gradient(135deg,var(--gold-d),var(--gold-sh),var(--gold-d));flex-shrink:0">
+          <div style="width:100%;height:100%;border-radius:50%;overflow:hidden">
+            <img src="../../../frontend/public/avatars/griechische-goetter/zeus_icon.png" style="width:100%;height:100%;object-fit:cover">
+          </div>
+        </div>
+        <div style="flex:1">
+          <div style="font-family:'Cinzel',serif;font-size:13px;font-weight:700;color:var(--gold-sh)">Zeus</div>
+          <div style="font-size:10px;color:var(--muted)">Russland · <span style="color:#F1C40F">●</span> 18 VZ</div>
+        </div>
+        <div style="text-align:right">
+          <div style="font-family:'JetBrains Mono',monospace;font-size:18px;font-weight:700;color:var(--gold-sh)">18</div>
+          <div style="font-size:8px;color:var(--muted);text-transform:uppercase;letter-spacing:1px">VZ</div>
+        </div>
+      </div>
+
+      <!-- #2 -->
+      <div style="display:flex;align-items:center;gap:12px;padding:10px 12px;margin-bottom:6px;background:var(--navy-l);border:1px solid rgba(197,165,90,.18);border-radius:10px">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:16px;font-weight:700;color:var(--muted);width:24px;text-align:center">2</div>
+        <div style="width:40px;height:40px;padding:2px;border-radius:50%;background:linear-gradient(135deg,var(--gold-d),var(--gold),var(--gold-d));flex-shrink:0">
+          <div style="width:100%;height:100%;border-radius:50%;overflow:hidden">
+            <img src="../../../frontend/public/avatars/mittelalter/napoleon-bonaparte_icon.png" onerror="this.src='../../../frontend/public/avatars/fruehe-neuzeit/napoleon-bonaparte_icon.png'" style="width:100%;height:100%;object-fit:cover">
+          </div>
+        </div>
+        <div style="flex:1">
+          <div style="font-family:'Cinzel',serif;font-size:12px;font-weight:700;color:var(--paper)">Napoleon</div>
+          <div style="font-size:10px;color:var(--muted)">Frankreich · <span style="color:#3498DB">●</span> 9 VZ</div>
+        </div>
+        <div style="text-align:right">
+          <div style="font-family:'JetBrains Mono',monospace;font-size:16px;font-weight:700;color:var(--paper)">9</div>
+          <div style="font-size:8px;color:var(--muted);text-transform:uppercase;letter-spacing:1px">VZ</div>
+        </div>
+      </div>
+
+      <!-- #3 -->
+      <div style="display:flex;align-items:center;gap:12px;padding:10px 12px;margin-bottom:6px;background:var(--navy-l);border:1px solid rgba(197,165,90,.18);border-radius:10px">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:16px;font-weight:700;color:var(--muted);width:24px;text-align:center">3</div>
+        <div style="width:40px;height:40px;padding:2px;border-radius:50%;background:linear-gradient(135deg,var(--gold-d),var(--gold),var(--gold-d));flex-shrink:0">
+          <div style="width:100%;height:100%;border-radius:50%;overflow:hidden">
+            <img src="../../../frontend/public/avatars/mittelalter/dschingis-khan_icon.png" style="width:100%;height:100%;object-fit:cover">
+          </div>
+        </div>
+        <div style="flex:1">
+          <div style="font-family:'Cinzel',serif;font-size:12px;font-weight:700;color:var(--paper)">Dschingis Khan</div>
+          <div style="font-size:10px;color:var(--muted)">Deutsches Reich · <span style="color:#9A9A9A">●</span> 7 VZ</div>
+        </div>
+        <div style="text-align:right">
+          <div style="font-family:'JetBrains Mono',monospace;font-size:16px;font-weight:700;color:var(--paper)">7</div>
+          <div style="font-size:8px;color:var(--muted);text-transform:uppercase;letter-spacing:1px">VZ</div>
+        </div>
+      </div>
+
+      <!-- Eliminated players (greyed out) -->
+      <div style="font-size:9px;font-weight:700;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin:12px 0 8px;text-align:center">— Eliminiert —</div>
+
+      <!-- GB (me) — eliminated rank 6 -->
+      <div style="display:flex;align-items:center;gap:12px;padding:10px 12px;margin-bottom:6px;background:rgba(20,26,36,.6);border:1px solid rgba(74,74,106,.25);border-radius:10px;opacity:.7">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:14px;font-weight:700;color:#4a5568;width:24px;text-align:center">6</div>
+        <div style="width:40px;height:40px;padding:2px;border-radius:50%;background:linear-gradient(135deg,#3a3a4a,#5a5a6a,#3a3a4a);flex-shrink:0">
+          <div style="width:100%;height:100%;border-radius:50%;overflow:hidden;filter:grayscale(80%)">
+            <img src="../../../frontend/public/avatars/antike-historisch/julius-caesar_icon.png" style="width:100%;height:100%;object-fit:cover">
+          </div>
+        </div>
+        <div style="flex:1">
+          <div style="font-family:'Cinzel',serif;font-size:12px;font-weight:700;color:#8a9bb5">Julius Caesar <span style="font-size:9px;font-weight:400;color:#ff6b6b">· DU</span></div>
+          <div style="font-size:10px;color:#4a5568">Großbritannien · Elim. Runde 7</div>
+        </div>
+        <div style="text-align:right">
+          <div style="font-family:'JetBrains Mono',monospace;font-size:16px;font-weight:700;color:#4a5568">0</div>
+          <div style="font-size:8px;color:#4a5568;text-transform:uppercase;letter-spacing:1px">VZ</div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Bottom -->
+    <div style="position:absolute;bottom:0;left:0;right:0;padding:10px 14px 28px;background:linear-gradient(0deg,var(--navy-d) 65%,transparent);display:flex;gap:8px;z-index:20">
+      <button class="btn-secondary" style="flex:1;height:50px">REPLAY</button>
+      <button class="btn-primary" style="flex:2;height:50px">NEUES SPIEL</button>
+    </div>
+
+  </div>
+</div>
+
+</body>
+</html>

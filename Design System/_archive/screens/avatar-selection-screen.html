@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=390, initial-scale=1">
+<title>D5 — Avatar Auswahl · Icon-Rahmen & Großansicht</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --navy:    #1B2838;  --navy-l:  #253548;  --navy-d:  #111C27;
+    --bord:    #8B0000;  --bord-h:  #A50000;  --bord-d:  #6B0000;
+    --green:   #2D5016;  --green-h: #3D6B20;
+    --gold:    #C5A55A;  --gold-l:  #D4BA7A;  --gold-sh: #EDD898;  --gold-d:  #9E7E3A;
+    --paper:   #F4E8C1;  --muted:   #8A9BAE;  --text:    #F4E8C1;
+  }
+
+  body {
+    background: #0D1520;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 100vh;
+    padding: 24px 24px 60px;
+    gap: 24px;
+    flex-wrap: wrap;
+    font-family: 'Inter', sans-serif;
+  }
+
+  .page-label {
+    width: 100%;
+    text-align: center;
+    color: var(--gold);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    padding: 0 0 4px;
+    border-bottom: 1px solid rgba(197,165,90,0.2);
+    margin-bottom: 20px;
+  }
+
+  .col-label {
+    color: var(--gold);
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    text-align: center;
+    margin-bottom: 8px;
+  }
+
+  /* ─── PHONE FRAME ─────────────────────────────────────── */
+  .phone {
+    width: 390px;
+    height: 844px;
+    background: var(--navy);
+    border-radius: 40px;
+    overflow: hidden;
+    position: relative;
+    border: 3px solid var(--gold);
+    box-shadow: 0 0 40px rgba(197,165,90,.2), 0 20px 60px rgba(0,0,0,.8);
+    flex-shrink: 0;
+  }
+  .phone::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    background: linear-gradient(90deg, var(--gold-d), var(--gold-sh), var(--gold-d));
+    z-index: 100;
+  }
+  .phone::after {
+    content: '';
+    position: absolute; bottom: 0; left: 0; right: 0; height: 3px;
+    background: linear-gradient(90deg, var(--gold-d), var(--gold-sh), var(--gold-d));
+    z-index: 100;
+  }
+
+  /* ─── STATUS BAR ──────────────────────────────────────── */
+  .sbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 28px 8px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--text);
+    position: relative;
+    z-index: 5;
+  }
+  .sbar-icons { display: flex; gap: 5px; align-items: center; }
+
+  /* ─── TOP BAR ─────────────────────────────────────────── */
+  .topbar {
+    display: flex;
+    align-items: center;
+    padding: 8px 16px;
+    gap: 12px;
+    border-bottom: 1px solid rgba(197,165,90,.2);
+    position: relative;
+    z-index: 5;
+  }
+  .btn-icon {
+    width: 36px; height: 36px;
+    border-radius: 8px;
+    background: var(--navy-l);
+    border: 1px solid rgba(197,165,90,.3);
+    display: flex; align-items: center; justify-content: center;
+    color: var(--gold); font-size: 16px; cursor: pointer;
+    flex-shrink: 0;
+  }
+  .topbar-title {
+    font-family: 'Cinzel', serif;
+    font-size: 15px; font-weight: 700;
+    color: var(--gold); letter-spacing: 1.5px;
+    flex: 1; text-align: center;
+  }
+
+  /* ─── CATEGORY TABS ───────────────────────────────────── */
+  .cat-tabs {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    padding: 12px 16px;
+    border-bottom: 1px solid rgba(197,165,90,.1);
+    position: relative; z-index: 5;
+  }
+  .cat-tabs::-webkit-scrollbar { display: none; }
+  .cat-tab {
+    flex-shrink: 0;
+    padding: 5px 14px;
+    border-radius: 20px;
+    font-size: 11px; font-weight: 600; letter-spacing: .4px;
+    cursor: pointer; white-space: nowrap;
+    color: var(--muted);
+    border: 1px solid transparent;
+    transition: all .15s;
+  }
+  .cat-tab.active {
+    background: rgba(197,165,90,.12);
+    border-color: var(--gold);
+    color: var(--gold);
+  }
+
+  /* ─── AVATAR GRID ─────────────────────────────────────── */
+  .avatar-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px 10px;
+    padding: 16px 14px 110px;
+    overflow-y: auto;
+    height: calc(844px - 200px);
+    scrollbar-width: thin;
+    scrollbar-color: rgba(197,165,90,.3) transparent;
+    position: relative; z-index: 5;
+  }
+  .avatar-cell {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+  }
+
+  /* ─── AVATAR FRAME — D5 Core Design ──────────────────── */
+  /*
+   * The frame is built with a gradient padding ring.
+   * Selected state uses a brighter gradient + glow.
+   * Locked state is grayscale + low opacity.
+   */
+  .af {
+    width: 100px; height: 100px;
+    padding: 3px;
+    border-radius: 50%;
+    background: linear-gradient(
+      145deg,
+      var(--gold-d)  0%,
+      var(--gold-sh) 30%,
+      var(--gold)    55%,
+      var(--gold-d)  78%,
+      var(--gold-sh) 100%
+    );
+    box-shadow:
+      0 0 14px rgba(197,165,90,.28),
+      0 4px 14px rgba(0,0,0,.65),
+      inset 0 1px 0 rgba(237,216,152,.3);
+    transition: transform .2s ease, box-shadow .2s ease;
+    position: relative;
+    flex-shrink: 0;
+  }
+  .af:hover {
+    transform: scale(1.06);
+    box-shadow:
+      0 0 28px rgba(197,165,90,.5),
+      0 6px 18px rgba(0,0,0,.7),
+      inset 0 1px 0 rgba(237,216,152,.3);
+  }
+  .af.selected {
+    padding: 4px;
+    background: linear-gradient(145deg, #fff 0%, var(--gold-sh) 28%, #fff 52%, var(--gold-sh) 80%, #fff 100%);
+    box-shadow:
+      0 0 36px rgba(237,216,152,.9),
+      0 0 72px rgba(197,165,90,.45),
+      0 4px 18px rgba(0,0,0,.7);
+  }
+  /* Corner rosette ornaments for selected frame */
+  .af.selected::before {
+    content: '✦';
+    position: absolute; top: -3px; right: 0;
+    font-size: 12px; color: var(--gold-sh); line-height: 1;
+    filter: drop-shadow(0 0 6px rgba(237,216,152,1));
+  }
+  .af.selected::after {
+    content: '✦';
+    position: absolute; bottom: -3px; left: 1px;
+    font-size: 10px; color: var(--gold); line-height: 1;
+    filter: drop-shadow(0 0 4px rgba(197,165,90,.9));
+  }
+  .af.locked { opacity: .28; filter: grayscale(100%); }
+
+  .af-inner {
+    width: 100%; height: 100%;
+    border-radius: 50%;
+    overflow: hidden;
+    background: var(--navy-d);
+  }
+  .af-inner img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .af-lock {
+    width: 100%; height: 100%;
+    border-radius: 50%;
+    background: var(--navy-d);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 28px;
+  }
+
+  .av-name {
+    font-size: 11px; font-weight: 600;
+    color: var(--text);
+    text-align: center; line-height: 1.3;
+    max-width: 108px;
+  }
+  .avatar-cell.selected .av-name { color: var(--gold); font-weight: 700; }
+  .avatar-cell.locked .av-name   { color: var(--muted); opacity: .4; }
+
+  /* ─── BOTTOM BAR ──────────────────────────────────────── */
+  .bottom-bar {
+    position: absolute; bottom: 0; left: 0; right: 0;
+    padding: 12px 16px 28px;
+    background: linear-gradient(0deg, var(--navy-d) 55%, transparent);
+    display: flex; align-items: center; gap: 12px;
+    z-index: 20;
+  }
+  .sel-preview {
+    display: flex; align-items: center; gap: 10px;
+    flex: 1; min-width: 0;
+  }
+  .sel-mini {
+    width: 48px; height: 48px; padding: 2.5px;
+    border-radius: 50%;
+    background: linear-gradient(145deg, var(--gold-d), var(--gold-sh), var(--gold-d));
+    box-shadow: 0 0 12px rgba(197,165,90,.45);
+    flex-shrink: 0;
+  }
+  .sel-mini-inner {
+    width: 100%; height: 100%;
+    border-radius: 50%; overflow: hidden;
+  }
+  .sel-mini-inner img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .sel-name {
+    font-family: 'Cinzel', serif; font-size: 13px; font-weight: 700;
+    color: var(--paper);
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .sel-cat {
+    font-size: 10px; color: var(--gold);
+    letter-spacing: 1px; text-transform: uppercase;
+  }
+  .btn-primary {
+    height: 52px; padding: 0 20px;
+    background: var(--bord);
+    border: 1px solid rgba(197,165,90,.45);
+    border-radius: 8px;
+    color: var(--paper);
+    font-family: 'Cinzel', serif; font-size: 13px; font-weight: 700; letter-spacing: 1px;
+    cursor: pointer;
+    box-shadow: 0 4px 0 var(--bord-d), 0 6px 20px rgba(139,0,0,.4);
+    flex-shrink: 0;
+    white-space: nowrap;
+  }
+
+  /* ─── DETAIL VIEW (Phone 2) ───────────────────────────── */
+  .detail-bg {
+    position: absolute; inset: 0;
+    background-size: cover; background-position: center top;
+    z-index: 1;
+  }
+  .detail-grad {
+    position: absolute; inset: 0;
+    background: linear-gradient(
+      0deg,
+      rgba(11,17,29,1)   0%,
+      rgba(11,17,29,.96) 28%,
+      rgba(11,17,29,.65) 52%,
+      rgba(11,17,29,.22) 72%,
+      transparent        100%
+    );
+    z-index: 2;
+  }
+  .detail-close {
+    position: absolute; top: 58px; right: 16px;
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    background: rgba(0,0,0,.6);
+    border: 1px solid rgba(197,165,90,.35);
+    display: flex; align-items: center; justify-content: center;
+    color: var(--muted); font-size: 16px; cursor: pointer;
+    z-index: 10;
+  }
+  .detail-fullbody {
+    position: absolute;
+    bottom: 272px; left: 50%;
+    transform: translateX(-50%);
+    width: 250px; height: 310px;
+    object-fit: contain;
+    z-index: 3;
+    filter: drop-shadow(0 8px 32px rgba(0,0,0,.9));
+  }
+  .detail-bottom {
+    position: absolute; bottom: 0; left: 0; right: 0;
+    padding: 0 20px 30px;
+    z-index: 10;
+    display: flex; flex-direction: column; align-items: center;
+  }
+  .detail-badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 4px 14px;
+    background: rgba(197,165,90,.14);
+    border: 1px solid rgba(197,165,90,.5);
+    border-radius: 20px;
+    color: var(--gold); font-size: 10px; font-weight: 600; letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+  .detail-name {
+    font-family: 'Cinzel', serif;
+    font-size: 30px; font-weight: 700;
+    color: var(--paper); text-align: center; line-height: 1.15;
+    margin-bottom: 14px;
+    text-shadow: 0 2px 20px rgba(0,0,0,.9), 0 0 40px rgba(197,165,90,.12);
+  }
+  .detail-desc {
+    font-size: 13px;
+    color: rgba(244,232,193,.72);
+    text-align: center; line-height: 1.65;
+    margin-bottom: 22px;
+    display: -webkit-box;
+    -webkit-line-clamp: 4;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .detail-btn {
+    width: 100%; height: 54px;
+    background: var(--bord);
+    border: 1px solid rgba(197,165,90,.45);
+    border-radius: 8px;
+    color: var(--paper);
+    font-family: 'Cinzel', serif; font-size: 14px; font-weight: 700; letter-spacing: 1.5px;
+    cursor: pointer;
+    box-shadow: 0 4px 0 var(--bord-d), 0 8px 24px rgba(139,0,0,.5);
+  }
+</style>
+</head>
+<body>
+
+<div style="width:100%">
+  <div class="page-label">D5 — Spieler-Icons · Avatar-Auswahl · Rahmen-Design</div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════════════════════ -->
+<!--  PHONE 1 — GALERIE · Avatar-Grid mit Icon-Rahmen                 -->
+<!-- ══════════════════════════════════════════════════════════════════ -->
+<div>
+  <div class="col-label">1 — GALERIE · Icon-Rahmen (3 Zustände)</div>
+  <div class="phone">
+
+    <!-- Status Bar -->
+    <div class="sbar">
+      <span>9:41</span>
+      <div class="sbar-icons">
+        <svg width="16" height="11" viewBox="0 0 16 11" fill="currentColor" opacity=".8">
+          <rect x="0" y="4" width="2.5" height="7" rx=".8"/>
+          <rect x="4" y="2.5" width="2.5" height="8.5" rx=".8"/>
+          <rect x="8" y="1" width="2.5" height="10" rx=".8"/>
+          <rect x="12" y="0" width="2.5" height="11" rx=".8"/>
+        </svg>
+        <svg width="15" height="11" viewBox="0 0 16 12" fill="currentColor" opacity=".8">
+          <path d="M8 3a8.5 8.5 0 0 0-7 3.7" stroke="currentColor" stroke-width="1.5" fill="none" opacity=".4"/>
+          <path d="M8 6a4.5 4.5 0 0 0-3.5 1.7" stroke="currentColor" stroke-width="1.5" fill="none" opacity=".7"/>
+          <circle cx="8" cy="10.5" r="1.5"/>
+        </svg>
+        <svg width="24" height="11" viewBox="0 0 24 11" fill="currentColor">
+          <rect x=".5" y=".5" width="20" height="10" rx="2" fill="none" stroke="currentColor" opacity=".4"/>
+          <rect x="21" y="3" width="3" height="5" rx="1.2" opacity=".3"/>
+          <rect x="1.5" y="1.5" width="15" height="8" rx="1.2"/>
+        </svg>
+      </div>
+    </div>
+
+    <!-- Top Bar -->
+    <div class="topbar">
+      <div class="btn-icon">←</div>
+      <div class="topbar-title">CHARAKTER WÄHLEN</div>
+      <div style="width:36px"></div>
+    </div>
+
+    <!-- Category Tabs -->
+    <div class="cat-tabs">
+      <div class="cat-tab active">Antike Hist.</div>
+      <div class="cat-tab">Mythologie</div>
+      <div class="cat-tab">Mittelalter</div>
+      <div class="cat-tab">Frühe Neuzeit</div>
+      <div class="cat-tab">20. Jhdt.</div>
+      <div class="cat-tab">Götter</div>
+      <div class="cat-tab">Ikonisch</div>
+    </div>
+
+    <!-- Avatar Grid -->
+    <div class="avatar-grid">
+
+      <!-- Julius Caesar — SELECTED STATE -->
+      <div class="avatar-cell selected">
+        <div class="af selected">
+          <div class="af-inner">
+            <img src="../../../frontend/public/avatars/antike-historisch/julius-caesar_icon.png" alt="Julius Caesar" loading="lazy">
+          </div>
+        </div>
+        <div class="av-name">Julius Caesar</div>
+      </div>
+
+      <!-- Alexander — DEFAULT STATE -->
+      <div class="avatar-cell">
+        <div class="af">
+          <div class="af-inner">
+            <img src="../../../frontend/public/avatars/antike-historisch/alexander-der-grosse_icon.png" alt="Alexander d. Gr." loading="lazy">
+          </div>
+        </div>
+        <div class="av-name">Alexander d. Gr.</div>
+      </div>
+
+      <!-- Hannibal — DEFAULT STATE -->
+      <div class="avatar-cell">
+        <div class="af">
+          <div class="af-inner">
+            <img src="../../../frontend/public/avatars/antike-historisch/hannibal-barca_icon.png" alt="Hannibal Barca" loading="lazy">
+          </div>
+        </div>
+        <div class="av-name">Hannibal Barca</div>
+      </div>
+
+      <!-- Perikles — DEFAULT STATE -->
+      <div class="avatar-cell">
+        <div class="af">
+          <div class="af-inner">
+            <img src="../../../frontend/public/avatars/antike-historisch/perikles_icon.png" alt="Perikles" loading="lazy">
+          </div>
+        </div>
+        <div class="av-name">Perikles</div>
+      </div>
+
+      <!-- Leonidas — DEFAULT STATE -->
+      <div class="avatar-cell">
+        <div class="af">
+          <div class="af-inner">
+            <img src="../../../frontend/public/avatars/antike-historisch/leonidas_icon.png" alt="Leonidas I." loading="lazy">
+          </div>
+        </div>
+        <div class="av-name">Leonidas I.</div>
+      </div>
+
+      <!-- LOCKED STATE (future unlock) -->
+      <div class="avatar-cell locked">
+        <div class="af locked">
+          <div class="af-lock">🔒</div>
+        </div>
+        <div class="av-name">Gesperrt</div>
+      </div>
+
+    </div>
+
+    <!-- Bottom Confirm Bar -->
+    <div class="bottom-bar">
+      <div class="sel-preview">
+        <div class="sel-mini">
+          <div class="sel-mini-inner">
+            <img src="../../../frontend/public/avatars/antike-historisch/julius-caesar_icon.png" alt="">
+          </div>
+        </div>
+        <div>
+          <div class="sel-name">Julius Caesar</div>
+          <div class="sel-cat">Antike — Historisch</div>
+        </div>
+      </div>
+      <button class="btn-primary">AUSWÄHLEN</button>
+    </div>
+
+  </div>
+</div><!-- /phone1 -->
+
+
+<!-- ══════════════════════════════════════════════════════════════════ -->
+<!--  PHONE 2 — GROSSANSICHT · Detail-Modal nach Icon-Tap              -->
+<!-- ══════════════════════════════════════════════════════════════════ -->
+<div>
+  <div class="col-label">2 — GROSSANSICHT · Detail nach Icon-Tap</div>
+  <div class="phone">
+
+    <!-- Status Bar (transparent, over BG) -->
+    <div class="sbar" style="color:#fff">
+      <span>9:41</span>
+      <div class="sbar-icons">
+        <svg width="16" height="11" viewBox="0 0 16 11" fill="white" opacity=".9">
+          <rect x="0" y="4" width="2.5" height="7" rx=".8"/>
+          <rect x="4" y="2.5" width="2.5" height="8.5" rx=".8"/>
+          <rect x="8" y="1" width="2.5" height="10" rx=".8"/>
+          <rect x="12" y="0" width="2.5" height="11" rx=".8"/>
+        </svg>
+        <svg width="24" height="11" viewBox="0 0 24 11" fill="white">
+          <rect x=".5" y=".5" width="20" height="10" rx="2" fill="none" stroke="white" opacity=".5"/>
+          <rect x="21" y="3" width="3" height="5" rx="1.2" opacity=".3"/>
+          <rect x="1.5" y="1.5" width="15" height="8" rx="1.2"/>
+        </svg>
+      </div>
+    </div>
+
+    <!-- Background (category atmosphere) -->
+    <div class="detail-bg" style="background-image:url('../../../frontend/public/avatars/antike-historisch/_background.png')"></div>
+    <div class="detail-grad"></div>
+
+    <!-- Close button -->
+    <div class="detail-close">✕</div>
+
+    <!-- Fullbody character -->
+    <img class="detail-fullbody"
+         src="../../../frontend/public/avatars/antike-historisch/julius-caesar_fullbody.png"
+         alt="Julius Caesar Fullbody" loading="lazy">
+
+    <!-- Bottom content -->
+    <div class="detail-bottom">
+      <div class="detail-badge">⚔ Antike — Historisch</div>
+      <div class="detail-name">Julius Caesar</div>
+      <div class="detail-desc">
+        Der Mann, der Rom für immer veränderte — nicht mit einer Krone,
+        sondern mit einem Lorbeerkranz und einem Messer im Rücken.
+        Stratege. Verführer. Diktator auf Zeit. Als er den Rubikon überschritt,
+        wusste er: Es gibt kein Zurück mehr.
+      </div>
+      <button class="detail-btn">CHARAKTER WÄHLEN</button>
+    </div>
+
+  </div>
+</div><!-- /phone2 -->
+
+
+<!-- ══════════════════════════════════════════════════════════════════ -->
+<!--  PHONE 3 — WEITERE KATEGORIEN · Griechische Götter Beispiel      -->
+<!-- ══════════════════════════════════════════════════════════════════ -->
+<div>
+  <div class="col-label">3 — GÖTTER-KATEGORIE · Zeus Großansicht</div>
+  <div class="phone">
+
+    <!-- Status Bar -->
+    <div class="sbar" style="color:#fff">
+      <span>9:41</span>
+      <div class="sbar-icons">
+        <svg width="16" height="11" viewBox="0 0 16 11" fill="white" opacity=".9">
+          <rect x="0" y="4" width="2.5" height="7" rx=".8"/>
+          <rect x="4" y="2.5" width="2.5" height="8.5" rx=".8"/>
+          <rect x="8" y="1" width="2.5" height="10" rx=".8"/>
+          <rect x="12" y="0" width="2.5" height="11" rx=".8"/>
+        </svg>
+        <svg width="24" height="11" viewBox="0 0 24 11" fill="white">
+          <rect x=".5" y=".5" width="20" height="10" rx="2" fill="none" stroke="white" opacity=".5"/>
+          <rect x="21" y="3" width="3" height="5" rx="1.2" opacity=".3"/>
+          <rect x="1.5" y="1.5" width="15" height="8" rx="1.2"/>
+        </svg>
+      </div>
+    </div>
+
+    <div class="detail-bg" style="background-image:url('../../../frontend/public/avatars/griechische-goetter/_background.png')"></div>
+    <!-- Blue-gold tint for divine category -->
+    <div class="detail-grad" style="background:linear-gradient(0deg,rgba(11,17,29,1) 0%,rgba(11,17,40,.96) 28%,rgba(15,20,50,.6) 52%,rgba(20,28,60,.2) 72%,transparent 100%)"></div>
+
+    <div class="detail-close">✕</div>
+
+    <img class="detail-fullbody"
+         src="../../../frontend/public/avatars/griechische-goetter/zeus_fullbody.png"
+         alt="Zeus Fullbody" loading="lazy">
+
+    <div class="detail-bottom">
+      <div class="detail-badge" style="color:#a0c8ff;border-color:rgba(160,200,255,.5);background:rgba(160,200,255,.1)">
+        ⚡ Griechische Götter
+      </div>
+      <div class="detail-name" style="text-shadow:0 2px 20px rgba(0,0,0,.9),0 0 40px rgba(100,160,255,.2)">Zeus</div>
+      <div class="detail-desc">
+        Herr des Olymp. Sein Blitz entscheidet, wer fällt.
+        Götter fürchten seinen Zorn, Sterbliche beten für seine Gnade —
+        und er tut, was ihm gefällt.
+      </div>
+      <button class="detail-btn" style="background:#1a3a6b;border-color:rgba(160,200,255,.4);box-shadow:0 4px 0 #0e2040,0 8px 24px rgba(30,70,150,.5)">
+        CHARAKTER WÄHLEN
+      </button>
+    </div>
+
+  </div>
+</div><!-- /phone3 -->
+
+
+<!-- ══════════════════════════════════════════════════════════════════ -->
+<!--  DESIGN SPEC: Frame-Zustände                                     -->
+<!-- ══════════════════════════════════════════════════════════════════ -->
+<div style="width:100%;margin-top:40px;padding:24px 0;border-top:1px solid rgba(197,165,90,.2)">
+  <div style="color:var(--gold);font-size:11px;font-weight:600;letter-spacing:2px;text-align:center;margin-bottom:24px;text-transform:uppercase">
+    Icon-Rahmen — 3 Zustände
+  </div>
+  <div style="display:flex;justify-content:center;gap:48px;flex-wrap:wrap">
+
+    <!-- DEFAULT -->
+    <div style="display:flex;flex-direction:column;align-items:center;gap:12px">
+      <div class="af" style="width:90px;height:90px">
+        <div class="af-inner">
+          <img src="../../../frontend/public/avatars/antike-historisch/alexander-der-grosse_icon.png" loading="lazy">
+        </div>
+      </div>
+      <div style="text-align:center">
+        <div style="color:var(--gold);font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:4px">DEFAULT</div>
+        <div style="color:var(--muted);font-size:10px;line-height:1.5">Goldener Gradientring<br>3px · box-shadow glow 14px</div>
+      </div>
+    </div>
+
+    <!-- SELECTED -->
+    <div style="display:flex;flex-direction:column;align-items:center;gap:12px">
+      <div class="af selected" style="width:90px;height:90px">
+        <div class="af-inner">
+          <img src="../../../frontend/public/avatars/antike-historisch/julius-caesar_icon.png" loading="lazy">
+        </div>
+      </div>
+      <div style="text-align:center">
+        <div style="color:var(--gold);font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:4px">SELECTED</div>
+        <div style="color:var(--muted);font-size:10px;line-height:1.5">Weißer Ring 4px · Glow 36px<br>Rosetten ✦ oben-rechts + unten-links</div>
+      </div>
+    </div>
+
+    <!-- LOCKED -->
+    <div style="display:flex;flex-direction:column;align-items:center;gap:12px">
+      <div class="af locked" style="width:90px;height:90px">
+        <div class="af-lock">🔒</div>
+      </div>
+      <div style="text-align:center">
+        <div style="color:var(--gold);font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:4px">LOCKED</div>
+        <div style="color:var(--muted);font-size:10px;line-height:1.5">Grayscale · opacity 28%<br>Schloss-Icon im Inneren</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+</body>
+</html>

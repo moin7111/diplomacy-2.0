@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(grep -E \"\\\\.\\(tsx?|jsx?\\)$\")",
+      "Bash(ls \"D:\\\\\\\\Einheiten image\\\\\\\\\")",
+      "Bash(powershell.exe -Command \"Get-ChildItem 'G:\\\\' -Force | Select-Object Name, Attributes\")",
+      "Bash(powershell.exe -Command \"Get-ChildItem 'G:\\\\.shortcut-targets-by-id\\\\' -Force | Select-Object Name\")",
+      "Bash(powershell.exe -Command \"Get-ChildItem 'G:\\\\.shortcut-targets-by-id\\\\1BiGzgE6TwoXqkeJD7hEgqDYAf4Esj2Tq\\\\' | Select-Object Name, Attributes\")",
+      "Bash(xargs grep *)"
+    ]
+  }
+}

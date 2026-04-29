@@ -54,7 +54,7 @@ Das Design-Team erstellt alle visuellen Assets: die interaktive Europa-Karte, Ei
   Großbritannien:  Farbe Rosa/Pink, Wappen Löwe
   Deutsches Reich: Farbe Schwarz, Wappen Adler
   Österreich-Ung.: Farbe Rot, Wappen Doppeladler
-  Frankreich:      Farbe Blau, Wappen Lilie
+  Frankreich:      Farbe Gelb (#FFDD00), Wappen Lilie
   Italien:         Farbe Grün, Wappen Stern
   Russland:        Farbe Gelb, Wappen Bär
   Osmn. Reich:     Farbe Türkis, Wappen Halbmond
@@ -92,10 +92,12 @@ Das Design-Team erstellt alle visuellen Assets: die interaktive Europa-Karte, Ei
 - [ ] Enttarnte SF: Normaler Look + "Entdeckt"-Badge
 - [ ] Zerstörte Einheit: Rauch/Trümmer-Icon
 
-### Paket D5: Spieler-Icons & Avatare
+### Paket D5: Spieler-Avatare (= In-Game Nationssymbol)
 **Priorität:** Phase 1 (MVP)
 
-- [ ] Mindestens 20 wählbare Spieler-Icons:
+**Konzept:** Der Avatar ist nicht nur ein Profilbild — er ist das visuelle Nationssymbol des Spielers in der gesamten App. Überall wo eine Nation dargestellt wird (Chat, Economy-Panel, Lobby, HUD, Spieler-Liste), erscheint der Avatar des zugehörigen Spielers.
+
+- [ ] Mindestens 20 wählbare Avatare:
   - Generäle (verschiedene Epochen/Nationen)
   - Admiräle
   - Diplomaten
@@ -103,7 +105,9 @@ Das Design-Team erstellt alle visuellen Assets: die interaktive Europa-Karte, Ei
   - Herrscher
 - [ ] 3D-gerenderte Miniaturen (wie in Design-Ideen)
 - [ ] Runder Rahmen (Gold, Silber, Bronze - je nach Rang)
-- [ ] Icon-Auswahl-Galerie (Grid-Layout)
+- [ ] Avatar-Auswahl-Galerie im Home-Screen (Grid-Layout)
+- [ ] Avatar in zwei Größen: klein (24px, für Chat/Listen) und groß (80px+, für Home/Lobby)
+- [ ] Avatar-Rahmen zeigt Nationfarbe des aktuellen Matches als farbigen Ring
 
 ### Paket D6: UI Screens (Figma-Prototyp)
 **Priorität:** Phase 1 (MVP)

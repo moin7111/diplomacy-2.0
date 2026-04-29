@@ -40,6 +40,7 @@ Das Backend-Team baut die gesamte Server-Infrastruktur: REST API, WebSocket-Serv
 **Priorität:** Phase 1 (MVP)
 
 - [ ] User-Datenmodell (id, email, username, password_hash, avatar_id, created_at)
+  - `avatar_id` referenziert den gewählten Avatar — dieser wird **in-game als Nationssymbol** des Spielers angezeigt (ersetzt Länderflagge in Chat, Economy-Panel, Lobby und HUD)
 - [ ] POST /auth/register - Registrierung (E-Mail, Username, Passwort)
 - [ ] POST /auth/login - Login (E-Mail + Passwort → JWT)
 - [ ] POST /auth/refresh - Token Refresh

@@ -84,6 +84,19 @@ export class GameService {
     return this.getGameDetails(game.id);
   }
 
+  async getMyGames(userId: string) {
+    return this.prisma.game.findMany({
+      where: {
+        players: { some: { user_id: userId } }
+      },
+      orderBy: { created_at: 'desc' },
+      include: {
+        host: { select: { username: true } },
+        players: { include: { user: { select: { username: true } } } }
+      }
+    });
+  }
+
   async getGameDetails(gameId: string) {
     const game = await this.prisma.game.findUnique({
       where: { id: gameId },
@@ -97,6 +110,13 @@ export class GameService {
 
     if (!game) throw new NotFoundException('Game not found');
     return game;
+  }
+
+  async getGameHistory(gameId: string) {
+    return this.prisma.gameState.findMany({
+      where: { game_id: gameId },
+      orderBy: { created_at: 'asc' }
+    });
   }
 
   async chooseNation(gameId: string, userId: string, dto: ChooseNationDto) {

@@ -16,6 +16,17 @@
 - **Nationen:** Großbritannien, Deutsches Reich, Österreich-Ungarn, Frankreich, Italien, Russland, Osmanisches Reich (Türkei)
 - Jede Nation hat **einzigartige Fähigkeiten** (Buffs) und **Startpositionen**
 
+### 2.2 Spieler-Identität & Avatar
+
+- Jeder Spieler wählt im **Home-Screen einen persönlichen Avatar** (General, Admiral, Diplomat, Spion etc.)
+- Dieser Avatar ist die **visuelle Identität des Spielers im gesamten Spiel** — er ersetzt das Länderwappen als Nationssymbol:
+  - Im **Chat** erscheint der Avatar neben Nachrichten statt einer Flagge
+  - Im **Economy-Panel** und der **Spieler-Übersicht** wird der Avatar als Ländersymbol angezeigt
+  - In der **Lobby** repräsentiert der Avatar den Spieler bei seiner gewählten Nation
+  - Auf dem **Spielfeld** (HUD, Befehlsliste) identifiziert der Avatar die eigene Nation
+- Der Avatar bleibt über Matches hinweg konstant (konto-gebunden), kann aber jederzeit im Home-Screen geändert werden
+- Avatare sind kosmetisch und haben keinen Einfluss auf Spielmechaniken
+
 ### 2.2 Siegbedingung
 
 - **Solo-Sieg:** Kontrolle über 18 Versorgungszentren (VZ)
@@ -392,7 +403,7 @@ Beim Erstellen eines Spiels konfigurierbar:
 
 | Modell | Beschreibung |
 |--------|-------------|
-| **Kosmetische Items** | Spieler-Icons, Kartenthemen, Einheiten-Skins |
+| **Kosmetische Items** | Spieler-Avatare (In-Game Nationssymbol), Kartenthemen, Einheiten-Skins |
 | **Premium-Mitgliedschaft** | Mehr gleichzeitige Spiele, Statistiken, Replays |
 | **Werbefreiheit** | Einmaliger Kauf |
 

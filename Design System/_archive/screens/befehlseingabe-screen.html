@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=390, initial-scale=1">
+<title>D6 — Befehlseingabe · Order Entry Screen</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --navy:#1B2838; --navy-l:#253548; --navy-d:#111C27;
+    --bord:#8B0000; --bord-d:#6B0000;
+    --green:#2D5016; --green-h:#3D6B20;
+    --gold:#C5A55A; --gold-l:#D4BA7A; --gold-sh:#EDD898; --gold-d:#9E7E3A;
+    --paper:#F4E8C1; --muted:#8A9BAE;
+    --gb:#E8A0B0;
+  }
+
+  body {
+    background:#0D1520;
+    display:flex; justify-content:center; align-items:flex-start;
+    min-height:100vh; padding:24px; gap:24px;
+    flex-wrap:wrap; font-family:'Inter',sans-serif;
+  }
+
+  .page-label {
+    width:100%; text-align:center; color:var(--gold);
+    font-size:11px; font-weight:600; letter-spacing:3px;
+    text-transform:uppercase; padding:0 0 4px;
+    border-bottom:1px solid rgba(197,165,90,.2); margin-bottom:20px;
+  }
+  .col-label {
+    color:var(--gold); font-size:10px; font-weight:600;
+    letter-spacing:2px; text-transform:uppercase;
+    text-align:center; margin-bottom:8px;
+  }
+
+  /* ── PHONE ── */
+  .phone {
+    width:390px; height:844px; background:var(--navy);
+    border-radius:40px; overflow:hidden; position:relative;
+    border:3px solid var(--gold);
+    box-shadow:0 0 40px rgba(197,165,90,.2),0 20px 60px rgba(0,0,0,.8);
+    flex-shrink:0;
+  }
+  .phone::before {
+    content:''; position:absolute; top:0; left:0; right:0; height:3px;
+    background:linear-gradient(90deg,var(--gold-d),var(--gold-sh),var(--gold-d)); z-index:100;
+  }
+  .phone::after {
+    content:''; position:absolute; bottom:0; left:0; right:0; height:3px;
+    background:linear-gradient(90deg,var(--gold-d),var(--gold-sh),var(--gold-d)); z-index:100;
+  }
+
+  .sbar {
+    display:flex; justify-content:space-between; align-items:center;
+    padding:14px 28px 8px;
+    font-family:'JetBrains Mono',monospace; font-size:12px; font-weight:700;
+    color:var(--paper); position:relative; z-index:5;
+  }
+
+  .topbar {
+    display:flex; align-items:center; padding:8px 14px; gap:10px;
+    border-bottom:1px solid rgba(197,165,90,.2);
+    background:var(--navy); position:relative; z-index:5;
+  }
+  .btn-icon {
+    width:36px; height:36px; border-radius:8px;
+    background:var(--navy-l); border:1px solid rgba(197,165,90,.3);
+    display:flex; align-items:center; justify-content:center;
+    color:var(--gold); font-size:15px; cursor:pointer; flex-shrink:0;
+  }
+  .topbar-center { flex:1; display:flex; flex-direction:column; align-items:center; gap:1px; }
+  .topbar-title {
+    font-family:'Cinzel',serif; font-size:14px; font-weight:700;
+    color:var(--gold); letter-spacing:1.5px;
+  }
+  .topbar-sub { font-size:10px; color:var(--muted); }
+  .topbar-timer {
+    background:rgba(139,0,0,.25); border:1px solid rgba(139,0,0,.6);
+    border-radius:6px; padding:4px 10px;
+    font-family:'JetBrains Mono',monospace; font-size:14px; font-weight:700;
+    color:#ff6b6b;
+  }
+
+  /* ── SCROLL AREA ── */
+  .scroll-area {
+    overflow-y:auto; padding:12px 14px 0;
+    scrollbar-width:thin; scrollbar-color:rgba(197,165,90,.3) transparent;
+  }
+
+  /* ── SECTION HEADER ── */
+  .section-header {
+    display:flex; align-items:center; justify-content:space-between;
+    margin-bottom:10px;
+  }
+  .section-title {
+    font-family:'Cinzel',serif; font-size:11px; font-weight:700;
+    color:var(--gold); letter-spacing:1.5px; text-transform:uppercase;
+  }
+  .section-count {
+    font-family:'JetBrains Mono',monospace; font-size:10px;
+    color:var(--muted);
+  }
+
+  /* ── UNIT CARD ── */
+  .unit-card {
+    display:flex; align-items:center; gap:12px;
+    padding:12px; margin-bottom:8px;
+    background:var(--navy-l);
+    border:1px solid rgba(197,165,90,.2);
+    border-radius:10px; cursor:pointer;
+    transition:all .15s;
+    position:relative;
+  }
+  .unit-card:hover { border-color:rgba(197,165,90,.4); background:#2d4258; }
+  .unit-card.active {
+    border-color:var(--gold);
+    background:rgba(197,165,90,.08);
+    box-shadow:0 0 12px rgba(197,165,90,.15);
+  }
+  .unit-card.has-order { border-color:rgba(45,80,22,.6); }
+  .unit-card.has-order::after {
+    content:'✓'; position:absolute; top:8px; right:10px;
+    font-size:12px; color:var(--green);
+    font-family:'JetBrains Mono',monospace; font-weight:700;
+  }
+
+  .unit-icon-wrap {
+    width:42px; height:42px; border-radius:50%;
+    border:2px solid rgba(232,160,176,.6);
+    overflow:hidden; flex-shrink:0;
+    background:var(--navy-d);
+  }
+  .unit-icon-wrap img { width:100%; height:100%; object-fit:cover; }
+  .unit-info { flex:1; min-width:0; }
+  .unit-type-row {
+    display:flex; align-items:center; gap:6px; margin-bottom:2px;
+  }
+  .unit-type-badge {
+    padding:1px 7px; border-radius:4px; font-size:9px; font-weight:700;
+    letter-spacing:1px; text-transform:uppercase;
+    background:rgba(232,160,176,.15); border:1px solid rgba(232,160,176,.4);
+    color:var(--gb);
+  }
+  .unit-territory {
+    font-family:'Cinzel',serif; font-size:13px; font-weight:700;
+    color:var(--paper);
+  }
+  .unit-order-text {
+    font-size:11px; color:var(--muted);
+    white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+  }
+  .unit-order-text.set { color:#6ebc45; }
+  .unit-chevron { color:var(--muted); font-size:14px; flex-shrink:0; }
+  .unit-card.active .unit-chevron { color:var(--gold); }
+
+  /* ── MINI MAP THUMBNAIL ── */
+  .map-thumb {
+    height:120px; margin:0 0 14px;
+    border-radius:8px; overflow:hidden;
+    border:1px solid rgba(197,165,90,.2);
+    position:relative;
+  }
+  .map-thumb img {
+    width:100%; height:100%;
+    object-fit:cover; object-position:center 30%;
+    opacity:.75;
+  }
+  .map-thumb-overlay {
+    position:absolute; inset:0;
+    background:linear-gradient(0deg,rgba(11,17,29,.7) 0%,transparent 60%);
+  }
+  .map-thumb-label {
+    position:absolute; bottom:6px; left:10px;
+    font-size:9px; font-weight:600; color:var(--muted); letter-spacing:1px;
+    text-transform:uppercase;
+  }
+
+  /* ── ORDER BOTTOM SHEET ── */
+  .order-sheet {
+    position:absolute; bottom:76px; left:0; right:0;
+    background:var(--navy-d);
+    border-top:1px solid rgba(197,165,90,.3);
+    border-radius:20px 20px 0 0;
+    padding:16px 16px 12px;
+    box-shadow:0 -8px 32px rgba(0,0,0,.6);
+    z-index:15;
+  }
+  .sheet-handle {
+    width:40px; height:4px; border-radius:2px;
+    background:rgba(197,165,90,.3);
+    margin:0 auto 14px;
+  }
+  .sheet-unit-header {
+    display:flex; align-items:center; gap:10px; margin-bottom:14px;
+    padding-bottom:12px;
+    border-bottom:1px solid rgba(197,165,90,.15);
+  }
+  .sheet-unit-icon {
+    width:44px; height:44px; border-radius:50%;
+    border:2px solid rgba(232,160,176,.7);
+    overflow:hidden; flex-shrink:0;
+  }
+  .sheet-unit-icon img { width:100%; height:100%; object-fit:cover; }
+  .sheet-unit-name {
+    font-family:'Cinzel',serif; font-size:15px; font-weight:700; color:var(--paper);
+  }
+  .sheet-unit-nation { font-size:11px; color:var(--gb); }
+
+  /* Order type buttons */
+  .order-types {
+    display:grid; grid-template-columns:repeat(2,1fr); gap:8px;
+    margin-bottom:14px;
+  }
+  .order-type-btn {
+    padding:10px 8px;
+    background:var(--navy-l);
+    border:1px solid rgba(197,165,90,.25);
+    border-radius:8px; cursor:pointer;
+    display:flex; flex-direction:column; align-items:center; gap:4px;
+    transition:all .15s;
+  }
+  .order-type-btn.active {
+    background:rgba(197,165,90,.12);
+    border-color:var(--gold);
+    box-shadow:0 0 10px rgba(197,165,90,.2);
+  }
+  .order-type-icon { font-size:20px; }
+  .order-type-name {
+    font-family:'Cinzel',serif; font-size:11px; font-weight:700;
+    color:var(--paper); letter-spacing:.5px;
+  }
+  .order-type-desc { font-size:9px; color:var(--muted); text-align:center; }
+
+  /* Target selector */
+  .target-label {
+    font-size:10px; font-weight:600; color:var(--muted);
+    letter-spacing:1px; text-transform:uppercase; margin-bottom:8px;
+  }
+  .target-grid {
+    display:flex; flex-wrap:wrap; gap:6px; margin-bottom:14px;
+  }
+  .target-chip {
+    padding:5px 12px; border-radius:20px;
+    background:var(--navy-l); border:1px solid rgba(197,165,90,.25);
+    font-family:'JetBrains Mono',monospace; font-size:11px; font-weight:700;
+    color:var(--paper); cursor:pointer; transition:all .12s;
+  }
+  .target-chip.active {
+    background:rgba(197,165,90,.15);
+    border-color:var(--gold); color:var(--gold);
+  }
+  .target-chip.enemy {
+    border-color:rgba(139,0,0,.5); color:#ff8888;
+    background:rgba(139,0,0,.1);
+  }
+
+  /* ── BOTTOM BAR ── */
+  .bottom-bar {
+    position:absolute; bottom:0; left:0; right:0;
+    padding:10px 14px 28px;
+    background:linear-gradient(0deg,var(--navy-d) 60%,transparent);
+    display:flex; gap:10px; z-index:20;
+  }
+  .btn-confirm {
+    flex:1; height:50px;
+    background:var(--bord);
+    border:1px solid rgba(197,165,90,.45);
+    border-radius:8px; color:var(--paper);
+    font-family:'Cinzel',serif; font-size:13px; font-weight:700; letter-spacing:1px;
+    cursor:pointer;
+    box-shadow:0 4px 0 var(--bord-d),0 6px 20px rgba(139,0,0,.4);
+  }
+  .btn-confirm:disabled {
+    opacity:.45; box-shadow:none; cursor:not-allowed;
+  }
+</style>
+</head>
+<body>
+
+<div class="page-label">D6 — Befehlseingabe (Login → Home → Lobby → Karte → <u>Befehlseingabe</u> → Auflösung → Sieg)</div>
+
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!--  PHONE 1 — EINHEITENLISTE · Keine Auswahl            -->
+<!-- ══════════════════════════════════════════════════════ -->
+<div>
+  <div class="col-label">1 — EINHEITENLISTE · Keine Auswahl</div>
+  <div class="phone">
+
+    <div class="sbar">
+      <span>9:41</span>
+      <div style="display:flex;gap:5px;align-items:center">
+        <svg width="16" height="11" viewBox="0 0 16 11" fill="currentColor" opacity=".8">
+          <rect x="0" y="4" width="2.5" height="7" rx=".8"/><rect x="4" y="2.5" width="2.5" height="8.5" rx=".8"/>
+          <rect x="8" y="1" width="2.5" height="10" rx=".8"/><rect x="12" y="0" width="2.5" height="11" rx=".8"/>
+        </svg>
+        <svg width="24" height="11" viewBox="0 0 24 11" fill="currentColor">
+          <rect x=".5" y=".5" width="20" height="10" rx="2" fill="none" stroke="currentColor" opacity=".4"/>
+          <rect x="21" y="3" width="3" height="5" rx="1.2" opacity=".3"/>
+          <rect x="1.5" y="1.5" width="15" height="8" rx="1.2"/>
+        </svg>
+      </div>
+    </div>
+
+    <div class="topbar">
+      <div class="btn-icon">←</div>
+      <div class="topbar-center">
+        <div class="topbar-title">BEFEHLE EINGEBEN</div>
+        <div class="topbar-sub">Frühjahr 1902 · Großbritannien</div>
+      </div>
+      <div class="topbar-timer">05:23</div>
+    </div>
+
+    <!-- Progress: 0/3 orders placed -->
+    <div style="padding:10px 14px 0;position:relative;z-index:5">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+        <span style="font-size:10px;font-weight:600;color:var(--muted);letter-spacing:1px;text-transform:uppercase">Befehle vergeben</span>
+        <span style="font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;color:var(--paper)">0 / 3</span>
+      </div>
+      <div style="height:4px;border-radius:2px;background:rgba(197,165,90,.15);overflow:hidden">
+        <div style="height:100%;width:0%;background:linear-gradient(90deg,var(--green),var(--green-h));border-radius:2px;transition:width .3s"></div>
+      </div>
+    </div>
+
+    <div class="scroll-area" style="height:calc(844px - 220px)">
+
+      <!-- Map Thumbnail -->
+      <div class="map-thumb" style="margin-top:12px">
+        <img src="../../../frontend/public/diplomacy-map.svg" alt="Map">
+        <div class="map-thumb-overlay"></div>
+        <div class="map-thumb-label">Frühjahr 1902 · Aktuelle Positionen</div>
+      </div>
+
+      <!-- Units section -->
+      <div class="section-header">
+        <div class="section-title">Meine Einheiten</div>
+        <div class="section-count">3 Einheiten · 0 Befehle</div>
+      </div>
+
+      <!-- Army London — no order -->
+      <div class="unit-card">
+        <div class="unit-icon-wrap">
+          <img src="../../../frontend/public/units/army-england.png" alt="Army">
+        </div>
+        <div class="unit-info">
+          <div class="unit-type-row">
+            <div class="unit-type-badge">ARMEE</div>
+          </div>
+          <div class="unit-territory">London</div>
+          <div class="unit-order-text">Kein Befehl — tippen zum Eingeben</div>
+        </div>
+        <div class="unit-chevron">›</div>
+      </div>
+
+      <!-- Fleet Edinburgh — no order -->
+      <div class="unit-card">
+        <div class="unit-icon-wrap">
+          <img src="../../../frontend/public/units/fleet-england.png" alt="Fleet">
+        </div>
+        <div class="unit-info">
+          <div class="unit-type-row">
+            <div class="unit-type-badge">FLOTTE</div>
+          </div>
+          <div class="unit-territory">Edinburgh</div>
+          <div class="unit-order-text">Kein Befehl — tippen zum Eingeben</div>
+        </div>
+        <div class="unit-chevron">›</div>
+      </div>
+
+      <!-- Fleet English Channel — no order -->
+      <div class="unit-card">
+        <div class="unit-icon-wrap">
+          <img src="../../../frontend/public/units/fleet-england.png" alt="Fleet">
+        </div>
+        <div class="unit-info">
+          <div class="unit-type-row">
+            <div class="unit-type-badge">FLOTTE</div>
+          </div>
+          <div class="unit-territory">Ärmelkanal</div>
+          <div class="unit-order-text">Kein Befehl — tippen zum Eingeben</div>
+        </div>
+        <div class="unit-chevron">›</div>
+      </div>
+
+      <!-- Hint -->
+      <div style="margin-top:8px;padding:10px 12px;background:rgba(197,165,90,.06);border:1px solid rgba(197,165,90,.15);border-radius:8px;font-size:11px;color:var(--muted);line-height:1.5">
+        💡 Tippe auf eine Einheit um Befehle zu vergeben. Du kannst auch auf der Karte tippen.
+      </div>
+
+    </div>
+
+    <!-- Bottom Bar — disabled until all orders set -->
+    <div class="bottom-bar">
+      <button class="btn-confirm" disabled>BEFEHLE ABSCHICKEN (0/3)</button>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!--  PHONE 2 — BEFEHLSAUSWAHL · Einheit ausgewählt       -->
+<!-- ══════════════════════════════════════════════════════ -->
+<div>
+  <div class="col-label">2 — BEFEHLSAUSWAHL · Army London aktiv</div>
+  <div class="phone">
+
+    <div class="sbar">
+      <span>9:41</span>
+      <div style="display:flex;gap:5px;align-items:center">
+        <svg width="16" height="11" viewBox="0 0 16 11" fill="currentColor" opacity=".8">
+          <rect x="0" y="4" width="2.5" height="7" rx=".8"/><rect x="4" y="2.5" width="2.5" height="8.5" rx=".8"/>
+          <rect x="8" y="1" width="2.5" height="10" rx=".8"/><rect x="12" y="0" width="2.5" height="11" rx=".8"/>
+        </svg>
+        <svg width="24" height="11" viewBox="0 0 24 11" fill="currentColor">
+          <rect x=".5" y=".5" width="20" height="10" rx="2" fill="none" stroke="currentColor" opacity=".4"/>
+          <rect x="21" y="3" width="3" height="5" rx="1.2" opacity=".3"/>
+          <rect x="1.5" y="1.5" width="15" height="8" rx="1.2"/>
+        </svg>
+      </div>
+    </div>
+
+    <div class="topbar">
+      <div class="btn-icon">←</div>
+      <div class="topbar-center">
+        <div class="topbar-title">BEFEHLE EINGEBEN</div>
+        <div class="topbar-sub">Frühjahr 1902 · Großbritannien</div>
+      </div>
+      <div class="topbar-timer">04:58</div>
+    </div>
+
+    <!-- Progress: 1/3 (2 already set) -->
+    <div style="padding:10px 14px 0;position:relative;z-index:5">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+        <span style="font-size:10px;font-weight:600;color:var(--muted);letter-spacing:1px;text-transform:uppercase">Befehle vergeben</span>
+        <span style="font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;color:var(--paper)">2 / 3</span>
+      </div>
+      <div style="height:4px;border-radius:2px;background:rgba(197,165,90,.15);overflow:hidden">
+        <div style="height:100%;width:66%;background:linear-gradient(90deg,var(--green),var(--green-h));border-radius:2px"></div>
+      </div>
+    </div>
+
+    <!-- Dimmed unit list (background) -->
+    <div class="scroll-area" style="height:calc(844px - 350px);opacity:.5;pointer-events:none">
+      <div style="margin-top:12px">
+        <div class="section-header" style="margin-bottom:10px">
+          <div class="section-title">Meine Einheiten</div>
+          <div class="section-count">3 Einheiten · 2 Befehle</div>
+        </div>
+
+        <!-- London — ACTIVE (highlighted) -->
+        <div class="unit-card active" style="opacity:1!important">
+          <div class="unit-icon-wrap">
+            <img src="../../../frontend/public/units/army-england.png" alt="Army">
+          </div>
+          <div class="unit-info">
+            <div class="unit-type-row">
+              <div class="unit-type-badge">ARMEE</div>
+            </div>
+            <div class="unit-territory">London</div>
+            <div class="unit-order-text">Kein Befehl</div>
+          </div>
+          <div class="unit-chevron" style="color:var(--gold)">›</div>
+        </div>
+
+        <!-- Edinburgh — order set -->
+        <div class="unit-card has-order">
+          <div class="unit-icon-wrap">
+            <img src="../../../frontend/public/units/fleet-england.png" alt="Fleet">
+          </div>
+          <div class="unit-info">
+            <div class="unit-type-row"><div class="unit-type-badge">FLOTTE</div></div>
+            <div class="unit-territory">Edinburgh</div>
+            <div class="unit-order-text set">Vorrücken → Nordsee</div>
+          </div>
+          <div class="unit-chevron">›</div>
+        </div>
+
+        <!-- ENG Channel — order set -->
+        <div class="unit-card has-order">
+          <div class="unit-icon-wrap">
+            <img src="../../../frontend/public/units/fleet-england.png" alt="Fleet">
+          </div>
+          <div class="unit-info">
+            <div class="unit-type-row"><div class="unit-type-badge">FLOTTE</div></div>
+            <div class="unit-territory">Ärmelkanal</div>
+            <div class="unit-order-text set">Unterstützen → A LON → BEL</div>
+          </div>
+          <div class="unit-chevron">›</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ORDER BOTTOM SHEET (slides up from bottom) -->
+    <div class="order-sheet">
+      <div class="sheet-handle"></div>
+
+      <!-- Unit Header -->
+      <div class="sheet-unit-header">
+        <div class="sheet-unit-icon">
+          <img src="../../../frontend/public/units/army-england.png" alt="Army London">
+        </div>
+        <div>
+          <div class="sheet-unit-name">Armee · London</div>
+          <div class="sheet-unit-nation">Großbritannien</div>
+        </div>
+      </div>
+
+      <!-- Order Type Selection -->
+      <div class="order-types">
+        <div class="order-type-btn">
+          <div class="order-type-icon">🛡</div>
+          <div class="order-type-name">Halten</div>
+          <div class="order-type-desc">Einheit bleibt stehen</div>
+        </div>
+        <div class="order-type-btn active">
+          <div class="order-type-icon">⚔</div>
+          <div class="order-type-name">Vorrücken</div>
+          <div class="order-type-desc">Ziel-Gebiet wählen</div>
+        </div>
+        <div class="order-type-btn">
+          <div class="order-type-icon">🤝</div>
+          <div class="order-type-name">Unterstützen</div>
+          <div class="order-type-desc">Andere Einheit stärken</div>
+        </div>
+        <div class="order-type-btn">
+          <div class="order-type-icon">🚢</div>
+          <div class="order-type-name">Konvoi</div>
+          <div class="order-type-desc">Armee über Meer</div>
+        </div>
+      </div>
+
+      <!-- Target Territory -->
+      <div class="target-label">Ziel-Gebiet wählen:</div>
+      <div class="target-grid">
+        <div class="target-chip active">BEL</div>
+        <div class="target-chip">WAL</div>
+        <div class="target-chip">YOR</div>
+        <div class="target-chip enemy">BRE ⚠</div>
+        <div class="target-chip">PIC</div>
+      </div>
+
+      <!-- Confirm -->
+      <button style="width:100%;height:46px;background:var(--green);border:1px solid rgba(197,165,90,.4);border-radius:8px;color:var(--paper);font-family:'Cinzel',serif;font-size:13px;font-weight:700;letter-spacing:1px;cursor:pointer;box-shadow:0 3px 0 #1a3009">
+        BEFEHL BESTÄTIGEN ✓
+      </button>
+    </div>
+
+    <!-- Bottom Bar -->
+    <div class="bottom-bar">
+      <button class="btn-confirm" disabled style="opacity:.35">BEFEHLE ABSCHICKEN (2/3)</button>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!--  PHONE 3 — ALLE BEFEHLE GESETZT                      -->
+<!-- ══════════════════════════════════════════════════════ -->
+<div>
+  <div class="col-label">3 — ALLE BEFEHLE VERGEBEN · Bereit</div>
+  <div class="phone">
+
+    <div class="sbar">
+      <span>9:41</span>
+      <div style="display:flex;gap:5px;align-items:center">
+        <svg width="16" height="11" viewBox="0 0 16 11" fill="currentColor" opacity=".8">
+          <rect x="0" y="4" width="2.5" height="7" rx=".8"/><rect x="4" y="2.5" width="2.5" height="8.5" rx=".8"/>
+          <rect x="8" y="1" width="2.5" height="10" rx=".8"/><rect x="12" y="0" width="2.5" height="11" rx=".8"/>
+        </svg>
+        <svg width="24" height="11" viewBox="0 0 24 11" fill="currentColor">
+          <rect x=".5" y=".5" width="20" height="10" rx="2" fill="none" stroke="currentColor" opacity=".4"/>
+          <rect x="21" y="3" width="3" height="5" rx="1.2" opacity=".3"/>
+          <rect x="1.5" y="1.5" width="15" height="8" rx="1.2"/>
+        </svg>
+      </div>
+    </div>
+
+    <div class="topbar">
+      <div class="btn-icon">←</div>
+      <div class="topbar-center">
+        <div class="topbar-title">BEFEHLE EINGEBEN</div>
+        <div class="topbar-sub">Frühjahr 1902 · Großbritannien</div>
+      </div>
+      <div style="background:rgba(45,80,22,.25);border:1px solid rgba(45,80,22,.6);border-radius:6px;padding:4px 8px;font-size:10px;font-weight:700;color:#6ebc45;">
+        ✓ FERTIG
+      </div>
+    </div>
+
+    <!-- Progress: 3/3 -->
+    <div style="padding:10px 14px 0;position:relative;z-index:5">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+        <span style="font-size:10px;font-weight:600;color:var(--muted);letter-spacing:1px;text-transform:uppercase">Befehle vergeben</span>
+        <span style="font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;color:#6ebc45">3 / 3 ✓</span>
+      </div>
+      <div style="height:4px;border-radius:2px;background:rgba(197,165,90,.15);overflow:hidden">
+        <div style="height:100%;width:100%;background:linear-gradient(90deg,var(--green),var(--green-h));border-radius:2px"></div>
+      </div>
+    </div>
+
+    <div class="scroll-area" style="height:calc(844px - 220px)">
+      <div style="margin-top:12px">
+        <div class="section-header">
+          <div class="section-title">Befehlsübersicht</div>
+          <div class="section-count">3 / 3 gesetzt</div>
+        </div>
+
+        <!-- All 3 with orders -->
+        <div class="unit-card has-order">
+          <div class="unit-icon-wrap">
+            <img src="../../../frontend/public/units/army-england.png" alt="Army">
+          </div>
+          <div class="unit-info">
+            <div class="unit-type-row"><div class="unit-type-badge">ARMEE</div></div>
+            <div class="unit-territory">London</div>
+            <div class="unit-order-text set">Vorrücken → Belgien</div>
+          </div>
+          <div class="unit-chevron">›</div>
+        </div>
+
+        <div class="unit-card has-order">
+          <div class="unit-icon-wrap">
+            <img src="../../../frontend/public/units/fleet-england.png" alt="Fleet">
+          </div>
+          <div class="unit-info">
+            <div class="unit-type-row"><div class="unit-type-badge">FLOTTE</div></div>
+            <div class="unit-territory">Edinburgh</div>
+            <div class="unit-order-text set">Vorrücken → Nordsee</div>
+          </div>
+          <div class="unit-chevron">›</div>
+        </div>
+
+        <div class="unit-card has-order">
+          <div class="unit-icon-wrap">
+            <img src="../../../frontend/public/units/fleet-england.png" alt="Fleet">
+          </div>
+          <div class="unit-info">
+            <div class="unit-type-row"><div class="unit-type-badge">FLOTTE</div></div>
+            <div class="unit-territory">Ärmelkanal</div>
+            <div class="unit-order-text set">Unterstützen → A LON → BEL</div>
+          </div>
+          <div class="unit-chevron">›</div>
+        </div>
+
+        <div style="margin-top:12px;padding:12px;background:rgba(45,80,22,.12);border:1px solid rgba(45,80,22,.35);border-radius:8px">
+          <div style="font-size:12px;font-weight:700;color:#6ebc45;margin-bottom:4px">✓ Alle Befehle bereit</div>
+          <div style="font-size:11px;color:var(--muted);line-height:1.5">Drücke Abschicken um deine Befehle einzureichen. Du kannst sie bis zum Timer-Ende noch ändern.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom Bar — ENABLED -->
+    <div class="bottom-bar">
+      <button class="btn-confirm" style="background:var(--green);box-shadow:0 4px 0 #1a3009,0 6px 20px rgba(45,80,22,.5)">
+        BEFEHLE ABSCHICKEN ✓
+      </button>
+    </div>
+
+  </div>
+</div>
+
+</body>
+</html>

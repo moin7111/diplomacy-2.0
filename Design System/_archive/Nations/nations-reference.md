@@ -12,7 +12,7 @@
 | 1 | Großbritannien | GB | Rosa/Pink | `#E8A0B0` | Löwe mit Krone | Finanz-Zentrum (+2 CR/Hauptstadt) |
 | 2 | Deutsches Reich | DE | Anthrazit | `#4A4A4A` | Reichsadler (gold) | High-Tech Marktführer (−1 CR Shop) |
 | 3 | Österreich-Ungarn | AT | Rot | `#C0392B` | Doppeladler | Logistik-Knoten (1×/Jahr Eilmarsch) |
-| 4 | Frankreich | FR | Blau | `#3498DB` | Lilie (Fleur-de-lis) | Nachrichtendienst (sieht alle Contracts) |
+| 4 | Frankreich | FR | Gelb | `#FFDD00` | Lilie (Fleur-de-lis) | Nachrichtendienst (sieht alle Contracts) |
 | 5 | Italien | IT | Grün | `#27AE60` | Stern + Zahnrad | Digitaler Backbone (+1 CR Gebühr) |
 | 6 | Russland | RU | Gelb | `#F1C40F` | Bär mit Krone | Energie-Hegemonie (3 Energie/Hauptstadt) |
 | 7 | Osmn. Reich | TR | Türkis | `#1ABC9C` | Halbmond + Stern | Technologie-Veto (1 Lizenz/Hauptstadt) |
@@ -59,10 +59,10 @@ Buff-Typ:        All-or-nothing
 
 ### 4. Frankreich (FR)
 ```
-Primärfarbe:     #3498DB  (Blau)
-Gebiets-Tint:    rgba(52, 152, 219, 0.4)
-Einheiten-Ring:  #3498DB mit 2px Stroke
-Emblem:          Fleur-de-lis (gold auf blau), kleine Lilien-Muster
+Primärfarbe:     #FFDD00  (Gelb)
+Gebiets-Tint:    rgba(255, 221, 0, 0.4)
+Einheiten-Ring:  #FFDD00 mit 2px Stroke
+Emblem:          Fleur-de-lis (schwarz auf gelb), kleine Lilien-Muster
 Emblem-Datei:    emblems/FR-frankreich.svg
 Badge:           badges/nation-badges.svg (Pos. 4)
 Heraldik:        Fleur-de-lis = Königreich Frankreich

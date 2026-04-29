@@ -100,8 +100,8 @@ const TERRITORIES: Territory[] = [
   t('spa', 'Spain', 'coast', true, ['gas', 'lyo', 'mao', 'mar', 'por', 'wes'], {
     homeNation: null,
     coastAdjacencies: {
-      nc: ['gas', 'mao'],
-      sc: ['gas', 'lyo', 'mao', 'mar', 'wes'],
+      nc: ['gas', 'mao', 'por'],
+      sc: ['lyo', 'mao', 'mar', 'por', 'wes'],
     },
   }),
   t('por', 'Portugal', 'coast', true, ['mao', 'spa'], {
@@ -339,7 +339,7 @@ export function areAdjacent(fromId: string, toId: string): boolean {
  */
 export function areAdjacentForFleet(fromId: string, toId: string): boolean {
   const [from, fromCoast] = parseCoastId(fromId);
-  const [to] = parseCoastId(toId);
+  const [to, toCoast] = parseCoastId(toId);
 
   const fromTerritory = getTerritory(from);
   const toTerritory = getTerritory(to);
@@ -355,6 +355,15 @@ export function areAdjacentForFleet(fromId: string, toId: string): boolean {
     if (coastNeighbours) {
       // Check if destination (with or without coast) appears in coast neighbours
       return coastNeighbours.some((n) => parseCoastId(n)[0] === to);
+    }
+  }
+
+  // If destination has coast-specific adjacencies and a coast is specified, use them
+  if (toCoast && toTerritory.coastAdjacencies) {
+    const toCoastKey = toCoast as 'nc' | 'sc' | 'ec';
+    const toCoastNeighbours = toTerritory.coastAdjacencies[toCoastKey];
+    if (toCoastNeighbours && !toCoastNeighbours.includes(from)) {
+      return false;
     }
   }
 

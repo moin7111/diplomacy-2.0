@@ -24,10 +24,22 @@ export class GameController {
     return this.gameService.joinGame(req.user.id, joinGameDto);
   }
 
+  @Get('my')
+  @ApiOperation({ summary: 'Get all active games for the current user' })
+  getMyGames(@Req() req: any) {
+    return this.gameService.getMyGames(req.user.id);
+  }
+
   @Get(':id')
   @ApiOperation({ summary: 'Get game details (players, status, config)' })
   findOne(@Param('id') id: string) {
     return this.gameService.getGameDetails(id);
+  }
+
+  @Get(':id/history')
+  @ApiOperation({ summary: 'Get replay history data for the game' })
+  getGameHistory(@Param('id') id: string) {
+    return this.gameService.getGameHistory(id);
   }
 
   @Patch(':id/nation')

@@ -29,7 +29,7 @@
 | Großbritannien | Rosa/Pink | `#E8A0B0` | Löwe rampant mit Krone |
 | Deutsches Reich | Anthrazit | `#4A4A4A` | Reichsadler (gold) mit Kaiserkrone |
 | Österreich-Ungarn | Rot | `#C0392B` | Doppeladler weiß, rot-weiß-rot Brust |
-| Frankreich | Blau | `#3498DB` | Fleur-de-lis (gold), Lilien-Streuung |
+| Frankreich | Gelb | `#FFDD00` | Fleur-de-lis (schwarz), Lilien-Streuung |
 | Italien | Grün | `#27AE60` | Stella d'Italia + Zahnrad |
 | Russland | Gelb | `#F1C40F` | Braunbär mit Krone |
 | Osmn. Reich | Türkis | `#1ABC9C` | Halbmond + Stern, osmanische Ornamente |
@@ -40,7 +40,7 @@
 --nation-gb: #E8A0B0;   /* Gebiet: rgba(232,160,176,0.4) */
 --nation-de: #4A4A4A;   /* Gebiet: rgba(74,74,74,0.4)    */
 --nation-at: #C0392B;   /* Gebiet: rgba(192,57,43,0.4)   */
---nation-fr: #3498DB;   /* Gebiet: rgba(52,152,219,0.4)  */
+--nation-fr: #FFDD00;   /* Gebiet: rgba(255,221,0,0.4)   */
 --nation-it: #27AE60;   /* Gebiet: rgba(39,174,96,0.4)   */
 --nation-ru: #F1C40F;   /* Gebiet: rgba(241,196,15,0.4)  */
 --nation-tr: #1ABC9C;   /* Gebiet: rgba(26,188,156,0.4)  */
@@ -79,19 +79,20 @@
 
 ### Home Screen
 - Top-Nav: Logo links, Settings/Achievements/Stats rechts
-- Hero-Sektion: Avatar (bearbeitbar), Rang-Badge, Spieler-Name, Stats-Row (Siege/Spiele/Rang/W-Rate)
+- Hero-Sektion: **Avatar (klickbar → Galerie)**, Rang-Badge, Spieler-Name, Stats-Row (Siege/Spiele/Rang/W-Rate)
+- Avatar ist das persönliche Nationssymbol — überall im Spiel sichtbar statt Länderflagge
 - CTA-Sektion: "Spiel Erstellen" (Bordeaux) + Raumcode-Input + "Beitreten" (Grün)
-- Match-Cards Grid (2 Spalten): Map-Thumbnail mit Nationalfarbe, Titel, Spieleranzahl, Runde, Join-Button
+- Match-Cards Grid (2 Spalten): **Spieler-Avatar** der eigenen Nation + Nationalfarbe-Ring, Titel, Spieleranzahl, Runde, Join-Button
 - Scroll-Bereich für weitere Matches
 
 ### Lobby Screen
 - Top-Bar: Exit-Button, "WARTERAUM", Raumcode (JetBrains Mono, anklickbar zum Kopieren)
-- Spieler-Liste (3/7): Host-Badge (Gold), Bereit-Badge (Grün), Warte-Badge (Grau), leere Slots (gestrichelt)
-- Nationen-Wahl: 4×2 Grid, Farb-Kreis + Kürzel + Vollname, selected/taken/random States
+- Spieler-Liste (3/7): **Avatar** + Spielername, Host-Badge (Gold), Bereit-Badge (Grün), Warte-Badge (Grau), leere Slots (gestrichelt)
+- Nationen-Wahl: 4×2 Grid, Farb-Kreis + Kürzel + Vollname + **Avatar-Vorschau des zugeordneten Spielers**, selected/taken/random States
 - Spieleinstellungen: Spielmodus, Phasen-Dauer, Raketen-Toggle (nur Host)
 - Bottom-Bar Host: Share-Button + "Spiel Starten" (disabled bis alle bereit)
 - Bottom-Bar Gast: Share-Button + "Bereit"-Toggle
-- Gast-View: Ausgewählte Nation prominent mit Buff-Info
+- Gast-View: Ausgewählte Nation prominent mit Buff-Info + eigenem Avatar
 
 ### Design-Konformität
 - ✅ D1 Farbpalette vollständig umgesetzt

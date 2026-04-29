@@ -1,0 +1,27 @@
+# ============================================
+# Diplomacy 2.0 - Caddy Reverse Proxy
+# Deploy to: /etc/caddy/Caddyfile on server
+# Reload: sudo systemctl reload caddy
+# ============================================
+
+diplomacy.tum-s.de {
+    # Block /api/health from external access — monitored internally via Uptime Kuma only
+    @healthCheck path /api/health
+    respond @healthCheck 403
+
+    # WebSocket (Socket.io) — must match before generic /api/* catch
+    @websocket {
+        path /socket.io/*
+        header Connection *Upgrade*
+        header Upgrade websocket
+    }
+    reverse_proxy @websocket api:4000
+
+    # REST API
+    reverse_proxy /api/* api:4000 {
+        header_up Host {host}
+        header_up X-Real-IP {remote_host}
+        header_up X-Forwarded-For {remote_host}
+        header_up X-Forwarded-Proto {scheme}
+    }
+}

@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=390, initial-scale=1">
+<title>D6 — Auflösung · Resolution Screen</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --navy:#1B2838; --navy-l:#253548; --navy-d:#111C27;
+    --bord:#8B0000; --bord-d:#6B0000;
+    --green:#2D5016; --green-h:#3D6B20;
+    --gold:#C5A55A; --gold-l:#D4BA7A; --gold-sh:#EDD898; --gold-d:#9E7E3A;
+    --paper:#F4E8C1; --muted:#8A9BAE;
+    --gb:#E8A0B0; --fr:#3498DB; --de:#9A9A9A; --at:#C0392B;
+    --ru:#F1C40F; --it:#27AE60; --tr:#1ABC9C;
+  }
+
+  body {
+    background:#0D1520;
+    display:flex; justify-content:center; align-items:flex-start;
+    min-height:100vh; padding:24px; gap:24px;
+    flex-wrap:wrap; font-family:'Inter',sans-serif;
+  }
+
+  .page-label {
+    width:100%; text-align:center; color:var(--gold);
+    font-size:11px; font-weight:600; letter-spacing:3px;
+    text-transform:uppercase; padding:0 0 4px;
+    border-bottom:1px solid rgba(197,165,90,.2); margin-bottom:20px;
+  }
+  .col-label {
+    color:var(--gold); font-size:10px; font-weight:600;
+    letter-spacing:2px; text-transform:uppercase;
+    text-align:center; margin-bottom:8px;
+  }
+
+  .phone {
+    width:390px; height:844px; background:var(--navy);
+    border-radius:40px; overflow:hidden; position:relative;
+    border:3px solid var(--gold);
+    box-shadow:0 0 40px rgba(197,165,90,.2),0 20px 60px rgba(0,0,0,.8);
+    flex-shrink:0;
+  }
+  .phone::before {
+    content:''; position:absolute; top:0; left:0; right:0; height:3px;
+    background:linear-gradient(90deg,var(--gold-d),var(--gold-sh),var(--gold-d)); z-index:100;
+  }
+  .phone::after {
+    content:''; position:absolute; bottom:0; left:0; right:0; height:3px;
+    background:linear-gradient(90deg,var(--gold-d),var(--gold-sh),var(--gold-d)); z-index:100;
+  }
+
+  .sbar {
+    display:flex; justify-content:space-between; align-items:center;
+    padding:14px 28px 8px;
+    font-family:'JetBrains Mono',monospace; font-size:12px; font-weight:700;
+    color:var(--paper); position:relative; z-index:5;
+  }
+
+  /* ── AUFLÖSUNG HEADER ── */
+  .auflos-header {
+    padding:12px 16px 10px;
+    background:linear-gradient(180deg,rgba(197,165,90,.08) 0%,transparent 100%);
+    border-bottom:1px solid rgba(197,165,90,.2);
+    position:relative; z-index:5;
+  }
+  .auflos-phase {
+    display:flex; align-items:center; justify-content:space-between;
+    margin-bottom:8px;
+  }
+  .auflos-title {
+    font-family:'Cinzel',serif; font-size:16px; font-weight:700;
+    color:var(--gold); letter-spacing:1.5px;
+  }
+  .auflos-season {
+    font-family:'JetBrains Mono',monospace; font-size:11px;
+    color:var(--muted); letter-spacing:1px;
+  }
+
+  /* Replay progress bar */
+  .replay-bar {
+    display:flex; align-items:center; gap:10px;
+    padding:8px 0 0;
+  }
+  .replay-btn {
+    width:32px; height:32px; border-radius:50%;
+    background:var(--navy-l); border:1px solid rgba(197,165,90,.35);
+    display:flex; align-items:center; justify-content:center;
+    color:var(--gold); font-size:14px; cursor:pointer; flex-shrink:0;
+  }
+  .replay-btn.play {
+    background:rgba(197,165,90,.15);
+    border-color:var(--gold);
+    width:36px; height:36px; font-size:16px;
+  }
+  .replay-track {
+    flex:1; height:6px; border-radius:3px;
+    background:rgba(197,165,90,.15); overflow:hidden; cursor:pointer;
+  }
+  .replay-fill {
+    height:100%;
+    background:linear-gradient(90deg,var(--gold-d),var(--gold-sh));
+    border-radius:3px; transition:width .3s;
+  }
+  .replay-step {
+    font-family:'JetBrains Mono',monospace; font-size:10px;
+    color:var(--muted); white-space:nowrap; flex-shrink:0;
+  }
+
+  /* ── MAP WITH ARROWS ── */
+  .map-area {
+    position:relative; width:390px;
+    flex-shrink:0; overflow:hidden;
+  }
+  .map-area img {
+    width:100%; display:block;
+    object-fit:cover; object-position:center 30%;
+    opacity:.85;
+  }
+  .map-overlay {
+    position:absolute; inset:0; pointer-events:none;
+  }
+  /* Movement arrows (CSS drawn in SVG overlay) */
+  .arrows-svg {
+    position:absolute; inset:0; width:100%; height:100%;
+    pointer-events:none; z-index:5;
+  }
+
+  /* Unit tokens on map */
+  .ut {
+    position:absolute;
+    width:30px; height:30px; border-radius:50%;
+    border:2.5px solid white; overflow:hidden;
+    box-shadow:0 2px 8px rgba(0,0,0,.7); z-index:6;
+  }
+  .ut img { width:100%; height:100%; object-fit:cover; }
+
+  /* ── EVENTS LOG ── */
+  .events-section {
+    overflow-y:auto; flex:1;
+    scrollbar-width:thin; scrollbar-color:rgba(197,165,90,.3) transparent;
+    padding:10px 14px 80px;
+  }
+  .events-title {
+    font-family:'Cinzel',serif; font-size:11px; font-weight:700;
+    color:var(--gold); letter-spacing:1.5px; text-transform:uppercase;
+    margin-bottom:10px;
+  }
+
+  .event-item {
+    display:flex; align-items:flex-start; gap:10px;
+    padding:10px 10px;
+    margin-bottom:6px;
+    border-radius:8px;
+    border-left:3px solid;
+  }
+  .event-item.success { background:rgba(45,80,22,.15); border-left-color:var(--green); }
+  .event-item.fail    { background:rgba(139,0,0,.12);  border-left-color:var(--bord); }
+  .event-item.bounce  { background:rgba(197,165,90,.06); border-left-color:var(--gold-d); }
+  .event-item.retreat { background:rgba(192,57,43,.1);  border-left-color:#e74c3c; }
+
+  .event-icon { font-size:16px; flex-shrink:0; margin-top:1px; }
+  .event-body { flex:1; }
+  .event-action {
+    font-size:12px; font-weight:600; color:var(--paper);
+    line-height:1.4; margin-bottom:2px;
+  }
+  .event-detail { font-size:10px; color:var(--muted); line-height:1.4; }
+  .nation-dot {
+    display:inline-block; width:8px; height:8px;
+    border-radius:50%; margin-right:4px; vertical-align:middle;
+  }
+
+  /* Step events (divider) */
+  .event-step-divider {
+    display:flex; align-items:center; gap:8px;
+    margin:12px 0 8px;
+  }
+  .event-step-divider::before,
+  .event-step-divider::after {
+    content:''; flex:1; height:1px;
+    background:rgba(197,165,90,.15);
+  }
+  .event-step-label {
+    font-size:9px; font-weight:700; color:var(--muted);
+    letter-spacing:1.5px; text-transform:uppercase; white-space:nowrap;
+  }
+
+  /* ── BOTTOM BAR ── */
+  .bottom-bar {
+    position:absolute; bottom:0; left:0; right:0;
+    padding:10px 14px 28px;
+    background:linear-gradient(0deg,var(--navy-d) 65%,transparent);
+    z-index:20;
+  }
+  .btn-primary {
+    width:100%; height:50px;
+    background:var(--bord);
+    border:1px solid rgba(197,165,90,.45);
+    border-radius:8px; color:var(--paper);
+    font-family:'Cinzel',serif; font-size:13px; font-weight:700; letter-spacing:1px;
+    cursor:pointer;
+    box-shadow:0 4px 0 var(--bord-d),0 6px 20px rgba(139,0,0,.4);
+  }
+
+  @keyframes pulse-glow {
+    0%,100% { box-shadow:0 0 10px rgba(197,165,90,.3); }
+    50%      { box-shadow:0 0 22px rgba(197,165,90,.65); }
+  }
+</style>
+</head>
+<body>
+
+<div class="page-label">D6 — Auflösung (Login → Home → Lobby → Karte → Befehlseingabe → <u>Auflösung</u> → Sieg)</div>
+
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!--  PHONE 1 — REPLAY · Karte mit Bewegungspfeilen       -->
+<!-- ══════════════════════════════════════════════════════ -->
+<div>
+  <div class="col-label">1 — REPLAY · Karte mit Bewegungspfeilen</div>
+  <div class="phone">
+
+    <div class="sbar">
+      <span>9:41</span>
+      <div style="display:flex;gap:5px;align-items:center">
+        <svg width="16" height="11" viewBox="0 0 16 11" fill="currentColor" opacity=".8">
+          <rect x="0" y="4" width="2.5" height="7" rx=".8"/><rect x="4" y="2.5" width="2.5" height="8.5" rx=".8"/>
+          <rect x="8" y="1" width="2.5" height="10" rx=".8"/><rect x="12" y="0" width="2.5" height="11" rx=".8"/>
+        </svg>
+        <svg width="24" height="11" viewBox="0 0 24 11" fill="currentColor">
+          <rect x=".5" y=".5" width="20" height="10" rx="2" fill="none" stroke="currentColor" opacity=".4"/>
+          <rect x="21" y="3" width="3" height="5" rx="1.2" opacity=".3"/>
+          <rect x="1.5" y="1.5" width="15" height="8" rx="1.2"/>
+        </svg>
+      </div>
+    </div>
+
+    <!-- Auflösung Header -->
+    <div class="auflos-header">
+      <div class="auflos-phase">
+        <div class="auflos-title">AUFLÖSUNG</div>
+        <div class="auflos-season">FRÜHJAHR 1902</div>
+      </div>
+      <div class="replay-bar">
+        <div class="replay-btn">⏮</div>
+        <div class="replay-btn">◀</div>
+        <div class="replay-btn play">▶</div>
+        <div class="replay-track">
+          <div class="replay-fill" style="width:45%"></div>
+        </div>
+        <div class="replay-btn">▶</div>
+        <div class="replay-step">3/7</div>
+      </div>
+    </div>
+
+    <!-- Map with movement arrows -->
+    <div class="map-area" style="height:420px">
+      <img src="../../../frontend/public/diplomacy-map.svg" alt="Map" style="height:420px">
+
+      <!-- Year badge -->
+      <div style="position:absolute;top:8px;left:8px;background:rgba(27,40,56,.85);border:1px solid rgba(197,165,90,.4);border-radius:6px;padding:4px 10px;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;color:var(--gold-sh);letter-spacing:1px;z-index:10">
+        FRÜHJAHR 1902
+      </div>
+
+      <!-- Movement arrows SVG overlay -->
+      <svg class="arrows-svg" viewBox="0 0 390 420">
+        <defs>
+          <!-- GB arrow head (pink) -->
+          <marker id="a-gb" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+            <path d="M0,0 L0,6 L8,3 z" fill="#E8A0B0"/>
+          </marker>
+          <!-- FR arrow head (blue) -->
+          <marker id="a-fr" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+            <path d="M0,0 L0,6 L8,3 z" fill="#3498DB"/>
+          </marker>
+          <!-- DE arrow head (grey) -->
+          <marker id="a-de" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+            <path d="M0,0 L0,6 L8,3 z" fill="#9A9A9A"/>
+          </marker>
+          <!-- AT arrow head (red) -->
+          <marker id="a-at" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+            <path d="M0,0 L0,6 L8,3 z" fill="#C0392B"/>
+          </marker>
+          <!-- BLOCKED X marker -->
+          <marker id="x-block" markerWidth="10" markerHeight="10" refX="5" refY="5" orient="auto">
+            <circle cx="5" cy="5" r="4" fill="rgba(139,0,0,.8)"/>
+            <line x1="2" y1="2" x2="8" y2="8" stroke="white" stroke-width="1.5"/>
+            <line x1="8" y1="2" x2="2" y2="8" stroke="white" stroke-width="1.5"/>
+          </marker>
+        </defs>
+
+        <!-- GB: Army London → Belgium (SUCCESS) -->
+        <line x1="62" y1="148" x2="94" y2="192"
+              stroke="#E8A0B0" stroke-width="2.5" stroke-linecap="round"
+              marker-end="url(#a-gb)" opacity=".9"/>
+        <!-- Success indicator at target -->
+        <circle cx="96" cy="196" r="6" fill="rgba(45,80,22,.7)" stroke="#6ebc45" stroke-width="1.5"/>
+        <text x="96" y="200" font-size="7" fill="#6ebc45" text-anchor="middle">✓</text>
+
+        <!-- GB: Fleet Edinburgh → North Sea (SUCCESS) -->
+        <line x1="62" y1="96" x2="78" y2="65"
+              stroke="#E8A0B0" stroke-width="2.5" stroke-linecap="round"
+              marker-end="url(#a-gb)" opacity=".9"/>
+
+        <!-- GB: Fleet ENG supports A LON → BEL (SUPPORT arrow, dashed) -->
+        <line x1="82" y1="186" x2="72" y2="165"
+              stroke="#E8A0B0" stroke-width="1.5" stroke-dasharray="5,3"
+              stroke-linecap="round" opacity=".6"/>
+        <text x="60" y="175" font-size="8" fill="#E8A0B0" opacity=".8" font-weight="bold">SUP</text>
+
+        <!-- FR: Army Paris → Burgundy (BOUNCE — blocked) -->
+        <line x1="116" y1="200" x2="138" y2="188"
+              stroke="#3498DB" stroke-width="2.5" stroke-linecap="round"
+              marker-end="url(#x-block)" opacity=".8"/>
+        <!-- Bounce X symbol at midpoint -->
+        <circle cx="138" cy="190" r="7" fill="rgba(139,0,0,.75)" stroke="#ff6b6b" stroke-width="1.5"/>
+        <line x1="134" y1="186" x2="142" y2="194" stroke="white" stroke-width="1.5"/>
+        <line x1="142" y1="186" x2="134" y2="194" stroke="white" stroke-width="1.5"/>
+
+        <!-- DE: Army Berlin → Munich (SUCCESS) -->
+        <line x1="172" y1="138" x2="170" y2="182"
+              stroke="#9A9A9A" stroke-width="2.5" stroke-linecap="round"
+              marker-end="url(#a-de)" opacity=".85"/>
+        <circle cx="170" cy="186" r="6" fill="rgba(45,80,22,.7)" stroke="#6ebc45" stroke-width="1.5"/>
+
+        <!-- AT: Army Vienna → Trieste (SUCCESS) -->
+        <line x1="196" y1="196" x2="184" y2="216"
+              stroke="#C0392B" stroke-width="2.5" stroke-linecap="round"
+              marker-end="url(#a-at)" opacity=".85"/>
+        <circle cx="183" cy="219" r="6" fill="rgba(45,80,22,.7)" stroke="#6ebc45" stroke-width="1.5"/>
+      </svg>
+
+      <!-- Unit tokens at new positions -->
+      <!-- GB Army at Belgium -->
+      <div class="ut" style="left:20%;top:43%;border-color:var(--gb)">
+        <img src="../../../frontend/public/units/army-england.png" alt="">
+      </div>
+      <!-- GB Fleet at North Sea -->
+      <div class="ut" style="left:15%;top:12%;border-color:var(--gb)">
+        <img src="../../../frontend/public/units/fleet-england.png" alt="">
+      </div>
+      <!-- GB Fleet at ENG (held) -->
+      <div class="ut" style="left:19%;top:40%;border-color:var(--gb)">
+        <img src="../../../frontend/public/units/fleet-england.png" alt="">
+      </div>
+      <!-- FR Army at Paris (bounced back) -->
+      <div class="ut" style="left:27%;top:46%;border-color:var(--fr)">
+        <img src="../../../frontend/public/units/army-france.png" alt="">
+      </div>
+      <!-- DE Army at Munich -->
+      <div class="ut" style="left:41%;top:42%;border-color:var(--de)">
+        <img src="../../../frontend/public/units/army-germany.png" alt="">
+      </div>
+    </div>
+
+    <!-- Current step info -->
+    <div style="padding:8px 14px;background:var(--navy-l);border-top:1px solid rgba(197,165,90,.15);border-bottom:1px solid rgba(197,165,90,.1);display:flex;align-items:center;gap:8px;position:relative;z-index:5">
+      <div style="width:8px;height:8px;border-radius:50%;background:var(--gb);flex-shrink:0"></div>
+      <div style="font-size:12px;color:var(--paper);font-weight:600">A LON → BEL: <span style="color:#6ebc45">Erfolg</span></div>
+      <div style="flex:1;text-align:right;font-size:10px;color:var(--muted)">Schritt 3 von 7</div>
+    </div>
+
+    <!-- Events log (partial, scrollable) -->
+    <div class="events-section" style="height:calc(844px - 600px)">
+      <div class="event-step-divider">
+        <div class="event-step-label">Großbritannien</div>
+      </div>
+      <div class="event-item success">
+        <div class="event-icon">✅</div>
+        <div class="event-body">
+          <div class="event-action">A London → Belgien</div>
+          <div class="event-detail">Unterstützt durch F Ärmelkanal. Kein Widerstand.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom Bar -->
+    <div class="bottom-bar">
+      <button class="btn-primary">WEITER → ERGEBNISSE</button>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!--  PHONE 2 — ERGEBNIS · Vollständiges Ereignis-Log     -->
+<!-- ══════════════════════════════════════════════════════ -->
+<div>
+  <div class="col-label">2 — ERGEBNISSE · Vollständiges Ereignis-Log</div>
+  <div class="phone">
+
+    <div class="sbar">
+      <span>9:41</span>
+      <div style="display:flex;gap:5px;align-items:center">
+        <svg width="16" height="11" viewBox="0 0 16 11" fill="currentColor" opacity=".8">
+          <rect x="0" y="4" width="2.5" height="7" rx=".8"/><rect x="4" y="2.5" width="2.5" height="8.5" rx=".8"/>
+          <rect x="8" y="1" width="2.5" height="10" rx=".8"/><rect x="12" y="0" width="2.5" height="11" rx=".8"/>
+        </svg>
+        <svg width="24" height="11" viewBox="0 0 24 11" fill="currentColor">
+          <rect x=".5" y=".5" width="20" height="10" rx="2" fill="none" stroke="currentColor" opacity=".4"/>
+          <rect x="21" y="3" width="3" height="5" rx="1.2" opacity=".3"/>
+          <rect x="1.5" y="1.5" width="15" height="8" rx="1.2"/>
+        </svg>
+      </div>
+    </div>
+
+    <!-- Header -->
+    <div class="auflos-header">
+      <div class="auflos-phase">
+        <div class="auflos-title">ERGEBNISSE</div>
+        <div class="auflos-season">FRÜHJAHR 1902</div>
+      </div>
+      <!-- Summary stats row -->
+      <div style="display:flex;gap:0;margin-top:8px;border-radius:8px;overflow:hidden;border:1px solid rgba(197,165,90,.2)">
+        <div style="flex:1;padding:8px;text-align:center;background:rgba(45,80,22,.15);border-right:1px solid rgba(197,165,90,.15)">
+          <div style="font-family:'JetBrains Mono',monospace;font-size:18px;font-weight:700;color:#6ebc45">9</div>
+          <div style="font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:1px">Erfolge</div>
+        </div>
+        <div style="flex:1;padding:8px;text-align:center;background:rgba(197,165,90,.06);border-right:1px solid rgba(197,165,90,.15)">
+          <div style="font-family:'JetBrains Mono',monospace;font-size:18px;font-weight:700;color:var(--gold)">4</div>
+          <div style="font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:1px">Bounces</div>
+        </div>
+        <div style="flex:1;padding:8px;text-align:center;background:rgba(139,0,0,.1)">
+          <div style="font-family:'JetBrains Mono',monospace;font-size:18px;font-weight:700;color:#ff8888">2</div>
+          <div style="font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:1px">Rückzüge</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Full events log -->
+    <div class="events-section">
+
+      <!-- GB section -->
+      <div class="event-step-divider">
+        <div class="event-step-label">
+          <span class="nation-dot" style="background:var(--gb)"></span>Großbritannien
+        </div>
+      </div>
+      <div class="event-item success">
+        <div class="event-icon">✅</div>
+        <div class="event-body">
+          <div class="event-action">A London → Belgien</div>
+          <div class="event-detail">Unterstützt durch F Ärmelkanal. Belgien eingenommen (+1 VZ).</div>
+        </div>
+      </div>
+      <div class="event-item success">
+        <div class="event-icon">✅</div>
+        <div class="event-body">
+          <div class="event-action">F Edinburgh → Nordsee</div>
+          <div class="event-detail">Unbefestigtes Gebiet — ohne Widerstand.</div>
+        </div>
+      </div>
+      <div class="event-item success">
+        <div class="event-icon">🤝</div>
+        <div class="event-body">
+          <div class="event-action">F Ärmelkanal unterstützt A LON → BEL</div>
+          <div class="event-detail">Unterstützung erfolgreich durchgeführt.</div>
+        </div>
+      </div>
+
+      <!-- FR section -->
+      <div class="event-step-divider">
+        <div class="event-step-label">
+          <span class="nation-dot" style="background:var(--fr)"></span>Frankreich
+        </div>
+      </div>
+      <div class="event-item bounce">
+        <div class="event-icon">⚡</div>
+        <div class="event-body">
+          <div class="event-action">A Paris → Burgund: ABPRALL</div>
+          <div class="event-detail">Gleichzeitiger Vorstoß mit DE München. Beide Einheiten prallen zurück.</div>
+        </div>
+      </div>
+      <div class="event-item success">
+        <div class="event-icon">✅</div>
+        <div class="event-body">
+          <div class="event-action">F Brest → Mittelmeer</div>
+          <div class="event-detail">Erfolgreich. Konvoi-Route etabliert.</div>
+        </div>
+      </div>
+
+      <!-- DE section -->
+      <div class="event-step-divider">
+        <div class="event-step-label">
+          <span class="nation-dot" style="background:var(--de)"></span>Deutsches Reich
+        </div>
+      </div>
+      <div class="event-item bounce">
+        <div class="event-icon">⚡</div>
+        <div class="event-body">
+          <div class="event-action">A München → Burgund: ABPRALL</div>
+          <div class="event-detail">Gleichzeitiger Angriff mit FR Paris. Rückfall nach München.</div>
+        </div>
+      </div>
+      <div class="event-item success">
+        <div class="event-icon">✅</div>
+        <div class="event-body">
+          <div class="event-action">F Kiel → Dänemark</div>
+          <div class="event-detail">Dänemark eingenommen (+1 VZ).</div>
+        </div>
+      </div>
+
+      <!-- AT section -->
+      <div class="event-step-divider">
+        <div class="event-step-label">
+          <span class="nation-dot" style="background:var(--at)"></span>Österreich-Ungarn
+        </div>
+      </div>
+      <div class="event-item success">
+        <div class="event-icon">✅</div>
+        <div class="event-body">
+          <div class="event-action">A Wien → Triest</div>
+          <div class="event-detail">Triest eingenommen (+1 VZ).</div>
+        </div>
+      </div>
+      <div class="event-item retreat">
+        <div class="event-icon">⚠️</div>
+        <div class="event-body">
+          <div class="event-action">A Budapest → Serbien: MUSS ZURÜCKWEICHEN</div>
+          <div class="event-detail">RU Galizien stieß vor und verdrängte A Budapest. Rückzug erforderlich.</div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Bottom Bar: Rückzüge or next phase -->
+    <div class="bottom-bar">
+      <button class="btn-primary" style="background:rgba(192,57,43,.8);box-shadow:0 4px 0 rgba(150,40,30,.8),0 6px 20px rgba(192,57,43,.3)">
+        RÜCKZÜGE EINGEBEN ⚠ (1)
+      </button>
+    </div>
+
+  </div>
+</div>
+
+</body>
+</html>

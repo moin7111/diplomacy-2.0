@@ -24,9 +24,11 @@ services:
     # Hot-Reload: Bei Dateiänderungen automatisch neustarten
     volumes:
       - ./backend:/app
+      - ./packages:/packages
       - diplomacy2_node_modules:/app/node_modules
 
   uptime-kuma:
+    image: louislam/uptime-kuma:1
     ports:
       - "3001:3001"  # Extern erreichbar für lokale Kontrolle
 

@@ -9,7 +9,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       ignoreExpiration: false,
-      secretOrKey: process.env.JWT_SECRET || 'diplomacy2-dev-secret-super-secure',
+      secretOrKey: process.env.JWT_SECRET || (() => { throw new Error('FATAL: JWT_SECRET missing') })(),
     });
   }
 

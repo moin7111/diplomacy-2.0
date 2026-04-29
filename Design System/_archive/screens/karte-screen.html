@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=390, initial-scale=1">
+<title>D6 — Karte · Spielfeld-Screen</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --navy:#1B2838; --navy-l:#253548; --navy-d:#111C27;
+    --bord:#8B0000; --bord-d:#6B0000;
+    --green:#2D5016; --green-h:#3D6B20;
+    --gold:#C5A55A; --gold-l:#D4BA7A; --gold-sh:#EDD898; --gold-d:#9E7E3A;
+    --paper:#F4E8C1; --muted:#8A9BAE;
+    /* Nation colors */
+    --gb:#E8A0B0; --de:#6A6A6A; --at:#C0392B;
+    --fr:#3498DB; --it:#27AE60; --ru:#F1C40F; --tr:#1ABC9C;
+  }
+
+  body {
+    background:#0D1520;
+    display:flex; justify-content:center; align-items:flex-start;
+    min-height:100vh; padding:24px; gap:24px;
+    flex-wrap:wrap; font-family:'Inter',sans-serif;
+  }
+
+  .col-label {
+    color:var(--gold); font-size:10px; font-weight:600;
+    letter-spacing:2px; text-transform:uppercase;
+    text-align:center; margin-bottom:8px;
+  }
+  .page-label {
+    width:100%; text-align:center; color:var(--gold);
+    font-size:11px; font-weight:600; letter-spacing:3px;
+    text-transform:uppercase; padding:0 0 4px;
+    border-bottom:1px solid rgba(197,165,90,.2); margin-bottom:20px;
+  }
+
+  /* ── PHONE ── */
+  .phone {
+    width:390px; height:844px; background:var(--navy);
+    border-radius:40px; overflow:hidden; position:relative;
+    border:3px solid var(--gold);
+    box-shadow:0 0 40px rgba(197,165,90,.2),0 20px 60px rgba(0,0,0,.8);
+    flex-shrink:0;
+  }
+  .phone::before {
+    content:''; position:absolute; top:0; left:0; right:0; height:3px;
+    background:linear-gradient(90deg,var(--gold-d),var(--gold-sh),var(--gold-d)); z-index:100;
+  }
+  .phone::after {
+    content:''; position:absolute; bottom:0; left:0; right:0; height:3px;
+    background:linear-gradient(90deg,var(--gold-d),var(--gold-sh),var(--gold-d)); z-index:100;
+  }
+
+  /* ── STATUS BAR ── */
+  .sbar {
+    display:flex; justify-content:space-between; align-items:center;
+    padding:14px 28px 8px;
+    font-family:'JetBrains Mono',monospace; font-size:12px; font-weight:700;
+    color:var(--paper); position:relative; z-index:5;
+  }
+
+  /* ── TOP BAR ── */
+  .topbar {
+    display:flex; align-items:center; padding:8px 14px;
+    gap:10px; border-bottom:1px solid rgba(197,165,90,.2);
+    position:relative; z-index:5;
+    background:var(--navy);
+  }
+  .btn-icon {
+    width:36px; height:36px; border-radius:8px;
+    background:var(--navy-l); border:1px solid rgba(197,165,90,.3);
+    display:flex; align-items:center; justify-content:center;
+    color:var(--gold); font-size:15px; cursor:pointer; flex-shrink:0;
+  }
+  .topbar-center { flex:1; display:flex; flex-direction:column; align-items:center; gap:1px; }
+  .topbar-title {
+    font-family:'Cinzel',serif; font-size:12px; font-weight:700;
+    color:var(--gold); letter-spacing:1.5px;
+  }
+  .topbar-sub { font-size:10px; color:var(--muted); letter-spacing:.5px; }
+  .topbar-timer {
+    display:flex; align-items:center; gap:5px;
+    background:rgba(139,0,0,.25); border:1px solid rgba(139,0,0,.6);
+    border-radius:6px; padding:4px 10px;
+    font-family:'JetBrains Mono',monospace; font-size:14px; font-weight:700;
+    color:#ff6b6b; flex-shrink:0;
+  }
+
+  /* ── PHASE INDICATOR ── */
+  .phase-bar {
+    display:flex; align-items:center; justify-content:center;
+    gap:0; padding:8px 16px;
+    border-bottom:1px solid rgba(197,165,90,.12);
+    background:var(--navy-d);
+    position:relative; z-index:5;
+  }
+  .phase-step {
+    display:flex; align-items:center; gap:0;
+    font-size:10px; font-weight:600; letter-spacing:.8px;
+    text-transform:uppercase; color:var(--muted);
+  }
+  .phase-step.active { color:var(--gold); }
+  .phase-step.done   { color:var(--green); }
+  .phase-dot {
+    width:28px; height:28px; border-radius:50%;
+    border:2px solid rgba(197,165,90,.2);
+    display:flex; align-items:center; justify-content:center;
+    font-size:11px; font-weight:700; color:var(--muted);
+    flex-shrink:0;
+  }
+  .phase-dot.active {
+    border-color:var(--gold);
+    background:rgba(197,165,90,.12);
+    color:var(--gold);
+    box-shadow:0 0 10px rgba(197,165,90,.3);
+  }
+  .phase-dot.done {
+    border-color:var(--green);
+    background:rgba(45,80,22,.2);
+    color:var(--green);
+  }
+  .phase-line {
+    width:28px; height:2px;
+    background:rgba(197,165,90,.15);
+    flex-shrink:0;
+  }
+  .phase-line.done { background:rgba(45,80,22,.5); }
+  .phase-label { font-size:9px; margin-top:2px; letter-spacing:.6px; }
+
+  /* ── MAP AREA ── */
+  .map-wrapper {
+    position:relative;
+    width:390px;
+    height:460px;
+    overflow:hidden;
+    background:var(--navy-d);
+    flex-shrink:0;
+  }
+  .map-img {
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    object-position:center 35%;
+    opacity:.9;
+  }
+  /* Nation territory overlay tints */
+  .territory-overlay {
+    position:absolute; inset:0; pointer-events:none;
+  }
+  /* Unit tokens on map */
+  .unit-token {
+    position:absolute;
+    width:32px; height:32px;
+    border-radius:50%;
+    border:2.5px solid rgba(255,255,255,.8);
+    overflow:hidden;
+    box-shadow:0 2px 8px rgba(0,0,0,.7);
+  }
+  .unit-token img { width:100%; height:100%; object-fit:cover; }
+
+  /* Map overlay controls */
+  .map-controls {
+    position:absolute; top:8px; right:8px;
+    display:flex; flex-direction:column; gap:6px; z-index:10;
+  }
+  .map-btn {
+    width:32px; height:32px; border-radius:6px;
+    background:rgba(27,40,56,.85); border:1px solid rgba(197,165,90,.35);
+    display:flex; align-items:center; justify-content:center;
+    color:var(--gold); font-size:14px; cursor:pointer;
+    backdrop-filter:blur(4px);
+  }
+  /* Year badge */
+  .year-badge {
+    position:absolute; top:8px; left:8px;
+    background:rgba(27,40,56,.85);
+    border:1px solid rgba(197,165,90,.4);
+    border-radius:6px; padding:4px 10px;
+    font-family:'JetBrains Mono',monospace; font-size:11px; font-weight:700;
+    color:var(--gold-sh); letter-spacing:1px;
+    backdrop-filter:blur(4px); z-index:10;
+  }
+
+  /* ── MY NATION STRIP ── */
+  .nation-strip {
+    display:flex; align-items:center; gap:10px;
+    padding:8px 14px;
+    background:var(--navy-l);
+    border-top:1px solid rgba(232,160,176,.3);
+    border-bottom:1px solid rgba(197,165,90,.12);
+    position:relative; z-index:5;
+  }
+  .nation-avatar {
+    width:36px; height:36px; padding:2px; border-radius:50%;
+    background:linear-gradient(135deg,var(--gold-d),var(--gold-sh),var(--gold-d));
+    flex-shrink:0;
+  }
+  .nation-avatar-inner {
+    width:100%; height:100%; border-radius:50%; overflow:hidden;
+  }
+  .nation-avatar-inner img { width:100%; height:100%; object-fit:cover; }
+  .nation-info { flex:1; min-width:0; }
+  .nation-name {
+    font-family:'Cinzel',serif; font-size:12px; font-weight:700;
+    color:var(--paper); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+  }
+  .nation-sub { font-size:10px; color:var(--muted); }
+  .nation-units {
+    display:flex; gap:6px; align-items:center;
+  }
+  .unit-badge {
+    display:flex; align-items:center; gap:4px;
+    padding:3px 8px; border-radius:4px;
+    background:rgba(232,160,176,.15);
+    border:1px solid rgba(232,160,176,.4);
+    font-size:10px; font-weight:700; color:#E8A0B0;
+  }
+
+  /* ── BOTTOM BAR ── */
+  .bottom-bar {
+    position:absolute; bottom:0; left:0; right:0;
+    padding:10px 14px 28px;
+    background:linear-gradient(0deg,var(--navy-d) 60%,transparent);
+    display:flex; gap:10px; align-items:center; z-index:20;
+  }
+  .btn-secondary {
+    height:50px; padding:0 16px;
+    background:transparent;
+    border:1px solid rgba(197,165,90,.45);
+    border-radius:8px; color:var(--gold);
+    font-family:'Cinzel',serif; font-size:12px; font-weight:700; letter-spacing:1px;
+    cursor:pointer; flex-shrink:0; white-space:nowrap;
+  }
+  .btn-primary {
+    flex:1; height:50px;
+    background:var(--bord);
+    border:1px solid rgba(197,165,90,.45);
+    border-radius:8px; color:var(--paper);
+    font-family:'Cinzel',serif; font-size:13px; font-weight:700; letter-spacing:1px;
+    cursor:pointer;
+    box-shadow:0 4px 0 var(--bord-d),0 6px 20px rgba(139,0,0,.4);
+  }
+
+  /* ── VC COUNTER ── */
+  .vc-counter {
+    position:absolute; bottom:84px; right:14px;
+    background:rgba(27,40,56,.9); border:1px solid rgba(197,165,90,.4);
+    border-radius:8px; padding:6px 10px;
+    display:flex; flex-direction:column; align-items:center;
+    z-index:15; backdrop-filter:blur(4px);
+  }
+  .vc-num {
+    font-family:'JetBrains Mono',monospace; font-size:20px; font-weight:700;
+    color:var(--gold-sh); line-height:1;
+  }
+  .vc-label { font-size:8px; color:var(--muted); letter-spacing:1px; text-transform:uppercase; }
+  .vc-max   { font-size:9px; color:var(--muted); }
+</style>
+</head>
+<body>
+
+<div class="page-label">D6 — Karte · Spielfeld-Screen (Login → Home → Lobby → <u>Karte</u> → Befehlseingabe → Auflösung → Sieg)</div>
+
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!--  PHONE 1 — KARTE · Befehlseingabe-Phase              -->
+<!-- ══════════════════════════════════════════════════════ -->
+<div>
+  <div class="col-label">1 — KARTE · Befehlseingabe-Phase aktiv</div>
+  <div class="phone">
+
+    <!-- Status Bar -->
+    <div class="sbar">
+      <span>9:41</span>
+      <div style="display:flex;gap:5px;align-items:center">
+        <svg width="16" height="11" viewBox="0 0 16 11" fill="currentColor" opacity=".8">
+          <rect x="0" y="4" width="2.5" height="7" rx=".8"/><rect x="4" y="2.5" width="2.5" height="8.5" rx=".8"/>
+          <rect x="8" y="1" width="2.5" height="10" rx=".8"/><rect x="12" y="0" width="2.5" height="11" rx=".8"/>
+        </svg>
+        <svg width="24" height="11" viewBox="0 0 24 11" fill="currentColor">
+          <rect x=".5" y=".5" width="20" height="10" rx="2" fill="none" stroke="currentColor" opacity=".4"/>
+          <rect x="21" y="3" width="3" height="5" rx="1.2" opacity=".3"/>
+          <rect x="1.5" y="1.5" width="15" height="8" rx="1.2"/>
+        </svg>
+      </div>
+    </div>
+
+    <!-- Top Bar -->
+    <div class="topbar">
+      <div class="btn-icon">☰</div>
+      <div class="topbar-center">
+        <div class="topbar-title">DIPLOMACY 2.0</div>
+        <div class="topbar-sub">Frühjahr 1902 · Runde 3</div>
+      </div>
+      <div class="topbar-timer">
+        <span style="font-size:10px;opacity:.7">⏱</span>
+        05:23
+      </div>
+    </div>
+
+    <!-- Phase Indicator -->
+    <div class="phase-bar">
+      <div style="display:flex;flex-direction:column;align-items:center;gap:2px">
+        <div class="phase-dot done">✓</div>
+        <div class="phase-label" style="color:var(--green)">Herbst</div>
+      </div>
+      <div class="phase-line done"></div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:2px">
+        <div class="phase-dot done">✓</div>
+        <div class="phase-label" style="color:var(--green)">Winter</div>
+      </div>
+      <div class="phase-line done"></div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:2px">
+        <div class="phase-dot active">B</div>
+        <div class="phase-label" style="color:var(--gold)">Befehle</div>
+      </div>
+      <div class="phase-line"></div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:2px">
+        <div class="phase-dot">R</div>
+        <div class="phase-label">Auflösung</div>
+      </div>
+      <div class="phase-line"></div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:2px">
+        <div class="phase-dot">Z</div>
+        <div class="phase-label">Rückzug</div>
+      </div>
+      <div class="phase-line"></div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:2px">
+        <div class="phase-dot">H</div>
+        <div class="phase-label">Herbst</div>
+      </div>
+    </div>
+
+    <!-- Map Area -->
+    <div class="map-wrapper">
+      <img class="map-img" src="../../../frontend/public/diplomacy-map.svg" alt="Diplomacy Europe Map">
+
+      <!-- Year Badge -->
+      <div class="year-badge">FRÜHJAHR 1902</div>
+
+      <!-- GB Units (England — pink) -->
+      <div class="unit-token" style="left:14%;top:28%;border-color:#E8A0B0">
+        <img src="../../../frontend/public/units/army-england.png" alt="A LON">
+      </div>
+      <div class="unit-token" style="left:13%;top:18%;border-color:#E8A0B0">
+        <img src="../../../frontend/public/units/fleet-england.png" alt="F EDI">
+      </div>
+      <div class="unit-token" style="left:19%;top:37%;border-color:#E8A0B0">
+        <img src="../../../frontend/public/units/fleet-england.png" alt="F ENG">
+      </div>
+
+      <!-- FR Units (France — blue) -->
+      <div class="unit-token" style="left:26%;top:44%;border-color:#3498DB">
+        <img src="../../../frontend/public/units/army-france.png" alt="A PAR">
+      </div>
+      <div class="unit-token" style="left:20%;top:48%;border-color:#3498DB">
+        <img src="../../../frontend/public/units/fleet-france.png" alt="F BRE">
+      </div>
+
+      <!-- DE Units (Germany — dark grey) -->
+      <div class="unit-token" style="left:38%;top:30%;border-color:#9A9A9A">
+        <img src="../../../frontend/public/units/army-germany.png" alt="A BER">
+      </div>
+      <div class="unit-token" style="left:36%;top:22%;border-color:#9A9A9A">
+        <img src="../../../frontend/public/units/fleet-germany.png" alt="F KIE">
+      </div>
+
+      <!-- AT Units -->
+      <div class="unit-token" style="left:43%;top:42%;border-color:#C0392B">
+        <img src="../../../frontend/public/units/army-austria.png" alt="A VIE">
+      </div>
+
+      <!-- RU Units -->
+      <div class="unit-token" style="left:62%;top:22%;border-color:#F1C40F">
+        <img src="../../../frontend/public/units/fleet-russia.png" alt="F STP">
+      </div>
+
+      <!-- Map controls -->
+      <div class="map-controls">
+        <div class="map-btn">+</div>
+        <div class="map-btn">−</div>
+        <div class="map-btn" style="font-size:12px">⊕</div>
+      </div>
+
+      <!-- VC Counter -->
+      <div class="vc-counter">
+        <div class="vc-num">4</div>
+        <div class="vc-label">VZ</div>
+        <div class="vc-max">/18</div>
+      </div>
+
+    </div>
+
+    <!-- My Nation Strip -->
+    <div class="nation-strip">
+      <div class="nation-avatar">
+        <div class="nation-avatar-inner">
+          <img src="../../../frontend/public/avatars/antike-historisch/julius-caesar_icon.png" alt="">
+        </div>
+      </div>
+      <div class="nation-info">
+        <div class="nation-name">Großbritannien</div>
+        <div class="nation-sub">Julius Caesar · 4 Versorgungszentren</div>
+      </div>
+      <div class="nation-units">
+        <div class="unit-badge">
+          <img src="../../../frontend/public/units/army-england.png" style="width:14px;height:14px;border-radius:50%">
+          A ×1
+        </div>
+        <div class="unit-badge">
+          <img src="../../../frontend/public/units/fleet-england.png" style="width:14px;height:14px;border-radius:50%">
+          F ×2
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom Bar -->
+    <div class="bottom-bar">
+      <button class="btn-secondary">CHAT</button>
+      <button class="btn-primary">BEFEHLE EINGEBEN →</button>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!--  PHONE 2 — KARTE · Auflösungs-Ergebnis-View          -->
+<!-- ══════════════════════════════════════════════════════ -->
+<div>
+  <div class="col-label">2 — KARTE · Alle Befehle abgegeben (warten)</div>
+  <div class="phone">
+
+    <!-- Status Bar -->
+    <div class="sbar">
+      <span>9:41</span>
+      <div style="display:flex;gap:5px;align-items:center">
+        <svg width="16" height="11" viewBox="0 0 16 11" fill="currentColor" opacity=".8">
+          <rect x="0" y="4" width="2.5" height="7" rx=".8"/><rect x="4" y="2.5" width="2.5" height="8.5" rx=".8"/>
+          <rect x="8" y="1" width="2.5" height="10" rx=".8"/><rect x="12" y="0" width="2.5" height="11" rx=".8"/>
+        </svg>
+        <svg width="24" height="11" viewBox="0 0 24 11" fill="currentColor">
+          <rect x=".5" y=".5" width="20" height="10" rx="2" fill="none" stroke="currentColor" opacity=".4"/>
+          <rect x="21" y="3" width="3" height="5" rx="1.2" opacity=".3"/>
+          <rect x="1.5" y="1.5" width="15" height="8" rx="1.2"/>
+        </svg>
+      </div>
+    </div>
+
+    <!-- Top Bar -->
+    <div class="topbar">
+      <div class="btn-icon">☰</div>
+      <div class="topbar-center">
+        <div class="topbar-title">DIPLOMACY 2.0</div>
+        <div class="topbar-sub">Frühjahr 1902 · Warte auf Spieler…</div>
+      </div>
+      <!-- Timer expired / waiting -->
+      <div style="display:flex;align-items:center;gap:5px;background:rgba(45,80,22,.25);border:1px solid rgba(45,80,22,.6);border-radius:6px;padding:4px 10px;font-size:11px;font-weight:700;color:#6ebc45;">
+        ✓ BEREIT
+      </div>
+    </div>
+
+    <!-- Phase Indicator -->
+    <div class="phase-bar">
+      <div style="display:flex;flex-direction:column;align-items:center;gap:2px">
+        <div class="phase-dot done">✓</div>
+        <div class="phase-label" style="color:var(--green)">Herbst</div>
+      </div>
+      <div class="phase-line done"></div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:2px">
+        <div class="phase-dot done">✓</div>
+        <div class="phase-label" style="color:var(--green)">Winter</div>
+      </div>
+      <div class="phase-line done"></div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:2px">
+        <div class="phase-dot done">✓</div>
+        <div class="phase-label" style="color:var(--green)">Befehle</div>
+      </div>
+      <div class="phase-line done"></div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:2px">
+        <div class="phase-dot active">R</div>
+        <div class="phase-label" style="color:var(--gold)">Auflösung</div>
+      </div>
+      <div class="phase-line"></div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:2px">
+        <div class="phase-dot">Z</div>
+        <div class="phase-label">Rückzug</div>
+      </div>
+      <div class="phase-line"></div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:2px">
+        <div class="phase-dot">H</div>
+        <div class="phase-label">Herbst</div>
+      </div>
+    </div>
+
+    <!-- Map Area -->
+    <div class="map-wrapper">
+      <img class="map-img" src="../../../frontend/public/diplomacy-map.svg" alt="Diplomacy Europe Map">
+      <div class="year-badge">FRÜHJAHR 1902</div>
+
+      <!-- GB Units with pending order indicators -->
+      <div class="unit-token" style="left:14%;top:28%;border-color:#E8A0B0">
+        <img src="../../../frontend/public/units/army-england.png" alt="A LON">
+      </div>
+      <!-- Order arrow hint (CSS line) -->
+      <svg style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:5" viewBox="0 0 390 460">
+        <!-- Army London → Belgium -->
+        <line x1="61" y1="147" x2="95" y2="190" stroke="#E8A0B0" stroke-width="2" stroke-dasharray="6,3" opacity=".7" marker-end="url(#arr-gb)"/>
+        <!-- Fleet ENG → Brest -->
+        <line x1="82" y1="188" x2="72" y2="228" stroke="#E8A0B0" stroke-width="2" stroke-dasharray="6,3" opacity=".7"/>
+        <defs>
+          <marker id="arr-gb" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+            <path d="M0,0 L0,6 L8,3 z" fill="#E8A0B0"/>
+          </marker>
+        </defs>
+      </svg>
+
+      <div class="unit-token" style="left:13%;top:18%;border-color:#E8A0B0">
+        <img src="../../../frontend/public/units/fleet-england.png" alt="F EDI">
+      </div>
+      <div class="unit-token" style="left:19%;top:37%;border-color:#E8A0B0">
+        <img src="../../../frontend/public/units/fleet-england.png" alt="F ENG">
+      </div>
+      <div class="unit-token" style="left:26%;top:44%;border-color:#3498DB">
+        <img src="../../../frontend/public/units/army-france.png" alt="A PAR">
+      </div>
+      <div class="unit-token" style="left:38%;top:30%;border-color:#9A9A9A">
+        <img src="../../../frontend/public/units/army-germany.png" alt="A BER">
+      </div>
+      <div class="unit-token" style="left:43%;top:42%;border-color:#C0392B">
+        <img src="../../../frontend/public/units/army-austria.png" alt="A VIE">
+      </div>
+      <div class="map-controls">
+        <div class="map-btn">+</div>
+        <div class="map-btn">−</div>
+      </div>
+
+      <!-- Waiting for players banner -->
+      <div style="position:absolute;bottom:0;left:0;right:0;background:rgba(11,17,29,.85);border-top:1px solid rgba(197,165,90,.2);padding:8px 14px;display:flex;align-items:center;justify-content:space-between;z-index:20">
+        <div style="font-size:11px;color:var(--muted)">Warten auf Befehle:</div>
+        <div style="display:flex;gap:6px">
+          <div style="width:20px;height:20px;border-radius:50%;background:rgba(241,196,15,.2);border:2px solid #F1C40F;font-size:9px;display:flex;align-items:center;justify-content:center;color:#F1C40F">RU</div>
+          <div style="width:20px;height:20px;border-radius:50%;background:rgba(26,188,156,.2);border:2px solid #1ABC9C;font-size:9px;display:flex;align-items:center;justify-content:center;color:#1ABC9C">TR</div>
+          <div style="width:20px;height:20px;border-radius:50%;background:rgba(39,174,96,.2);border:2px solid #27AE60;font-size:9px;display:flex;align-items:center;justify-content:center;color:#27AE60">IT</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Nation Strip -->
+    <div class="nation-strip">
+      <div class="nation-avatar">
+        <div class="nation-avatar-inner">
+          <img src="../../../frontend/public/avatars/antike-historisch/julius-caesar_icon.png" alt="">
+        </div>
+      </div>
+      <div class="nation-info">
+        <div class="nation-name">Großbritannien</div>
+        <div class="nation-sub">Julius Caesar · 3 Befehle abgegeben ✓</div>
+      </div>
+      <div style="padding:4px 10px;background:rgba(45,80,22,.2);border:1px solid rgba(45,80,22,.5);border-radius:6px;font-size:10px;font-weight:700;color:#6ebc45;letter-spacing:.5px">
+        BEREIT
+      </div>
+    </div>
+
+    <!-- Bottom Bar -->
+    <div class="bottom-bar">
+      <button class="btn-secondary" style="flex:1">BEFEHLE ANSEHEN</button>
+      <button class="btn-secondary" style="flex:1">CHAT</button>
+    </div>
+
+  </div>
+</div>
+
+</body>
+</html>

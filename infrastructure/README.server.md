@@ -137,7 +137,7 @@ redis://:D2_Redis_S3cur3_2026!@127.0.0.1:6379      # vom Host
 |-----|------|
 | https://diplomacy.tum-s.de/api/* | → NestJS API (Port 4000) |
 | https://diplomacy.tum-s.de/socket.io/* | → WebSocket (Port 4000) |
-| https://diplomacy.tum-s.de/health | → Health-Check |
+| `/api/health` | → Intern only (Caddy blockt extern mit 403) |
 
 Frontend wird separat gehostet (Cloudflare Pages oder Vercel).
 

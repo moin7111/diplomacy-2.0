@@ -18,9 +18,9 @@ model User {
   avatar_id     String?
   created_at    DateTime @default(now())
 
-  hostedGames   Game[]   @relation("GameHost")
-  playedGames   GamePlayer[]
-  
+  hostedGames Game[]       @relation("GameHost")
+  playedGames GamePlayer[]
+
   // Relations for B6 & B7
   orders           PlayerOrder[]
   sentMessages     ChatMessage[] @relation("ChatSender")
@@ -28,38 +28,41 @@ model User {
 }
 
 model Game {
-  id             String   @id @default(uuid())
-  name           String
-  
-  host_id        String
-  host           User     @relation("GameHost", fields: [host_id], references: [id])
-  
-  status         String   @default("lobby") // lobby | active | finished
-  config         Json     // Rockets, timers, mode etc.
-  room_code      String   @unique
+  id   String @id @default(uuid())
+  name String
 
-  current_phase  String   @default("FRÜHLING")
-  current_year   Int      @default(1901)
-  
-  created_at     DateTime @default(now())
+  host_id String
+  host    User   @relation("GameHost", fields: [host_id], references: [id])
 
-  players        GamePlayer[]
-  
+  status    String @default("lobby") // lobby | active | finished
+  config    Json // Rockets, timers, mode etc.
+  room_code String @unique
+
+  current_phase String @default("FRÜHLING")
+  current_year  Int    @default(1901)
+
+  created_at DateTime @default(now())
+
+  players GamePlayer[]
+
   // Relations for B6 & B7
-  playerOrders   PlayerOrder[]
-  gameStates     GameState[]
-  chatMessages   ChatMessage[]
+  playerOrders PlayerOrder[]
+  gameStates   GameState[]
+  chatMessages ChatMessage[]
 }
+
 model GamePlayer {
   game_id  String
   user_id  String
   nation   String
   is_ready Boolean @default(false)
 
-  game     Game @relation(fields: [game_id], references: [id])
-  user     User @relation(fields: [user_id], references: [id])
+  game Game @relation(fields: [game_id], references: [id])
+  user User @relation(fields: [user_id], references: [id])
 
   @@id([game_id, user_id])
+  @@index([game_id])
+  @@index([user_id])
 }
 
 model PlayerOrder {
@@ -73,17 +76,21 @@ model PlayerOrder {
 
   game Game @relation(fields: [game_id], references: [id], onDelete: Cascade)
   user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  @@index([game_id])
 }
 
 model GameState {
-  id           String   @id @default(uuid())
-  game_id      String
-  phase        String
-  year         Int
-  board_state  Json
-  created_at   DateTime @default(now())
+  id          String   @id @default(uuid())
+  game_id     String
+  phase       String
+  year        Int
+  board_state Json
+  created_at  DateTime @default(now())
 
   game Game @relation(fields: [game_id], references: [id], onDelete: Cascade)
+
+  @@index([game_id])
 }
 
 model ChatMessage {
@@ -97,4 +104,6 @@ model ChatMessage {
   game      Game  @relation(fields: [game_id], references: [id], onDelete: Cascade)
   sender    User  @relation("ChatSender", fields: [sender_id], references: [id], onDelete: Cascade)
   recipient User? @relation("ChatRecipient", fields: [recipient_id], references: [id], onDelete: Cascade)
+
+  @@index([game_id])
 }

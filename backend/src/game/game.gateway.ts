@@ -37,8 +37,12 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
       const token = client.handshake.query.token as string || client.handshake.headers.authorization?.split(' ')[1];
       if (!token) throw new Error('No token provided');
 
+      if (!process.env.JWT_SECRET) {
+          throw new Error('FATAL: JWT_SECRET environment variable is missing!');
+      }
+
       const payload = this.jwtService.verify(token, {
-          secret: process.env.JWT_SECRET || 'diplomacy2-dev-secret-super-secure'
+          secret: process.env.JWT_SECRET
       });
       client.data.user = payload;
       this.logger.log(`WS Client connected: ${client.id} (User: ${payload.sub})`);
@@ -130,6 +134,54 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
                phase: game.current_phase,
                year: game.current_year
            }
+       });
+
+       if (submittedCount >= playersInGame && playersInGame > 0) {
+           this.logger.log(`All players submitted. Triggering auto-resolve for ${data.gameId}`);
+           this.timerService.stopTimer(data.gameId);
+           await this.timerService.resolveTurn(data.gameId);
+       }
+    } catch(e) {
+       this.logger.error(`Error saving orders: ${e.message}`);
+       client.emit('error', { message: e.message || 'Invalid orders' });
+    }
+  }
+
+  @SubscribeMessage('submit-retreats')
+  async handleSubmitRetreats(@ConnectedSocket() client: Socket, @MessageBody() data: { gameId: string, orders: any[] }) {
+      await this.saveOrdersWithoutDeepValidation(client, data, ['RÜCKZUG_FRÜHLING', 'RÜCKZUG_HERBST']);
+  }
+
+  @SubscribeMessage('submit-builds')
+  async handleSubmitBuilds(@ConnectedSocket() client: Socket, @MessageBody() data: { gameId: string, orders: any[] }) {
+      await this.saveOrdersWithoutDeepValidation(client, data, ['WINTER']);
+  }
+
+  private async saveOrdersWithoutDeepValidation(client: Socket, data: { gameId: string, orders: any[] }, allowedPhases: string[]) {
+    const userId = client.data.user.sub;
+    try {
+       const game = await this.prisma.game.findUnique({ where: { id: data.gameId }});
+       if (!game) throw new Error('Game not found');
+
+       if (!allowedPhases.includes(game.current_phase)) {
+           throw new Error(`Invalid phase for these orders. Current phase: ${game.current_phase}`);
+       }
+
+       await this.prisma.playerOrder.create({
+           data: {
+               game_id: data.gameId,
+               user_id: userId,
+               phase: game.current_phase,
+               year: game.current_year,
+               order_data: data.orders
+           }
+       });
+
+       this.server.to(data.gameId).emit('orders-received', { user: client.data.user?.username });
+
+       const playersInGame = await this.prisma.gamePlayer.count({ where: { game_id: data.gameId }});
+       const submittedCount = await this.prisma.playerOrder.count({
+           where: { game_id: data.gameId, phase: game.current_phase, year: game.current_year }
        });
 
        if (submittedCount >= playersInGame && playersInGame > 0) {

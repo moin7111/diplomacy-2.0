@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useChatStore } from "@/stores/useChatStore";
 
 /**
  * Bottom Navigation — D1 Style Guide
@@ -45,6 +46,8 @@ const tabs: NavTab[] = [
 
 export function BottomNav() {
   const pathname = usePathname();
+  const { conversations } = useChatStore();
+  const totalUnread = conversations.reduce((acc, conv) => acc + conv.unreadCount, 0);
 
   return (
     <nav
@@ -78,7 +81,24 @@ export function BottomNav() {
               filter: isActive ? "drop-shadow(0 0 6px rgba(197,165,90,0.6))" : "none",
             }}
           >
-            <span className="w-6 h-6">{tab.icon}</span>
+            <div className="relative">
+              <span className="w-6 h-6">{tab.icon}</span>
+              {tab.id === "diplomacy" && totalUnread > 0 && (
+                <div
+                  className="absolute -top-1 -right-2 flex items-center justify-center bg-red-600 text-white rounded-full"
+                  style={{
+                    minWidth: 18,
+                    height: 18,
+                    fontSize: 10,
+                    fontWeight: "bold",
+                    padding: "0 4px",
+                    border: "2px solid #5C3A21",
+                  }}
+                >
+                  {totalUnread > 99 ? "99+" : totalUnread}
+                </div>
+              )}
+            </div>
             <span
               className="leading-none"
               style={{
