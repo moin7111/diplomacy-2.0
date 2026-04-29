@@ -43,7 +43,7 @@ services:
   # Placeholder: Node.js Container für Development
   # ============================================
   api:
-    image: node:20-alpine
+    image: node:18-alpine3.17
     container_name: diplomacy2-api
     restart: unless-stopped
     working_dir: /app
