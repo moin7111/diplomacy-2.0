@@ -132,7 +132,7 @@ export class GameService {
 
     if (game.status !== 'lobby') throw new BadRequestException('Cannot change nation after game started');
 
-    const nationTaken = game.players.find(p => p.nation === dto.nation && p.user_id !== userId);
+    const nationTaken = game.players.find((p: any) => p.nation === dto.nation && p.user_id !== userId);
     if (nationTaken) throw new BadRequestException(`Nation ${dto.nation} is already taken`);
 
     await this.prisma.gamePlayer.update({
@@ -176,12 +176,12 @@ export class GameService {
       throw new BadRequestException('Game is already active');
     }
 
-    const allReady = game.players.every(p => p.is_ready);
+    const allReady = game.players.every((p: any) => p.is_ready);
     if (!allReady) {
       throw new BadRequestException('Not all players are ready');
     }
 
-    const unassignedNations = game.players.filter(p => !ALLOWED_NATIONS.includes(p.nation));
+    const unassignedNations = game.players.filter((p: any) => !ALLOWED_NATIONS.includes(p.nation));
     if (unassignedNations.length > 0) {
       throw new BadRequestException('All players must choose a valid nation before starting');
     }

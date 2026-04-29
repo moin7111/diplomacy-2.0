@@ -108,7 +108,7 @@ export class TimerService {
         const playerOrders = await this.prisma.playerOrder.findMany({
             where: { game_id: gameId, phase: game.current_phase, year: game.current_year }
         });
-        const allOrders = playerOrders.flatMap(po => po.order_data as any[]);
+        const allOrders = playerOrders.flatMap((po: any) => po.order_data as any[]);
 
         let nextPhase = '';
         let nextYear = game.current_year;
