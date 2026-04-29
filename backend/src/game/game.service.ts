@@ -67,7 +67,7 @@ export class GameService {
       throw new BadRequestException('Game is already full (maximum 7 players)');
     }
 
-    const alreadyJoined = game.players.find(p => p.user_id === userId);
+    const alreadyJoined = game.players.find((p: any) => p.user_id === userId);
     if (alreadyJoined) {
       throw new BadRequestException('You are already in this game');
     }
@@ -127,7 +127,7 @@ export class GameService {
 
     if (!game) throw new NotFoundException('Game not found');
 
-    const playerRecord = game.players.find(p => p.user_id === userId);
+    const playerRecord = game.players.find((p: any) => p.user_id === userId);
     if (!playerRecord) throw new ForbiddenException('You are not a player in this game');
 
     if (game.status !== 'lobby') throw new BadRequestException('Cannot change nation after game started');
